@@ -1,6 +1,6 @@
 # this is a comment
 # this file im going to learn how to put comments and use the print function
-
+# print must always be lowercase
 # dont indent a print
 print ("Hello World :D")  # This is an inline comment
 """comment"""  # This is a comment
