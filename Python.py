@@ -17,5 +17,4 @@ print ("test 1 \ttest 2")
 
 # use ' if you are using " in your print functions and use a \ if you are using ' in a word
 print('It is "warm"')
-
 print ('It\'s "warm"')
