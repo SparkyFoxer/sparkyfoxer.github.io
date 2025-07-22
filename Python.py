@@ -2,8 +2,8 @@
 # this file im going to learn how to put comments and use the print function
 
 # dont indent a print
-print ("Hello World :D")                        # This is an inline comment
-"""comment"""                                   # This is a comment
+print ("Hello World :D")  # This is an inline comment
+"""comment"""  # This is a comment
 
 # for a new line (only for print function) put a \n
 print ("line 1 \nline 2") 
