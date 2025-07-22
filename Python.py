@@ -3,10 +3,19 @@
 
 # dont indent a print
 print ("Hello World :D")                        # This is an inline comment
-"""comment"""                                  # This is a comment
+"""comment"""                                   # This is a comment
 
 # for a new line (only for print function) put a \n
 print ("line 1 \nline 2") 
 
 # for a 'tab in' use \t (also only for print function)
 print ("test 1 \ttest 2")
+
+# If using single quotes, if you are using a ' in your word you must use a \
+# print ('It\'s a lovely day')  works but,
+# print ('It's a lovely day')   doesnt work
+
+# use ' if you are using " in your print functions and use a \ if you are using ' in a word
+print('It is "warm"')
+
+print ('It\'s "warm"')
