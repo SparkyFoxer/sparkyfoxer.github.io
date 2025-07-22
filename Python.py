@@ -1,5 +1,12 @@
 # this is a comment
 # this file im going to learn how to put comments and use the print function
 
+# dont indent a print
 print ("Hello World :D")                        # This is an inline comment
-"""hallaur?"""                                  # I don't remember what this is called xD
+"""comment"""                                  # This is a comment
+
+# for a new line (only for print function) put a \n
+print ("line 1 \nline 2") 
+
+# for a 'tab in' use \t (also only for print function)
+print ("test 1 \ttest 2")
