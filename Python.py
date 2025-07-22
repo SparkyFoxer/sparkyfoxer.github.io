@@ -21,3 +21,8 @@ print ('It\'s "warm"')
 
 # When putting in a directory like C:\User\Name, you need to use two back slashes
 print ('go to C:\\Users\\frg45') # this will work
+
+# For indenting print words use \t for as many indents as you want
+print("how's it going?")
+print("\tpractise is important")
+print("\t\tkeep trying!")
