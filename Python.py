@@ -23,6 +23,6 @@ print ('It\'s "warm"')
 print ('go to C:\\Users\\frg45') # this will work
 
 # For indenting print words use \t for as many indents as you want
-print("how's it going?")
-print("\tpractise is important")
-print("\t\tkeep trying!")
+print("no indent")
+print("\tone indent")
+print("\t\ttwo indents")
