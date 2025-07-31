@@ -29,6 +29,7 @@
 #print("\tOne indent")
 #print("\t\tTwo indents")
 
+
 # Week 2 revision from last week
 #print("28/07/2025")
 #print("Hello world")
@@ -71,18 +72,45 @@
 #y = int(3)    # y will be 3
 #z = float(3)  # z will be 3.0
 
-FullUsersName, AGE, FavFood, Salary = "Terry", 96, "Pasta", 196.33
-print(FullUsersName)
-print(AGE)
-print(FavFood)
-print(Salary)
+#FullUsersName, AGE, FavFood, Salary = "Terry", 96, "Pasta", 196.33
+#print(FullUsersName)
+#print(AGE)
+#print(FavFood)
+#print(Salary)
 
-FullUsersName = str(FullUsersName)
-AGE = int(AGE)
-FavFood = str(FavFood)
-Salary = float(Salary)
+#FullUsersName = str(FullUsersName)
+#AGE = int(AGE)
+#FavFood = str(FavFood)
+#Salary = float(Salary)
 
-studentID = "1234567890"
-CellPhoneNumber = "123 456 7890"
-# just because something has numbers in it, doesnt mean it should be a str(string) | e.g someones ID number doesnt change so it should be a str. Same with someones phone number
+#studentID = "1234567890"
+#CellPhoneNumber = "123 456 7890"
+#Just because something has numbers in it, doesnt mean it should be a str(string) | e.g someones ID number doesnt change so it should be a str. Same with someones phone number
 
+# 30/07/2025
+# variable revision
+Age = 20                                    # this will default to a Int
+#print(Age)
+#print(type(Age))                            # this will show me hey yes Age = 20 is an Int
+Age = str(20)                               # this tells age you are a Str instead
+#print(type(Age))                            # it will how tell me this is a Str
+Name = "Brendan"                            # anything that has "" is gonna show up as a Str
+#print(Name)
+#print(type(Name))                           # what is this? Its printing that its a Str
+LastName = "Chapman"
+#print(LastName)
+#print(type(LastName))
+Subject = "Software Design & Development"
+CourseName = "CITE404"
+#print(Subject)
+#print(type(Subject))
+HourlyRate = '$30.00'                       # chat do i really earn this much (maybe neheheh)
+#print(HourlyRate)                           # anything with these 00.00 "." will show up as a float
+#print(type(HourlyRate))                     # yep this proves correct it is infact a float
+
+
+info = f"Hi, {Name}"                        # info is our tag for "Hi, Name('Brendan' in our case)"
+#print (info)                                #
+
+Intro = f"Morning {Name} {LastName} you're {Age} years old. \n\tYou are in {CourseName}, {Subject}. \n\t\tCurrently your hourly rate is {HourlyRate}!"  # the {word} is a tag, not the actual word being assigned
+print (Intro)
