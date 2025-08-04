@@ -89,28 +89,102 @@
 
 # 30/07/2025
 # variable revision
-Age = 20                                    # this will default to a Int
+#Age = 20                                    # this will default to a Int
 #print(Age)
 #print(type(Age))                            # this will show me hey yes Age = 20 is an Int
-Age = str(20)                               # this tells age you are a Str instead
+#Age = str(20)                               # this tells age you are a Str instead
 #print(type(Age))                            # it will how tell me this is a Str
-Name = "Brendan"                            # anything that has "" is gonna show up as a Str
+#Name = "Brendan"                            # anything that has "" is gonna show up as a Str
 #print(Name)
 #print(type(Name))                           # what is this? Its printing that its a Str
-LastName = "Chapman"
+#LastName = "Chapman"
 #print(LastName)
 #print(type(LastName))
-Subject = "Software Design & Development"
-CourseName = "CITE404"
+#Subject = "Software Design & Development"
+#CourseName = "CITE404"
 #print(Subject)
 #print(type(Subject))
-HourlyRate = '$30.00'                       # chat do i really earn this much (maybe neheheh)
+#HourlyRate = '$30.00'                       # chat do i really earn this much (maybe neheheh)
 #print(HourlyRate)                           # anything with these 00.00 "." will show up as a float
 #print(type(HourlyRate))                     # yep this proves correct it is infact a float
 
-
-info = f"Hi, {Name}"                        # info is our tag for "Hi, Name('Brendan' in our case)"
+#info = f"Hi, {Name}"                        # info is our tag for "Hi, Name('Brendan' in our case)"
 #print (info)                                #
 
-Intro = f"Morning {Name} {LastName} you're {Age} years old. \n\tYou are in {CourseName}, {Subject}. \n\t\tCurrently your hourly rate is {HourlyRate}!"  # the {word} is a tag, not the actual word being assigned
-print (Intro)
+#Intro = f"Morning {Name} {LastName} you're {Age} years old. \n\tYou are in {CourseName}, {Subject}. \n\t\tCurrently your hourly rate is {HourlyRate}!"  # the {word} is a tag, not the actual word being assigned
+#print (Intro)
+
+
+
+# 04/08/2025
+#fstring and imput
+
+#FirstName="Brendan"
+#Age=20
+#message = f"hi {Name}, your age is {Age}"
+# print (message)
+
+#allergy1 = "gluten free"
+#allergy2 = "egg free"
+#preference = f"Hello {Name}, you're {Age} years old today, You're food preference is {allergy1} and {allergy2}."
+#print (preference)
+
+# this is the basics of 'fstring'
+
+#FirstName="Brendan"
+#LastName="Chapman"
+#Age=20
+#print (f"Your name is {FirstName} {LastName} and you're {Age} years old")
+
+#FirstName = input("What is your first name: ")
+#print(f"Hello {FirstName}!")  # Prints immediately after entering the name
+#LastName = input("What is your last name: ")
+#print(f"{FirstName} {LastName}!")
+#Age = input("How old are you? ")
+#print(f"you're {Age} today.")
+#FoodAllergy = input("What is your food allergy: ")
+#print(f"damn okay, lets keep going")
+#Information = input("Would you like further information: ")
+#print (f"Lets keep going")
+#UsedProduct = float(input("How many times have you used this product: "))
+#print(f"noted, thank you!")
+
+#print("These are your inputs...")
+#print(FirstName)
+#print(LastName)
+#print(FoodAllergy)
+#print(Information)
+#print(UsedProduct)
+#print(type(UsedProduct))  # User must type in a number for this to work
+#print(" ")
+
+#print(f"Thanks {FirstName} you have stated you have used our product {UsedProduct} times.")
+#print (f"Since you said {Information} to receiving further information an email may be on its way.")
+#print (f"At {Age} and with your {FoodAllergy} allergy, the information on the email will keep you healthy.")
+
+FirstName = input("What is your first name?: ")
+LastName = input("What is your last name?: ")
+print (f"Hello {FirstName} {LastName}.")
+Age = input("How old are you?: ")
+print (f"{Age}, got it.")
+Go = input("Welcome to The Store! \nWe have drinks and food. \nWhere do you wanna go... | Drinks/Food?: ")
+if Go == "Drinks":
+    print ("You walk to the Drinks isle with a $10 note. \nThere are 3 Drinks, \n\tEnergy Drinks $4 \n\tJuice $3 \n\tCoffee $5")
+Drinks = input("What drink do you want? | Energy/Juice/Coffee: ")
+if Drinks == "Energy":
+    print ("You grab an energy drink -$4")
+if Drinks == "Juice":
+    print ("You grab a juice -$3")
+if Drinks == "Coffee":
+    print ("You grab a Coffee -$5")
+if Go == "Food":
+    print ("You walk to the Food isle")
+
+
+
+
+
+
+
+
+
