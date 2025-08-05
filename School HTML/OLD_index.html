@@ -46,7 +46,19 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.flex-container {
+  display: flex;
+  justify-content: center;                                         /* Centers horizontally */
+  align-items: center;                                             /* Centers vertically */
+  height: 200px;                                                   /* Example height for the container */
+  border: 1px solid black;
+}
 
+.centered-item {
+  margin: 2px;
+  padding: 2px;
+  background-color: rgb(255, 255, 255);
+}
 </style>
 
 
@@ -54,13 +66,14 @@
 
 <body>                                                            <!-- What is seen -->
 
-  <div class="box" align="center">
-    <h1>My First Webpage</h1>                                      <!-- Main header print -->
-    <h3>402 second class</h3>                                      <!-- Smaller print -->
-    <h6>By Brendan 22/7/25</h6>                                    <!-- Smallest print -->
-    <p>This is a paragraph</p>                                    <!-- Used for paragraphs -->
-    <p>This is another paragraph</p>
-    <p>This is a third paragraph</p>
+  <div class="flex; flex-container; centered-item">
+    <div style="width: 20px;">hello</div>
+    <p style="width: 20%;">My First Webpage<br>                                      <!-- Main header print -->
+    402 second class<br>                                      <!-- Smaller print -->
+    By Brendan 22/7/25<br>                                    <!-- Smallest print -->
+    This is a paragraph<br>                                  <!-- Used for paragraphs -->
+    This is another paragraph<br>
+    This is a third paragraph</p><br>
   </div>
 
 
