@@ -204,12 +204,12 @@ elif Go == "Drinks":
     Food = "None"
 
 else:
-    print ("ERRR UR WRONG!! *dies*")
+    print("ERRR UR WRONG! *dies*")
     Food = "None"
     Drinks = "None"
 
-print ("You have finished shopping, thank you for coming to The Store!")
-print (f"\tThanks for shopping with us {FirstName} {LastName} on {Date}! \nYour shopping list is: \n\t{Food} \n\t{Drinks}")
+print("You have finished shopping, thank you for coming to The Store!")
+print(f"\tThanks for shopping with us {FirstName} {LastName} on {Date}! \nYour shopping list is: \n\t{Food} \n\t{Drinks}")
 
 
 
