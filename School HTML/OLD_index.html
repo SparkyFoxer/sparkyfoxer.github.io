@@ -65,12 +65,12 @@ background-color: #f0f0f0;
 .centered-item {
   margin: 2px;
   padding: 2px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0);
 }
 
-    .justified-text {
-      text-align: justify;
-    }
+.justified-text {
+  text-align: justify;
+}
 </style>
 
 
@@ -84,15 +84,22 @@ background-color: #f0f0f0;
 
 
   <div class="flex; flex-container">
-    <ol class="flex-container"><p>First Webpage         <!-- Main header print -->
-      402 second class                                         <!-- Smaller print -->
-      By Brendan 22/7/25                                      <!-- Smallest print -->
-      This is a paragraph                                    <!-- Used for paragraphs -->
-      This is another paragraph
-      This is a third paragraph</ol>
+    <div class="flex-container">
+        <div>
+          <div class="centered-item">First Webpage</div>                                             <!-- Main header print -->
+          <div class="centered-item">402 second class</div>                                          <!-- Smaller print -->
+          <div class="centered-item">By Brendan 22/7/25</div>                                        <!-- Smallest print -->
+        </div></div>
+        <div>
+          <div class="centered-item">This is a paragraph</div>                                    <!-- Used for paragraphs -->
+          <div class="centered-item">This is another paragraph</div>
+          <div class="centered-item">This is a third paragraph</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div syle class="flex; flex-container" >
+  <div style class="flex; flex-container" >
     <ol>                                                           <!-- Open Ordered List -->
         <li>List item</li>                                         <!-- List Item example (creates a numbered list) -->
         <li>List item</li>          
@@ -106,7 +113,7 @@ background-color: #f0f0f0;
     </ul>                                                          <!-- Closed Unordered List -->
 
   </div>
-<div class="flex; flex-container; centered-item">
+<div class=".box">
   <h1>Animals</h1>                                                 <!-- teacher wanted me to make this again -->
     <ul>
         <li><a href="https://en.wikipedia.org/wiki/Puppy" target="_blank">Puppy.</a></li> <!-- linked unlisted item -->
