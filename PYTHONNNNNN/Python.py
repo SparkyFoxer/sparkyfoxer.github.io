@@ -254,21 +254,28 @@
 #Total = Sold * Price
 #print ((f"you grab {Sold} {Name}s, This will cost a total of {Total}"))
 
-InvoiceNumber = (input("What is your Invoice number? "))
-ClientName = (input("What is your Name? "))
-Item1 = (input("What is the first item you want to buy? "))
-Amount1 = int(input(f"How how many {Item1} do you want? "))
-Price1 = int(input(f"What is the price if {Item1} each? "))
-Item2 = (input("What is the second item you want to buy? "))
-Amount2 = int(input(f"How many {Item2} do you want? "))
-Price2 = int(input(f"What is the Price of {Item2} each?"))
-Cost1 = Amount1 * Price1
-Cost2 = Amount2 * Price2
-GST = 0.11
-Total = Cost1 + Cost2
-Final = Total * GST
-print (f"You have {Amount1} {Item1}s costing a total of ${Cost1} and {Amount2} of {Item2} Costing ${Cost2}")
-print (f"Cost before tax is ${Total}")
-print (f"Your grand total is ${Final}")
-print (f"Thank you for shopping with us {ClientName}!")
- # GST ISNT WORKING HERE
+#InvoiceNumber = (input("What is your Invoice number? "))
+#ClientName = (input("What is your Name? "))
+#Item1 = (input("What is the first item you want to buy? "))
+#Amount1 = int(input(f"How how many {Item1} do you want? "))
+#Price1 = int(input(f"What is the price if {Item1} each? "))
+#Item2 = (input("What is the second item you want to buy? "))
+#Amount2 = int(input(f"How many {Item2} do you want? "))
+#Price2 = int(input(f"What is the Price of {Item2} each?"))
+#Cost1 = Amount1 * Price1
+#Cost2 = Amount2 * Price2
+#GST = 0.11
+#Total = Cost1 + Cost2
+#Final = Total * GST
+#print (f"You have {Amount1} {Item1}s costing a total of ${Cost1} and {Amount2} of {Item2} Costing ${Cost2}")
+#print (f"Cost before tax is ${Total}")
+#print (f"Your grand total is ${Final}")
+#print (f"Thank you for shopping with us {ClientName}!")
+ # GST ISNT WORKING RIGHT HERE
+
+
+
+
+# 07/07/2025
+# Divisions
+
