@@ -30,6 +30,9 @@
 #print("\t\tTwo indents")
 
 
+
+
+
 # Week 2 revision from last week
 #print("28/07/2025")
 #print("Hello world")
@@ -87,6 +90,11 @@
 #CellPhoneNumber = "123 456 7890"
 #Just because something has numbers in it, doesnt mean it should be a str(string) | e.g someones ID number doesnt change so it should be a str. Same with someones phone number
 
+
+
+
+
+
 # 30/07/2025
 # variable revision
 #Age = 20                                    # this will default to a Int
@@ -113,6 +121,8 @@
 
 #Intro = f"Morning {Name} {LastName} you're {Age} years old. \n\tYou are in {CourseName}, {Subject}. \n\t\tCurrently your hourly rate is {HourlyRate}!"  # the {word} is a tag, not the actual word being assigned
 #print (Intro)
+
+
 
 
 
@@ -161,6 +171,9 @@
 #print(f"Thanks {FirstName} you have stated you have used our product {UsedProduct} times.")
 #print (f"Since you said {Information} to receiving further information an email may be on its way.")
 #print (f"At {Age} and with your {FoodAllergy} allergy, the information on the email will keep you healthy.")
+
+
+
 
 
 # 04/08/2025
@@ -320,3 +333,30 @@
 #       f"there will be {NumberOfApplesLeft} left for you to eat") #python joins the stings inside () automatically
 #  
 
+
+
+
+
+# 13/08/2025
+
+#FirstName="brendan"
+#LastName="chapman"
+#FullName=FirstName+" "+LastName
+#CapFirstName=FirstName.capitalize()
+#CapLastName=LastName.capitalize()
+#print(CapFirstName+" "+CapLastName)
+#AllCapFirstName=FirstName.upper()
+#AllCapLastName=LastName.upper()
+#print(AllCapFirstName+" "+AllCapLastName)
+
+#FirstName="Sam"
+#print(f"Good Morning {FirstName}")
+
+FirstName=input("What is your first name? ")
+LastName=input("What is your last name? ")
+Greeting=input("What is your greeing? ")
+print(f"{Greeting} {FirstName} {LastName}!")
+FirstNumber=input("What is your first number? ")
+SecondNumber=input("What is your second number? ")
+Answer=FirstNumber+SecondNumber
+print(Answer)
