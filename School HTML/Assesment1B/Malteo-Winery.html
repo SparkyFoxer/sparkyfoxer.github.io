@@ -1,117 +1,88 @@
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/x-icon" href="Logo.png">
-        <title>Malteo Winery</title>
-        <style>
-            nav { /* main navigation settings */
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100%;
-                font-family: 'Playfair Display', serif;
-                font-size: 20px;
-                gap: 12px;
-            }
-            nav a { /* navigation default font colour */
-                text-decoration: none;
-                color: #333;
-            }
-            nav a:hover { /* navigation mouse hover font colour */
-                color: #800020;
-            }
-            .flex-container { /* spaces things around evenly */
-                display: flex;
-                justify-content: space-around;
-                background-color: green;
-            }
-            .flex-container > div { /* puts some padding around all divisions */
-                background-color: #f1f1f1;
-                margin: 10px;
-                padding: 20px;
-                font-size: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <header style="background-color: #dfcec6;"> <!-- background colour for the main header/navigation -->
-            <div style="height: 150px; display: flex; flex-wrap: wrap; flex-direction: column;">
-                <div style="height: 150px; width: 150px;"> <!-- image sizing -->
-                    <img src="Logo.png" alt="Malteo Winery Logo" width="150" height="150"> <!-- icon image -->
-                </div>
-                <div style="height: 150px; width: calc(100% - 158px);"> <!-- height of the division for the navigation -->
-                    <div style="display: flex; flex-wrap: wrap; flex-direction: column; height: 150px;">
-                        <div style="height: 100%; width: calc(60% - 6px)"> <!-- calculating the size of the nav font buttons -->
-                            <nav>
-                                <a href="Malteo-Winery.html">Home</a>
-                                <a href="About.html">About Us</a>
-                                <a href="Products.html">Products</a>
-                                <a href="Contact.html">Contact</a>
-                            </nav>
-                        </div>
-                        <div style="height: 100%; width: calc(20% - 6px); font-family: 'Playfair Display', serif;">
-                            <p>Opening Hours</p>
-                            <p>Monday – Friday 11.30 – 2.30pm</p>
-                            <p>Saturday and Sunday 11.30-4.30pm</p>
-                        </div>
-                        <div style="height: 100%; width: calc(20% - 6px); font-family: 'Playfair Display', serif;">
-                            <p>Phone Number: +64 1 234 5678</p>
-                            <p>36 Main North Road, Blenheim</p>
-                            <p>Email: info@malteowinery.com</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <div class="flex-container" style="background-color: chocolate;"> <!-- main body text -->
-            <h1>Malteo Winery</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="Logo.png">
+    <title>Malteo Winery</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+    <header style="background-color: #dfcec6;" class="row-display"> <!-- background colour for the main header/navigation -->
+        <img src="Logo.png" alt="Malteo Winery Logo" width="150" height="150"> <!-- icon image -->
+        <div style="width: calc((100% - 150px) * 0.60)"> <!-- calculating the size of the nav font buttons -->
+            <nav>
+                <a href="Malteo-Winery.html">Home</a>
+                <a href="About.html">About Us</a>
+                <a href="Products.html">Products</a>
+                <a href="Contact.html">Contact</a>
+            </nav>
         </div>
-        <div class="flex-container" style="background-color: #800020";> <!-- general description paragraph -->
-            <p>paragraph about wines</p>
+        <div style="width: calc((100% - 150px) * 0.20); font-family: 'Playfair Display', serif;">
+            <p>Opening Hours</p>
+            <p>Monday - Friday 11.30 - 2.30pm</p>
+            <p>Saturday and Sunday 11.30-4.30pm</p>
         </div>
-            <div class="flex-container" style="background-color: aqua";> <!-- main division holding the wine boxes -->
-                <div style="background-color: rgb(52, 43, 226);"> <!-- Wine box 1 -->
-                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100"> <!-- image of wine-->
-                    <div style="background-color: rgb(20, 208, 255);"> <!-- wine name division -->
-                        <p>wine name 1</p>
-                    </div>
-                    <div style="background-color: rgb(0, 145, 255);"> <!-- price division -->
-                        <p>price</p>
-                    </div>
-                </div>
-                <div style="background-color: rgb(10, 83, 0);"> <!-- Wine box 2-->
-                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100">
-                    <div style="background-color: #00b100;"> <!-- wine name division -->
-                        <p>wine name 2</p>
-                    </div>
-                    <div style="background-color: rgb(155, 255, 149);"> <!-- price division-->
-                        <p>price</p>
-                    </div>
-                    </div>
-                <div style="background-color: rgb(56, 0, 108);"> <!-- Wine box 3 -->
-                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100"> <!-- image of wine-->
-                    <div style="background-color: rgb(255, 0, 204);"> <!-- wine name division -->
-                        <p>wine name 3</p>
-                    </div>
-                    <div style="background-color: rgb(255, 169, 242);"> <!-- price division-->
-                        <p>price</p>
-                    </div>
-                </div>
-                <div style="background-color: rgb(79, 0, 0);"> <!-- Wine box 4-->
-                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100">
-                    <div style="background-color: #ff0000;"> <!-- wine name division -->
-                        <p>wine name 4</p>
-                    </div>
-                    <div style="background-color: rgb(255, 130, 130);"> <!-- price division-->
-                        <p>price</p>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-    </body>
-    <footer>
+        <div style="width: calc((100% - 150px) * 0.20); font-family: 'Playfair Display', serif;">
+            <p>Phone Number: +64 1 234 5678</p>
+            <p>36 Main North Road, Blenheim</p>
+            <p>Email: info@malteowinery.com</p>
+        </div>
+    </header>
 
-    </footer>
+    <div style="background-color: chocolate;"> <!-- main body text -->
+        <h1 class="center-me text-sizing">Malteo Winery</h1>
+    </div>
+
+    <div style="background-color: #800020;"> <!-- general description paragraph -->
+        <p class="center-me text-sizing">paragraph about wines</p>
+    </div>
+    
+    <div class="flex-container" style="background-color: aqua;"> <!-- main division holding the wine boxes -->
+        <div style="width: 150px; background-color: rgb(52, 43, 226);"> <!-- Wine box 1 -->
+            <div class="center-me">
+                <img src="bottle.png" alt="image of wine" width="100"> <!-- image of wine -->
+            </div>
+            <div style="background-color: rgb(20, 208, 255);"> <!-- wine name division -->
+                <p>wine name 1</p>
+            </div>
+            <div style="background-color: rgb(0, 145, 255);"> <!-- price division -->
+                <p>price</p>
+            </div>
+        </div>
+        <div style="width: 150px; background-color: rgb(10, 83, 0);"> <!-- Wine box 2-->
+            <div class="center-me">
+                <img src="bottle.png" alt="image of wine" width="100"> <!-- image of wine -->
+            </div>
+            <div style="background-color: #00b100;"> <!-- wine name division -->
+                <p>wine name 2</p>
+            </div>
+            <div style="background-color: rgb(155, 255, 149);"> <!-- price division-->
+                <p>price</p>
+            </div>
+            </div>
+        <div style="width: 150px; background-color: rgb(56, 0, 108);"> <!-- Wine box 3 -->
+            <div class="center-me">
+                <img src="bottle.png" alt="image of wine" width="100"> <!-- image of wine -->
+            </div>
+            <div style="background-color: rgb(255, 0, 204);"> <!-- wine name division -->
+                <p>wine name 3</p>
+            </div>
+            <div style="background-color: rgb(255, 169, 242);"> <!-- price division-->
+                <p>price</p>
+            </div>
+        </div>
+        <div style="width: 150px; background-color: rgb(79, 0, 0);"> <!-- Wine box 4-->
+            <div class="center-me"> <!-- center image -->
+                <img src="bottle.png" alt="image of wine" width="100"> <!-- image of wine -->
+            </div>
+            <div style="background-color: #ff0000;"> <!-- wine name division -->
+                <p>wine name 4</p>
+            </div>
+            <div style="background-color: rgb(255, 130, 130);"> <!-- price division-->
+                <p>price</p>
+            </div>
+        </div>
+    </div>
+</body>
+<footer></footer>
 </html>
