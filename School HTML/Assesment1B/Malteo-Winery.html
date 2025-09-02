@@ -5,7 +5,7 @@
         <link rel="icon" type="image/x-icon" href="Logo.png">
         <title>Malteo Winery</title>
         <style>
-            nav {
+            nav { /* main navigation settings */
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -14,19 +14,19 @@
                 font-size: 20px;
                 gap: 12px;
             }
-            nav a {
+            nav a { /* navigation default font colour */
                 text-decoration: none;
                 color: #333;
             }
-            nav a:hover {
+            nav a:hover { /* navigation mouse hover font colour */
                 color: #800020;
             }
-            .flex-container {
+            .flex-container { /* spaces things around evenly */
                 display: flex;
                 justify-content: space-around;
                 background-color: green;
             }
-            .flex-container > div {
+            .flex-container > div { /* puts some padding around all divisions */
                 background-color: #f1f1f1;
                 margin: 10px;
                 padding: 20px;
@@ -35,14 +35,14 @@
         </style>
     </head>
     <body>
-        <header style="background-color: #dfcec6;">
+        <header style="background-color: #dfcec6;"> <!-- background colour for the main header/navigation -->
             <div style="height: 150px; display: flex; flex-wrap: wrap; flex-direction: column;">
-                <div style="height: 150px; width: 150px;">
-                    <img src="Logo.png" alt="Malteo Winery Logo" width="150" height="150">
+                <div style="height: 150px; width: 150px;"> <!-- image sizing -->
+                    <img src="Logo.png" alt="Malteo Winery Logo" width="150" height="150"> <!-- icon image -->
                 </div>
-                <div style="height: 150px; width: calc(100% - 158px);">
+                <div style="height: 150px; width: calc(100% - 158px);"> <!-- height of the division for the navigation -->
                     <div style="display: flex; flex-wrap: wrap; flex-direction: column; height: 150px;">
-                        <div style="height: 100%; width: calc(60% - 6px)">
+                        <div style="height: 100%; width: calc(60% - 6px)"> <!-- calculating the size of the nav font buttons -->
                             <nav>
                                 <a href="Malteo-Winery.html">Home</a>
                                 <a href="About.html">About Us</a>
@@ -64,46 +64,46 @@
                 </div>
             </div>
         </header>
-        <div class="flex-container" style="background-color: chocolate;">
+        <div class="flex-container" style="background-color: chocolate;"> <!-- main body text -->
             <h1>Malteo Winery</h1>
         </div>
-        <div class="flex-container" style="background-color: #800020";>
+        <div class="flex-container" style="background-color: #800020";> <!-- general description paragraph -->
             <p>paragraph about wines</p>
         </div>
-            <div class="flex-container" style="background-color: aqua";>
+            <div class="flex-container" style="background-color: aqua";> <!-- main division holding the wine boxes -->
                 <div style="background-color: rgb(52, 43, 226);"> <!-- Wine box 1 -->
-                    <img src="bottle.png" alt="image of wine" width="60"> <!-- image of wine-->
-                    <div style="background-color: rgb(20, 208, 255);">
+                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100"> <!-- image of wine-->
+                    <div style="background-color: rgb(20, 208, 255);"> <!-- wine name division -->
                         <p>wine name 1</p>
                     </div>
-                    <div style="background-color: rgb(0, 145, 255);">
+                    <div style="background-color: rgb(0, 145, 255);"> <!-- price division -->
                         <p>price</p>
                     </div>
                 </div>
                 <div style="background-color: rgb(10, 83, 0);"> <!-- Wine box 2-->
-                    <img src="bottle.png" alt="image of wine" width="60">
-                    <div style="background-color: #00b100;">
+                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100">
+                    <div style="background-color: #00b100;"> <!-- wine name division -->
                         <p>wine name 2</p>
                     </div>
-                    <div style="background-color: rgb(155, 255, 149);">
+                    <div style="background-color: rgb(155, 255, 149);"> <!-- price division-->
                         <p>price</p>
                     </div>
                     </div>
                 <div style="background-color: rgb(56, 0, 108);"> <!-- Wine box 3 -->
-                    <img src="bottle.png" alt="image of wine" width="60"> <!-- image of wine-->
-                    <div style="background-color: rgb(255, 0, 204);">
+                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100"> <!-- image of wine-->
+                    <div style="background-color: rgb(255, 0, 204);"> <!-- wine name division -->
                         <p>wine name 3</p>
                     </div>
-                    <div style="background-color: rgb(255, 169, 242);">
+                    <div style="background-color: rgb(255, 169, 242);"> <!-- price division-->
                         <p>price</p>
                     </div>
                 </div>
                 <div style="background-color: rgb(79, 0, 0);"> <!-- Wine box 4-->
-                    <img src="bottle.png" alt="image of wine" width="60">
-                    <div style="background-color: #ff0000;">
+                    <img style="padding: 25px;" src="bottle.png" alt="image of wine" width="100">
+                    <div style="background-color: #ff0000;"> <!-- wine name division -->
                         <p>wine name 4</p>
                     </div>
-                    <div style="background-color: rgb(255, 130, 130);">
+                    <div style="background-color: rgb(255, 130, 130);"> <!-- price division-->
                         <p>price</p>
                     </div>
                     </div>
