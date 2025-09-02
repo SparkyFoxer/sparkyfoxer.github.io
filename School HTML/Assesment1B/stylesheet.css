@@ -1,0 +1,37 @@
+nav { /* main navigation settings */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    gap: 12px;
+}
+nav a { /* navigation default font colour */
+    text-decoration: none;
+    color: #333;
+}
+nav a:hover { /* navigation mouse hover font colour */
+    color: #800020;
+}
+
+.flex-container { /* spaces things around evenly */
+    display: flex;
+    justify-content: space-around;
+}
+
+.text-sizing { /* font size and padding for title and text - Oreo*/
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+}
+
+.center-me { /* apply this to a div to make it centered - Oreo */
+    margin: auto;
+    text-align: center;
+}
+
+.row-display { /* apply this to display items inside in a row - Oreo */
+    display: flex;
+    flex-wrap: wrap;
+}
