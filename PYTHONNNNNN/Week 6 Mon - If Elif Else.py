@@ -85,10 +85,8 @@ PieCount = int(input("How many pies do you want? "))
 CoffeeCount = int(input("How many coffees do you want? "))
 if PieCount >0 and CoffeeCount>0:
    PiePrice = PieCount*PieCost
-   print(f"You need to pay ${PiePrice} for {PieCount} pies")
-elif CoffeeCount >0 and CoffeeCount>0:
-   CoffeePrice = CoffeeCount*CoffeeCost
-   print(f"you need to pay {CoffeePrice} for {CoffeeCount} coffees")
+   CoffeePrice = CoffeeCost*CoffeeCount
+   Total = CoffeePrice + PiePrice
+   print(f"Your total is ${Total}")
 else:
    print("Goodbye")
-
