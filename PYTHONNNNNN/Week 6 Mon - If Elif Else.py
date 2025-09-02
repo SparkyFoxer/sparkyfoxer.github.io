@@ -70,10 +70,25 @@
 
 # 3/09/2025
 # write code revision
-Day = input("What day of the week is it?\nMon, Tue, Wed, Thr, Fri, Sat, Sun? ") .strip().title() 
-if Day == "Mon" or Day == "Wed": #.strip() removes spaces, .title() adds caps for input
-   print("we have CITE 404 today")
-elif Day == "Tue" or Day == "Thr":
-   print("We have 402 today")
+#Day = input("What day of the week is it?\nMon, Tue, Wed, Thr, Fri, Sat, Sun? ") .strip().title() 
+#if Day == "Mon" or Day == "Wed": #.strip() removes spaces, .title() adds caps for input
+#   print("we have CITE 404 today")
+#elif Day == "Tue" or Day == "Thr":
+#   print("We have 402 today")
+#else:
+#   print("We have no classes today")
+#
+# Pseudocode & testing plan written from paper copy
+PieCost = 6.00
+CoffeeCost = 6.50
+PieCount = int(input("How many pies do you want? "))
+CoffeeCount = int(input("How many coffees do you want? "))
+if PieCount >0 and CoffeeCount>0:
+   PiePrice = PieCount*PieCost
+   print(f"You need to pay ${PiePrice} for {PieCount} pies")
+elif CoffeeCount >0 and CoffeeCount>0:
+   CoffeePrice = CoffeeCount*CoffeeCost
+   print(f"you need to pay {CoffeePrice} for {CoffeeCount} coffees")
 else:
-   print("We have no classes today")
+   print("Goodbye")
+
