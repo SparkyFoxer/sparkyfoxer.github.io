@@ -4,10 +4,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/x-icon" href="Logo.png">
         <title>Malteo Winery</title>
-
-        <!-- Add a nice elegant font -->
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-
         <style>
             nav {
                 display: flex;
@@ -18,14 +14,23 @@
                 font-size: 20px;
                 gap: 12px;
             }
-
             nav a {
                 text-decoration: none;
                 color: #333;
             }
-
             nav a:hover {
                 color: #800020;
+            }
+            .flex-container {
+                display: flex;
+                justify-content: space-around;
+                background-color: green;
+            }
+            .flex-container > div {
+                background-color: #f1f1f1;
+                margin: 10px;
+                padding: 20px;
+                font-size: 30px;
             }
         </style>
     </head>
@@ -59,8 +64,54 @@
                 </div>
             </div>
         </header>
+        <div class="flex-container" style="background-color: chocolate;">
+            <h1>Malteo Winery</h1>
+        </div>
+        <div class="flex-container" style="background-color: #800020";>
+            <p>paragraph about wines</p>
+        </div>
+            <div class="flex-container" style="background-color: aqua";>
+                <div style="background-color: rgb(52, 43, 226);"> <!-- Wine box 1 -->
+                    <img src="bottle.png" alt="image of wine" width="60"> <!-- image of wine-->
+                    <div style="background-color: rgb(20, 208, 255);">
+                        <p>wine name 1</p>
+                    </div>
+                    <div style="background-color: rgb(0, 145, 255);">
+                        <p>price</p>
+                    </div>
+                </div>
+                <div style="background-color: rgb(10, 83, 0);"> <!-- Wine box 2-->
+                    <img>
+                    <div style="background-color: #00b100;">
+                        <p>wine name 2</p>
+                    </div>
+                    <div style="background-color: rgb(155, 255, 149);">
+                        <p>price</p>
+                    </div>
+                    </div>
+                <div style="background-color: rgb(56, 0, 108);"> <!-- Wine box 3 -->
+                    <img> <!-- image of wine-->
+                    <div style="background-color: rgb(255, 0, 204);">
+                        <p>wine name 3</p>
+                    </div>
+                    <div style="background-color: rgb(255, 169, 242);">
+                        <p>price</p>
+                    </div>
+                </div>
+                <div style="background-color: rgb(79, 0, 0);"> <!-- Wine box 4-->
+                    <img>
+                    <div style="background-color: #ff0000;">
+                        <p>wine name 4</p>
+                    </div>
+                    <div style="background-color: rgb(255, 130, 130);">
+                        <p>price</p>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
     </body>
     <footer>
-        
+
     </footer>
 </html>
