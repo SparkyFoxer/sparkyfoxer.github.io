@@ -54,8 +54,8 @@
 #     print("ERROR")
 
 
-Number=int(input("Please enter a number: ")).strip()
-"This is an invalid number"
-if Number "The number is even."
-elif"The number is odd."
-print("Thank you for your input.")
+# Number=int(input("Please enter a number: ")).strip()
+# "This is an invalid number"
+# if Number "The number is even." # UFINISHED
+# elif"The number is odd."
+# print("Thank you for your input.")
