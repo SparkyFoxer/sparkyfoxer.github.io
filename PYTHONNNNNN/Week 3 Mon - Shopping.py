@@ -8,7 +8,7 @@ print(f"Hello {FirstName} {LastName}, welcome to The Store!")
 print(f"Today is {Date}, lets go shopping!")
 
 
-Go = input("Welcome to The Store! \nWe have drinks and food. \nWhere do you wanna go... | Drinks/Food?: ")
+Go = input("Welcome to The Store! \nWe have drinks and food. \nWhere do you wanna go... | Drinks/Food?: ").strip().capitalize()
 
 if Go == "Food":
    print ("You walk to the Food isle. \nThere are 3 Foods; \n\t- Pizza \n\t- Burger \n\t- Salad")
@@ -39,7 +39,7 @@ elif Go == "Drinks":
    Food = "None"
 
 else:
-   print("ERRR UR WRONG! *dies*")
+   print("Invalid inut")
    Food = "None"
    Drinks = "None"
 
