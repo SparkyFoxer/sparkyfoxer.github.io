@@ -99,26 +99,48 @@
 #     elif Temp >=10 and Temp <=19: print("Wear a sweater")
 #     elif Temp <10: print("Extreme weather - stay indoors!")
 
-#BrendanC
-#Question6
+# #BrendanC
+# #Question6
 
-#What is your word, number or phrase? 
-Word=input("What is your word, number or phrase? ")
-CheckedWord=Word.isupper()
-print(CheckedWord) # is checking to see if the word inputed is all caps or not
+# Word=input("What is your word, number or phrase? ").strip()
+# if Word.isalpha():
+#     print("You entered only letters")
+# elif Word.isnumeric():
+#     print("You entered only numbers")
+# elif Word.isspace():
+#     print("You entered only spaces!")
+# elif Word.isalnum():
+#     print("You entered letters and numbers")
+# else:
+#     print("Your word is a mix of other characters, including punctuation.")
 
-Word=(input("Please input something: ")).strip()
-CheckedWord=Word.isalpha()
-if Word.isalpha("a")
-    if CheckedWord.startswith("a"):
-        print("Starts with a")
-    elif CheckedWord.startswith("a"):
-        print("Doesnt start with a")
-else:
-    print("You put a mix of characters")
-#You entered only numbers
-#You entered only letters
-#You entered letters and numbers
-#You entered only spaces!
-#Your word is a mix of other characters, including punctuation.
 
+# #BrendanC
+# #Question7
+
+# Word=input("Enter a word: ").strip().capitalize()
+# if Word.startswith("A"):
+#     print("The word begins with A or a.")
+# elif Word.startswith("B"):
+#     print("The word begins with B or b.")
+# else:
+#     print("The word begins with something else.")
+
+# #BrendanC
+# #Question8
+# # It is {} that the word {} starts with the letter {}.
+
+# Letter=str(input("Give me a letter of the alphabet: ")).strip().capitalize()
+# AlphaWord=str(input(f"Please enter a word that starts with {Letter}: ")).strip().capitalize()
+# if AlphaWord.startswith(Letter):
+#     print(f"It is True that the word {AlphaWord} starts with the letter {Letter}.")
+# else:
+#     print(f"It is False that the word {AlphaWord} starts with the letter {Letter}.")
+
+# BrendanC
+# Question9
+
+Word=input("Please enter a word whose letters are all lower case: ")
+
+#It is {} that you have entered a lower case word
+#It is {}, Try again
