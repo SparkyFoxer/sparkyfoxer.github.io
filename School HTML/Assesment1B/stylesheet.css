@@ -6,13 +6,29 @@ nav { /* main navigation settings */
     font-family: 'Playfair Display', serif;
     font-size: 20px;
     gap: 12px;
+    background-color: #31859b;
 }
 nav a { /* navigation default font colour */
     text-decoration: none;
     color: #333;
+    background-color: #92cddc;
+    outline: solid black 2px;
+    font-size: xx-large;
+    padding: 1%;
 }
 nav a:hover { /* navigation mouse hover font colour */
     color: #800020;
+}
+
+.header-container {
+    width: calc((100% - 230px) * 0.20);
+    font-family: 'Playfair Display', serif;
+    background-color: #31859b;
+}
+
+.header-container p {
+    background-color: #92cddc;
+    outline: solid black 2px;
 }
 
 .flex-container { /* spaces things around evenly */
@@ -34,4 +50,21 @@ nav a:hover { /* navigation mouse hover font colour */
 .row-display { /* apply this to display items inside in a row - Oreo */
     display: flex;
     flex-wrap: wrap;
+}
+
+.black-border {
+    outline: solid black 4px;
+}
+
+.thin-black-border {
+    outline: solid black 2px;
+}
+
+.product-display {
+    width: 150px;
+    background-color: #d9958f;
+}
+
+.horizontal-spacer {
+    height: 15px;
 }
