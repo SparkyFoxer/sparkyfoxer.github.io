@@ -12,9 +12,14 @@
 # once the user has finished getting everthing they want they then need to checkout. 
 # checkout just calculates the total price of everything together and prints a receipt 
 # once user has checked out the store then says goodbye and the code finishes
+# make sure to handle invalid inputs and edge cases
+# use functions where possible to keep code clean
+# use comments to explain code where needed
 
 
 # Store setup
+
+# Items and prices
 items = {
     "Pharmacy": {"Painkillers": 12, "Bandages": 5, "Cough Syrup": 10},
     "Snacks": {"Chips": 3, "Chocolate": 2, "Candy": 1},
@@ -25,22 +30,22 @@ items = {
 }
 
 wallet = 100
-cart = {}
+cart = {} # Shopping cart
 
 # Intro
-date = input("What is the date today?: ")
-print(f"\nWelcome to Sparky's Store! \nDate: {date}")
+date = input("What is the date today?: ") # Get current date
+print(f"\nWelcome to Sparky's Store! \nDate: {date}") # Welcome message
 print("We cater to all your needs including:\nPharmacy goods, Snacks, Drinks, Bakery, Dairy products, and Meats.")
 print(f"You have ${wallet} in your wallet. Time to shop!\n")
 
 # Store loop
 while True:
-    print("\nWhere do you wanna go?")
-    print("1: Pharmacy | 2: Snacks | 3: Drinks | 4: Bakery | 5: Dairy | 6: Meats | 0: Checkout")
+    print("\nWhere do you wanna go?") 
+    print("1: Pharmacy | 2: Snacks | 3: Drinks | 4: Bakery | 5: Dairy | 6: Meats | 0: Checkout") 
 
     choice = input("Type isle number or name: ").strip().capitalize()
 
-    isle_map = {
+    isle_map = {    # Mapping inputs to isle names
         "1": "Pharmacy", "Pharmacy": "Pharmacy",
         "2": "Snacks", "Snacks": "Snacks",
         "3": "Drinks", "Drinks": "Drinks",
@@ -50,49 +55,49 @@ while True:
         "0": "Checkout"
     }
 
-    if choice not in isle_map:
+    if choice not in isle_map: # Invalid input handling
         print("Invalid input! Try again.")
         continue
 
     isle = isle_map[choice]
 
-    if isle == "Checkout":
+    if isle == "Checkout": # Checkout process
         print("\nCheckout time!")
-        total = sum(price * qty for item, (price, qty) in cart.items())
+        total = sum(price * qty for item, (price, qty) in cart.items()) # Calculate total
         print("\nYour Receipt:")
-        for item, (price, qty) in cart.items():
+        for item, (price, qty) in cart.items(): # Print receipt
             print(f"{item} x{qty} - ${price * qty}")
         print(f"Total: ${total}")
-        print(f"Wallet left: ${wallet - total}")
-        print("\nThank you for shopping at Sparky's Store! 🦊 Goodbye!\n")
+        print(f"Wallet left: ${wallet - total}")   # Print remaining wallet balance
+        print("\nThank you for shopping at Sparky's Store! Goodbye!\n") # Goodbye message
         break
 
-    print(f"\nYou walk into the {isle} isle. Here’s what’s available:")
+    print(f"\nYou walk into the {isle} isle. Here’s what’s available:") # Display items in isle
     for item, price in items[isle].items():
         print(f"- {item}: ${price}")
 
-    pick = input("What do you want to buy? (or type 'back'): ").strip().title()
+    pick = input("What do you want to buy? (or type 'back'): ").strip().title() # Item selection
     if pick.lower() == "back":
         continue
     if pick not in items[isle]:
-        print("That item doesn't exist here.")
+        print("That item doesn't exist here.") # Invalid item handling
         continue
 
     try:
-        qty = int(input(f"How many {pick}s do you want? "))
+        qty = int(input(f"How many {pick}s do you want? ")) # Quantity selection
     except ValueError:
         print("Please enter a valid number.")
         continue
 
-    cost = items[isle][pick] * qty
+    cost = items[isle][pick] * qty # Affordability check
     if cost > wallet - sum(price * qty for item, (price, qty) in cart.items()):
-        print(f"You can't afford that! You only have ${wallet - sum(price * qty for item, (price, qty) in cart.items())} left.")
+        print(f"You can't afford that! You only have ${wallet - sum(price * qty for item, (price, qty) in cart.items())} left.") # Insufficient funds message
         continue
 
-    if pick in cart:
+    if pick in cart: # Add to cart
         old_price, old_qty = cart[pick]
         cart[pick] = (old_price, old_qty + qty)
-    else:
+    else: # New item in cart
         cart[pick] = (items[isle][pick], qty)
 
     print(f"Added {qty} {pick}(s) to your cart!")
@@ -102,4 +107,4 @@ while True:
     print("\nYour cart:")
     for item, (price, qty) in cart.items():
         print(f"{item} x{qty} - ${price * qty}")
-    print(f"Total so far: ${total} / Wallet: ${wallet}")
+    print(f"Total so far: ${total} / Wallet: ${wallet}") # Show running total and wallet balance

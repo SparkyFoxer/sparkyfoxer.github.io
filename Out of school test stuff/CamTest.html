@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Webcam Stream</title>
+
+<style>
+    h1 {
+        font-family: sans-serif;
+        color: #333;
+    }
+    body {
+        margin: 50px;
+    }
+    #container {
+        margin: 0px auto;
+        width: 960px;
+        height: 720px;
+        border: 10px solid #333;
+    }
+    #videoElement {
+        width: 960px;
+        height: 720px;
+        background-color: #666;
+    }
+</style>
+</head>
+<body>
+    <h1>Display Webcam Stream</h1>
+    <div id="container">
+        <video id="videoElement" autoplay="true">
+
+
+        </video>
+    </div>
+
+<script>
+    let video = document.querySelector("#videoElement");
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (err0r) {
+                console.log("Something went wrong!");
+            });
+    }
+</script>
+</body>
+</html
