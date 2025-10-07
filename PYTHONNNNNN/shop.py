@@ -1,6 +1,6 @@
 # Sparky's Store
 
-# I want an intro to what it is that is going on 
+# An intro to what it is that is going on 
 # "Welcome to Sparkys Store, date etc" 
 # I want to present the user with what the store has avalable and where they can go 
 # places they could go would be in isles; Isle 1: pharmacy, Isle 2: snacks, Isle 3: drinks, Isle 4: bakery, Isle 5: dairy, Isle 6: Meats 
