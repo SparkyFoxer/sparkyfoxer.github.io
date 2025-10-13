@@ -5,13 +5,10 @@ fruits = ["apple", "banana","cherry"]
 for Eachfruit in fruits:
     print(Eachfruit)
 
-<<<<<<< HEAD:PYTHONNNNNN/Week 9 Wed - CODERUNNER Q.py
 # # for "amount" in fruits, print how many times the "amount" of the item is in the list
 # # is _apple_ in fruits = yes = "print apple"
-=======
 for "amount" in fruits, print how many times the "amount" of the item is in the list
 is _apple_ in fruits = yes = "print apple"
->>>>>>> 685970a493db21d334625d5b143f3d61bf34879a:PYTHONNNNNN/Week 9 Wed.py
 
 Animals = ["Cat","Dog","Bird","Fox","Mouse"] # my list
 print (Animals) # print the list
@@ -69,13 +66,10 @@ grocery_list.append("chips")
 grocery_list.append("pies")
 print(grocery_list)
 
-<<<<<<< HEAD:PYTHONNNNNN/Week 9 Wed - CODERUNNER Q.py
 # # #BrendanC
 # # #Question8
-=======
 #BrendanC
 #Question8
->>>>>>> 685970a493db21d334625d5b143f3d61bf34879a:PYTHONNNNNN/Week 9 Wed.py
 
 grocery_list = ["milk", "bread", "eggs", "butter", "apples", "cheese", "chips", "vegemite", "peanut butter", "chicken"]
 List=len(grocery_list)
@@ -83,7 +77,6 @@ print(List)
 
 # #BrendanC
 # #Question5
-<<<<<<< HEAD:PYTHONNNNNN/Week 9 Wed - CODERUNNER Q.py
 
 # #Enter the temperature in °C:
 # #Is it raining? (yes/no) 
@@ -112,7 +105,6 @@ print(List)
 
 # # #BrendanC
 # # #Question6
-=======
 Temp=int(input("Enter the temperature in °C: "))
 Raining=input("Is it raining? (yes/no) ").strip().lower()
 if Raining == "yes":
@@ -127,7 +119,6 @@ else:
 
 #BrendanC
 #Question6
->>>>>>> 685970a493db21d334625d5b143f3d61bf34879a:PYTHONNNNNN/Week 9 Wed.py
 
 Word=input("What is your word, number or phrase? ").strip()
 if Word.isalpha():
@@ -145,7 +136,6 @@ else:
 # # #BrendanC
 # # #Question7
 
-<<<<<<< HEAD:PYTHONNNNNN/Week 9 Wed - CODERUNNER Q.py
 # # Word=input("Enter a word: ").strip().capitalize()
 # # if Word.startswith("A"):
 # #     print("The word begins with A or a.")
@@ -153,7 +143,6 @@ else:
 # #     print("The word begins with B or b.")
 # # else:
 # #     print("The word begins with something else.")
-=======
 Word=input("Enter a word: ").strip().capitalize()
 if Word.startswith("A"):
     print("The word begins with A or a.")
@@ -161,34 +150,29 @@ elif Word.startswith("B"):
     print("The word begins with B or b.")
 else:
     print("The word begins with something else.")
->>>>>>> 685970a493db21d334625d5b143f3d61bf34879a:PYTHONNNNNN/Week 9 Wed.py
 
 # # #BrendanC
 # # #Question8
 # # # It is {} that the word {} starts with the letter {}.
 
-<<<<<<< HEAD:PYTHONNNNNN/Week 9 Wed - CODERUNNER Q.py
 # # Letter=str(input("Give me a letter of the alphabet: ")).strip().capitalize()
 # # AlphaWord=str(input(f"Please enter a word that starts with {Letter}: ")).strip().capitalize()
 # # if AlphaWord.startswith(Letter):
 # #     print(f"It is True that the word {AlphaWord} starts with the letter {Letter}.")
 # # else:
 # #     print(f"It is False that the word {AlphaWord} starts with the letter {Letter}.")
-=======
 Letter=str(input("Give me a letter of the alphabet: ")).strip().capitalize()
 AlphaWord=str(input(f"Please enter a word that starts with {Letter}: ")).strip().capitalize()
 if AlphaWord.startswith(Letter):
     print(f"It is True that the word {AlphaWord} starts with the letter {Letter}.")
 else:
     print(f"It is False that the word {AlphaWord} starts with the letter {Letter}.")
->>>>>>> 685970a493db21d334625d5b143f3d61bf34879a:PYTHONNNNNN/Week 9 Wed.py
 
 # # BrendanC
 # # Question9
 
 # Word=input("Please enter a word whose letters are all lower case: ")
 
-<<<<<<< HEAD:PYTHONNNNNN/Week 9 Wed - CODERUNNER Q.py
 # #It is {} that you have entered a lower case word
 # #It is {}, Try again
 
@@ -200,7 +184,6 @@ Num = int(input("Please enter a number: "))
 Ans = ({Num} - 1)
 print("Please re-enter the number, zero or negative numbers are not allowed")
 print(f"The answer to {Num} - 1 is {Ans}")
-=======
 #It is {} that you have entered a lower case word
 #It is {}, Try again
 
@@ -216,4 +199,3 @@ else:
     print("The number is odd.")
 print("Thank you for your input.")
 
->>>>>>> 685970a493db21d334625d5b143f3d61bf34879a:PYTHONNNNNN/Week 9 Wed.py

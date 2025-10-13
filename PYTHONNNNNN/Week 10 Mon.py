@@ -142,4 +142,3 @@ print (greeting)
 FuelUnits=int(input("How many fuel units are needed? "))
 for i in range(FuelUnits):
     print(f"Fuel Loaded: [{'#' * (i + 1)}] {i + 1}/{FuelUnits}")
->>>>>>> 685970a493db21d334625d5b143f3d61bf34879a
