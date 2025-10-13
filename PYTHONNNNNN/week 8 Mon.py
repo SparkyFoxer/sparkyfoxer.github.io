@@ -29,15 +29,15 @@ Word=input("Give me a word: ")
 CheckedWord=Word.isupper()
 print(CheckedWord) # is checking to see if the word inputed is all caps or not
 
-# Word=(input("Please input something: ")).strip()
-# CheckedWord=Word.isalpha()
-# if CheckedWord:
-#     if CheckedWord.startswith("a"):
-#         print("Starts with a")
-#     elif CheckedWord.startswith("a"):
-#         print("Doesnt start with a")
-# else:
-#     print("You put a mix of characters")
+Word=(input("Please input something: ")).strip()
+CheckedWord=Word.isalpha()
+if CheckedWord:
+    if CheckedWord.startswith("a"):
+        print("Starts with a")
+    elif CheckedWord.startswith("a"):
+        print("Doesnt start with a")
+else:
+    print("You put a mix of characters")
 
 Test = int(input("What percent did you get for your test result?: "))
 if Test <0:
