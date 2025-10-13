@@ -20,7 +20,7 @@ nav a:hover { /* navigation mouse hover font colour */
     color: #800020;
 }
 
-.header-container {
+.header-container { 
     width: calc((100% - 230px) * 0.20);
     font-family: 'Playfair Display', serif;
     background-color: #31859b;
@@ -36,18 +36,18 @@ nav a:hover { /* navigation mouse hover font colour */
     justify-content: space-around;
 }
 
-.text-sizing { /* font size and padding for title and text - Oreo*/
+.text-sizing { /* font size and padding for title and text */
     margin: 10px;
     padding: 20px;
     font-size: 30px;
 }
 
-.center-me { /* apply this to a div to make it centered - Oreo */
+.center-me { /* to a div to make it centered */
     margin: auto;
     text-align: center;
 }
 
-.row-display { /* apply this to display items inside in a row - Oreo */
+.row-display { /* display items inside in a row */
     display: flex;
     flex-wrap: wrap;
 }
