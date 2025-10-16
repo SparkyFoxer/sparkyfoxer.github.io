@@ -6,9 +6,9 @@ for Eachfruit in fruits:
     print(Eachfruit)
 
 # # for "amount" in fruits, print how many times the "amount" of the item is in the list
-# # is _apple_ in fruits = yes = "print apple"
-for "amount" in fruits, print how many times the "amount" of the item is in the list
-is _apple_ in fruits = yes = "print apple"
+# # # is _apple_ in fruits = yes = "print apple"
+# for "amount" in fruits, print how many times the "amount" of the item is in the list
+# is _apple_ in fruits = yes = "print apple"
 
 Animals = ["Cat","Dog","Bird","Fox","Mouse"] # my list
 print (Animals) # print the list

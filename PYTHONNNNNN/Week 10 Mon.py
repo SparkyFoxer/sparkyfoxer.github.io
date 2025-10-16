@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 6/10/2025
 # Pseudocode practice
 # Can I go to the beach today?
@@ -68,15 +68,14 @@
 
 
 
-greeting = len("Hello World")
-print (greeting)
+# greeting = len("Hello World")
+# print (greeting)
 
 # What number will we get as output?
 
 
 
 
-=======
 # for i in range(5):
 #     print(i)
 #  # this prints 0-4
