@@ -8,22 +8,24 @@
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-    <header style="background-color: #dec6be;" class="row-display"> <!-- background colour for the main header/navigation -->
-        <img src="Logo.png" alt="Malteo Winery Logo" width="150" height="150"> <!-- icon image -->
-        <div class="center-me" style="width: calc((100% - 230px) * 0.60); height: 120px;"> <!-- calculating the size of the nav font buttons -->
+    <header style="background-color: #dec6be" class="row-display black-border"> <!-- background colour for the main header/navigation -->
+        <img src="Logo.png" alt="Malteo Winery Logo" width="160" height="160"> <!-- icon image -->
+        <div class="center-me" style="width: calc((100% - 230px) * 0.60); height: 120px; background-color: #d3b9b4;"> <!-- calculating the size of the nav font buttons -->
             <nav>
-                <a href="Malteo-Winery.html">Home</a>
-                <a href="AboutUs.html">About Us</a>
-                <a href="Products.html">Products</a>
-                <a href="Contact.html">Contact</a>
+                <div class="flex-container" style="justify-content: center; align-items: center; height: 100%;"> <!-- navigation bar -->
+                    <a href="Malteo-Winery.html">Home</a>
+                    <a href="AboutUs.html">About Us</a>
+                    <a href="Products.html">Products</a>
+                    <a href="Contact.html">Contact</a>
+                </div>
             </nav>
         </div>
-        <div class="center-me header-container">
+        <div class="center-me header-container" style="background-color: #d3b9b4; height: 120px;">
             <p>Opening Hours</p>
             <p>Monday - Friday 11.30 - 2.30pm</p>
             <p>Saturday and Sunday 11.30-4.30pm</p>
         </div>
-        <div class="center-me header-container">
+        <div class="center-me header-container" style="background-color: #d3b9b4; height: 120px;">
             <p>Phone Number: +64 1 234 5678</p>
             <p>36 Main North Road, Blenheim</p>
             <p>Email: info@malteowinery.com</p>
@@ -50,19 +52,19 @@
 
         <div class="horizontal-spacer"></div>
         
-        <div class="flex-container black-border" style="background-color: #dec6be;"> <!-- main division holding the wine boxes -->
+        <div class="flex-container" style="background-color: #dec6be;"> <!-- main division holding the wine boxes -->
             <div class="product-display"> <!-- Wine box 1 -->
                 <div class="center-me">
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
                 <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me thin-black-border" style="font-size: 20px; padding: 10px;">wine name 1</p>
+                    <p class="center-me" style="font-size: 20px; padding: 10px;">Chardonnay</p>
                 </div>
                 <div class="flex-container" style="margin-top: 5px;">
-                    <div class="thin-black-border" style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">price</p>
+                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
+                        <p class="center-me" style="font-size: 20px; padding: 10px;">$39.99</p>
                     </div>
-                    <div class="thin-black-border" style="background-color: #dec6be;">
+                    <div style="background-color: #dec6be;">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
@@ -72,13 +74,13 @@
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
                 <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me thin-black-border" style="font-size: 20px; padding: 10px;">wine name 2</p>
+                    <p class="center-me" style="font-size: 20px; padding: 10px;">Sauvignon Blanc</p>
                 </div>
                 <div class="flex-container" style="margin-top: 5px;">
-                    <div class="thin-black-border" style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">price</p>
+                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
+                        <p class="center-me" style="font-size: 20px; padding: 10px;">$44.99</p>
                     </div>
-                    <div class="thin-black-border" style="background-color: #dec6be;">
+                    <div  style="background-color: #dec6be;">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
@@ -88,13 +90,13 @@
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
                 <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me thin-black-border" style="font-size: 20px; padding: 10px;">wine name 3</p>
+                    <p class="center-me" style="font-size: 20px; padding: 10px;">Riesling</p>
                 </div>
                 <div class="flex-container" style="margin-top: 5px;">
-                    <div class="thin-black-border" style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">price</p>
+                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
+                        <p class="center-me" style="font-size: 20px; padding: 10px;">$29.99</p>
                     </div>
-                    <div class="thin-black-border" style="background-color: #dec6be;">
+                    <div style="background-color: #dec6be;">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
@@ -104,13 +106,13 @@
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
                 <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me thin-black-border" style="font-size: 20px; padding: 10px;">wine name 4</p>
+                    <p class="center-me" style="font-size: 20px; padding: 10px;">Pinot Grigio</p>
                 </div>
                 <div class="flex-container" style="margin-top: 5px;">
-                    <div class="thin-black-border" style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">price</p>
+                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
+                        <p class="center-me" style="font-size: 20px; padding: 10px;">$19.99</p>
                     </div>
-                    <div class="thin-black-border" style="background-color: #dec6be;">
+                    <div style="background-color: #dec6be;">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
@@ -120,8 +122,8 @@
     <div class="horizontal-spacer"></div>
 
     <div style="background-image: url(winery-background.jpg); background-size: 100%;" id="history">
-        <h1 class="center-me text-sizing" style="margin: 10px; background-color: #d3d3d32c;">Our History</h1>
-        <p class="text-sizing" style="background-color: #d3d3d32c;">
+        <h1 class="center-me" style="margin: 10px; background-color: #3b3b3b67;">Our History</h1>
+        <p class="text-sizing" style="background-color: #3b3b3b67;">
             Founded in 1952, Malteo Winery has been a cherished family tradition for over three generations. 
             Nestled in one of New Zealand’s oldest and most renowned wine regions, 
             our vineyards benefit from a unique terroir that imparts exceptional character to our wines. 
@@ -129,7 +131,7 @@
             blending time-honored techniques with modern innovation. This dedication has allowed us to create elegant, 
             award-winning white wines that capture the true essence of our land and heritage.
         </p>
-        <ul class="text-sizing" style="background-color: #d3d3d32c;">
+        <ul class="text-sizing" style="background-color: #3b3b3b67;">
             <li style="margin-left: 20px;">Malteo Winery has been proudly family-owned and operated since 1952, 
                 passing down winemaking traditions and passion from generation to generation.</li>
             <li style="margin-left: 20px;">All grapes are cultivated using environmentally friendly and sustainable farming practices, 
@@ -139,7 +141,7 @@
             <li style="margin-left: 20px;">The winery’s vineyards are located in one of New Zealand’s oldest wine-growing regions, 
                 known for its unique terroir that imparts distinctive character to the wines.</li>
         </ul>
-        <p class="text-sizing" style="background-color: #d3d3d32c;">
+        <p class="text-sizing" style="background-color: #3b3b3b67;">
             At Malteo Winery, we take pride in our rich heritage and commitment to quality. 
             Our grapes are sustainably grown in pristine vineyards, reflecting our respect for the environment and future generations. 
             Over the years, our wines have garnered multiple awards, showcasing the exceptional care and expertise poured into every bottle. 
@@ -211,27 +213,27 @@
             <h1>Sign up to our newsletter!</h1>
         </div>
         <div class="flex-container" style="height: auto;">
-            <div class="flex-container" style="width: 40%; height: 100px; background-color: #cccccc; margin: 1%;">
-                <h1>Sign up!</h1>
-                <table>
-                    <tr>
-                        <td><h2 style="margin: 0;">First Name:</h2></td>
-                        <td><input></td>
-                    </tr>
-                    <tr>
-                        <td><h2 style="margin: 0;">Email:</h2></td>
-                        <td><input></td>
-                    </tr>
-                </table>
+            <div style="height: auto; width: 40%;">
+                <div class="flex-container" style="width: 100%; height: 100px; background-color: #cccccc; margin: 1%; margin-top: 80px;">
+                    <h1>Sign up!</h1>
+                    <table>
+                        <tr>
+                            <td><h2 style="margin: 0;">First Name:</h2></td>
+                            <td><input></td>
+                        </tr>
+                        <tr>
+                            <td><h2 style="margin: 0;">Email:</h2></td>
+                            <td><input></td>
+                        </tr>
+                    </table>
+                </div>    
             </div>
             <div class="center-me" style="width: 40%; background-color: #cccccc; margin: 1%;">
-                <h1>small newsletter blob</h1>
+                <h1>Why you should sign up?</h1>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Stay updated with the latest news, events, and exclusive offers from Malteo Winery by subscribing to our newsletter. 
+                    Be the first to know about new wine releases, special tastings, and community events. 
+                    Join our wine-loving community today and never miss a sip!
                 </p>
             </div>
         </div>
@@ -241,27 +243,27 @@
 
     <footer>
         <div class="flex-container" style="background-color: #205867;">
-            <div class="center-me" style="margin: 10px; width: 10%; background-color: #31859b;">
+            <div class="center-me" style="margin: 10px; width: 23%; background-color: #31859b;">
                 <h2>Contact Us</h2>
                 <p>Phone Number: +64 1 234 5678</p>
                 <p>36 Main North Road, Blenheim</p>
                 <p>Email: info@malteowinery.com</p>
             </div>
-            <div class="center-me" style="margin: 10px; width: 10%; background-color: #31859b;">
+            <div class="center-me" style="margin: 10px; width: 23%; background-color: #31859b;">
                 <h2>Products</h2>
-                <p>Classic Chardonnay</p>
-                <p>Crisp Sauvignon Blanc</p>
-                <p>Elegant Riesling</p>
-                <p>Refreshing Pinot Grigio</p>
+                <p>Chardonnay</p>
+                <p>Sauvignon Blanc</p>
+                <p>Riesling</p>
+                <p>Pinot Grigio</p>
             </div>
-            <div class="center-me" style="margin: 10px; width: 10%; background-color: #31859b;">
+            <div class="center-me" style="margin: 10px; width: 23%; background-color: #31859b;">
                 <h2>Navigation</h2>
                 <p><a href="#products">Wines</a></p>
                 <p><a href="#history">History</a></p>
                 <p><a href="#community">Community</a></p>
                 <p><a href="#newsletter">Newsletter</a></p>
             </div>
-            <div class="center-me" style="margin: 10px; width: 10%; background-color: #31859b;">
+            <div class="center-me" style="margin: 10px; width: 23%; background-color: #31859b;">
                 <h2>Our Socials</h2>
                 <p>Insta - @MalteoWinery</p>
                 <p>FB - @MalteoWinery</p>
