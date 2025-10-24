@@ -138,6 +138,8 @@
 # for letter in word:
 #     print(len(letter))
 
-FuelUnits=int(input("How many fuel units are needed? "))
-for i in range(FuelUnits):
-    print(f"Fuel Loaded: [{'#' * (i + 1)}] {i + 1}/{FuelUnits}")
+# FuelUnits=int(input("How many fuel units are needed? "))
+# for i in range(FuelUnits):
+#     print(f"Fuel Loaded: [{'#' * (i + 1)}] {i + 1}/{FuelUnits}")
+
+#
