@@ -1,34 +1,41 @@
-nav { /* main navigation settings */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    gap: 12px;
-    background-color: #31859b;
+body {
+    font-family: 'Georgia', serif;
+    font-size: 18px;           
+    line-height: 1.6;        
+    color: #333;          
+    background-color: #f3e7e3;
 }
-nav a { /* navigation default font colour */
+
+h1, h2, h3 {
+    font-family: 'Georgia', serif;
+    color: #5a3e36;        
+}
+
+p, nav a {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    color: #4a4a4a;
+}
+
+nav a {
     text-decoration: none;
-    color: #333;
-    background-color: #92cddc;
-    outline: solid black 2px;
-    font-size: xx-large;
-    padding: 1%;
+    padding: 10px 15px;
+    color: #5a3e36;
 }
-nav a:hover { /* navigation mouse hover font colour */
-    color: #800020;
+
+nav a:hover {
+    color: #9c6b5e;
 }
 
 .header-container { 
     width: calc((100% - 230px) * 0.20);
     font-family: 'Playfair Display', serif;
-    background-color: #31859b;
+    background-color: #dec6be;
 }
 
 .header-container p {
-    background-color: #92cddc;
-    outline: solid black 2px;
+    background-color: #d3b9b4;
+    outline: solid black 0px;
 }
 
 .flex-container { /* spaces things around evenly */
@@ -67,4 +74,35 @@ nav a:hover { /* navigation mouse hover font colour */
 
 .horizontal-spacer {
     height: 15px;
+}
+
+/* History Section */
+
+#history {
+    font-family: 'Georgia', serif;
+    padding: 20px;
+    background-image: url('winery-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    color: #f5f5f5;
+}
+
+#history::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: 0;
+}
+
+#history > * {
+    position: relative;
+    z-index: 1;
+}
+
+#history ul li {
+    color: #f5f5f5;
+    margin-left: 20px;
 }

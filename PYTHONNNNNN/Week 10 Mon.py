@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 6/10/2025
 # Pseudocode practice
 # Can I go to the beach today?
@@ -68,15 +68,15 @@
 
 
 
-greeting = len("Hello World")
-print (greeting)
+# greeting = len("Hello World")
+# print (greeting)
 
 # What number will we get as output?
 
 
 
 
-=======
+
 # for i in range(5):
 #     print(i)
 #  # this prints 0-4
@@ -139,6 +139,8 @@ print (greeting)
 # for letter in word:
 #     print(len(letter))
 
-FuelUnits=int(input("How many fuel units are needed? "))
-for i in range(FuelUnits):
-    print(f"Fuel Loaded: [{'#' * (i + 1)}] {i + 1}/{FuelUnits}")
+# FuelUnits=int(input("How many fuel units are needed? "))
+# for i in range(FuelUnits):
+#     print(f"Fuel Loaded: [{'#' * (i + 1)}] {i + 1}/{FuelUnits}")
+
+#

@@ -1,0 +1,17 @@
+# ##DETAILED EXPLANATION:
+
+# # This code prints numbers from 1 to 10 but stops when it reaches 5.
+# number = 1 # Initialize number to 1
+# while number <= 10: # Loop while number is less than or equal to 10
+#     print(number) # Print the current number
+#     if number == 5: # Check if the number is 5
+#         break
+#     number += 1 # Increment number by 1
+# # If number is 5, the loop breaks and stops executing further.
+
+# number = 0 # Initialize number to 0
+# while number <= 10: # Loop while number is less than or equal to 10
+#     number += 1 # Increment number by 1
+#     if number == 5: # Check if the number is 5
+#         print(f"This is the number {number}") # Print a special message for number 5
+
