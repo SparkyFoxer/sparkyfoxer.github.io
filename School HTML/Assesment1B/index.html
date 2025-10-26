@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-    <header style="background-color: #dec6be; border-width: 4px; border-color: #5a3e36; border-style: solid;" class="row-display"> <!-- background colour for the main header/navigation -->
+    <header class="row-display" ID="main-header">
         <img src="Logo.png" alt="Malteo Winery Logo" width="160" height="160"> <!-- icon image -->
-        <div class="center-me" style="width: calc((100% - 230px) * 0.60); height: 120px; background-color: #d3b9b4;"> <!-- calculating the size of the nav font buttons -->
+        <div class="center-me" ID="header-nav"> <!-- calculating the size of the nav font buttons -->
             <nav>
-                <div class="flex-container" style="justify-content: center; align-items: center; height: 100%;"> <!-- navigation bar -->
+                <div class="flex-container center-align" > <!-- navigation bar -->
                     <a href="index.html">Home</a>
                     <a href="AboutUs.html">About Us</a>
                     <a href="Products.html">Products</a>
@@ -20,27 +20,27 @@
                 </div>
             </nav>
         </div>
-        <div class="center-me header-container" style="background-color: #d3b9b4; height: 120px;">
+        <div class="center-me header-container header-org">
             <p>Opening Hours</p>
             <p>Monday - Friday 11.30 - 2.30pm</p>
             <p>Saturday and Sunday 11.30-4.30pm</p>
         </div>
-        <div class="center-me header-container" style="background-color: #d3b9b4; height: 120px;">
+        <div class="center-me header-container header-org">
             <p>Phone Number: +64 1 234 5678</p>
             <p>36 Main North Road, Blenheim</p>
             <p>Email: info@malteowinery.com</p>
         </div>
     </header>
 
-    <div style="background-color: #dec6be;" id="products">
+    <div class="background-colour" id="products">
         <div> <!-- main body text -->
-            <h1 class="center-me text-sizing" style="margin-top: 15px; background-color: #dec6be;">Malteo Winery</h1>
-            <h3 class="center-me text-sizing" style="margin-top: 15px; background-color: #dec6be;">
+            <h1 class="center-me text-sizing" style="margin-top: 15px;">Malteo Winery</h1>
+            <h3 class="center-me text-sizing" style="margin-top: 15px;">
                 Malteo Winery’s white wines are crafted with meticulous care, blending tradition and innovation to deliver a crisp, 
                 refreshing taste that captures the essence of their terroir. Known for their vibrant aromas, balanced acidity, 
                 and smooth finish, these wines pair beautifully with a variety of dishes, from light seafood to creamy cheeses. 
                 Each sip offers a journey into the heart of Malteo’s vineyards, embodying quality and elegance.</h3>
-            <p class="center-me text-sizing" style="margin-top: 15px; background-color: #dec6be;">
+            <p class="center-me text-sizing" style="margin-top: 15px;">
                 At Malteo Winery, our winemaking process is a blend of tradition and innovation, 
                 crafted to bring out the unique character of every grape. 
                 From hand-selecting the finest fruit at peak ripeness to carefully controlling fermentation and aging, 
@@ -52,19 +52,19 @@
 
         <div class="horizontal-spacer"></div>
         
-        <div class="flex-container" style="background-color: #dec6be;"> <!-- main division holding the wine boxes -->
+        <div class="flex-container background-colour"> <!-- main division holding the wine boxes -->
             <div class="product-display"> <!-- Wine box 1 -->
                 <div class="center-me">
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
-                <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me" style="font-size: 20px; padding: 10px;">Chardonnay</p>
+                <div class="background-colour"> <!-- wine name division -->
+                    <p class="center-me wine-text">Chardonnay</p>
                 </div>
-                <div class="flex-container" style="margin-top: 5px;">
-                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">$39.99</p>
+                <div class="flex-container wine-width">
+                    <div class="background-colour wine-BG-width">
+                        <p class="center-me wine-text">$39.99</p>
                     </div>
-                    <div style="background-color: #dec6be;">
+                    <div class="background-colour">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
@@ -73,14 +73,14 @@
                 <div class="center-me">
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
-                <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me" style="font-size: 20px; padding: 10px;">Sauvignon Blanc</p>
+                <div class="background-colour"> <!-- wine name division -->
+                    <p class="center-me wine-text">Sauvignon Blanc</p>
                 </div>
-                <div class="flex-container" style="margin-top: 5px;">
-                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">$44.99</p>
+                <div class="flex-container wine-width">
+                    <div class="background-colour wine-BG-width"> <!-- price division -->
+                        <p class="center-me wine-text">$44.99</p>
                     </div>
-                    <div  style="background-color: #dec6be;">
+                    <div class="background-colour">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
@@ -89,14 +89,14 @@
                 <div class="center-me">
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
-                <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me" style="font-size: 20px; padding: 10px;">Riesling</p>
+                <div class="background-colour"> <!-- wine name division -->
+                    <p class="center-me wine-text">Riesling</p>
                 </div>
-                <div class="flex-container" style="margin-top: 5px;">
-                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">$29.99</p>
+                <div class="flex-container wine-width">
+                    <div class="background-colour wine-BG-width"> <!-- price division -->
+                        <p class="center-me wine-text">$29.99</p>
                     </div>
-                    <div style="background-color: #dec6be;">
+                    <div class="background-colour">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
@@ -105,25 +105,25 @@
                 <div class="center-me">
                     <img src="bottle.png" alt="image of wine" width="100" style="padding: 10%;"> <!-- image of wine -->
                 </div>
-                <div style="background-color: #dec6be"> <!-- wine name division -->
-                    <p class="center-me" style="font-size: 20px; padding: 10px;">Pinot Grigio</p>
+                <div class="background-colour"> <!-- wine name division -->
+                    <p class="center-me wine-text">Pinot Grigio</p>
                 </div>
-                <div class="flex-container" style="margin-top: 5px;">
-                    <div style="background-color: #dec6be; width: 110px"> <!-- price division -->
-                        <p class="center-me" style="font-size: 20px; padding: 10px;">$19.99</p>
+                <div class="flex-container wine-width">
+                    <div class="background-colour wine-BG-width"> <!-- price division -->
+                        <p class="center-me wine-text">$19.99</p>
                     </div>
-                    <div style="background-color: #dec6be;">
+                    <div class="background-colour">
                         <img src="cart-icon.png" width="40px">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="horizontal-spacer"></div>
+
 
     <div style="background-image: url(winery-background.jpg); background-size: 100%;" id="history">
         <h1 class="center-me" style="margin: 10px; background-color: #3b3b3b67;">Our History</h1>
-        <p class="text-sizing" style="background-color: #3b3b3b67;">
+        <p class="text-sizing body-colour">
             Founded in 1952, Malteo Winery has been a cherished family tradition for over three generations. 
             Nestled in one of New Zealand’s oldest and most renowned wine regions, 
             our vineyards benefit from a unique terroir that imparts exceptional character to our wines. 
@@ -131,7 +131,7 @@
             blending time-honored techniques with modern innovation. This dedication has allowed us to create elegant, 
             award-winning white wines that capture the true essence of our land and heritage.
         </p>
-        <ul class="text-sizing" style="background-color: #3b3b3b67;">
+        <ul class="text-sizing body-colour">
             <li style="margin-left: 20px;">Malteo Winery has been proudly family-owned and operated since 1952, 
                 passing down winemaking traditions and passion from generation to generation.</li>
             <li style="margin-left: 20px;">All grapes are cultivated using environmentally friendly and sustainable farming practices, 
@@ -141,7 +141,7 @@
             <li style="margin-left: 20px;">The winery’s vineyards are located in one of New Zealand’s oldest wine-growing regions, 
                 known for its unique terroir that imparts distinctive character to the wines.</li>
         </ul>
-        <p class="text-sizing" style="background-color: #3b3b3b67;">
+        <p class="text-sizing body-colour">
             At Malteo Winery, we take pride in our rich heritage and commitment to quality. 
             Our grapes are sustainably grown in pristine vineyards, reflecting our respect for the environment and future generations. 
             Over the years, our wines have garnered multiple awards, showcasing the exceptional care and expertise poured into every bottle. 
@@ -152,7 +152,7 @@
 
     <div class="horizontal-spacer"></div>
 
-    <div>
+    <div> <!-- map division -->
         <!-- <iframe
             width="600"
             height="450"
@@ -167,9 +167,9 @@
 
     <div class="horizontal-spacer"></div>
 
-    <div class="row-display" style="background-color: #f3e7e3;" id="community"> <!-- box to hold community stuff -->
-        <div style="background-color: #f3e7e3; width: 50%;">
-            <div class="center-me" style="background-color: #f3e7e3">
+    <div class="row-display event-colour" id="community"> <!-- box to hold community stuff -->
+        <div class="event-colour" style="width: 50%;">
+            <div class="center-me event-colour">
                 <h1>Our Events and details</h1>
                 <p>
                     At Malteo Winery, we cherish the moments spent with family, friends, and our community. 
@@ -181,7 +181,7 @@
                 <img src="community-event.jpg" alt="image of community event" width="500" height="400"> <!-- image of community event -->
                 <img src="people-working.jpg" alt="image of people working" width="500" height="400"> <!-- image of people working -->
             </div>
-            <div class="center-me" style="background-color: #f3e7e3;"> <!-- box to hold sponsorship stuff -->
+            <div class="center-me event-colour"> <!-- box to hold sponsorship stuff -->
                 <h1>
                     Sponsorships
                 </h1>

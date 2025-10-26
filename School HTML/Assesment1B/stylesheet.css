@@ -41,9 +41,39 @@ nav a:hover {
     background-color: #dec6be;
 }
 
+.background-colour {
+    background-color: #dec6be;
+}
+
 .header-container p {
     /* background-color: #d3b9b4; */
     outline: solid black 0px;
+}
+.wine-text {
+    font-size: 20px; 
+    padding: 10px;
+}
+
+#main-header {
+    background-color: #dec6be;
+    border: 4px solid #5a3e36;
+}
+
+.header-org {
+    background-color: #d3b9b4; 
+    height: 120px;
+}
+
+.center-align {
+    justify-content: center; 
+    align-items: center; 
+    height: 100%;
+}
+
+#header-nav {
+width: calc((100% - 230px) * 0.60); 
+height: 120px; 
+background-color: #d3b9b4;
 }
 
 .flex-container { /* spaces things around evenly */
@@ -55,6 +85,22 @@ nav a:hover {
     margin: 10px;
     padding: 20px;
     font-size: 30px;
+}
+.wine-text {
+    font-size: 20px; 
+    padding: 10px;
+}
+.body-colour {
+    background-color: #3b3b3b67;
+}
+.event-colour {
+    background-color: #f3e7e3;
+}
+.wine-width {
+    margin-top: 5px;
+}
+.wine-BG-width {
+    width: 110px;
 }
 
 .center-me { /* to a div to make it centered */
@@ -82,6 +128,15 @@ nav a:hover {
 
 .horizontal-spacer {
     height: 15px;
+}
+
+.imageflex {
+     display: flex;
+}
+
+.imageflexcontent {
+    margin-left: 5px; 
+    margin-top: 0;
 }
 
 /* History Section */
