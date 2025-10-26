@@ -35,6 +35,8 @@ nav a:hover {
     color: #9c6b5e;
 }
 
+
+
 .header-container { 
     width: calc((100% - 230px) * 0.20);
     font-family: 'Playfair Display', serif;
@@ -55,6 +57,11 @@ nav a:hover {
 }
 
 #main-header {
+    background-color: #dec6be;
+    border: 4px solid #5a3e36;
+}
+
+#background {
     background-color: #dec6be;
     border: 4px solid #5a3e36;
 }
@@ -174,4 +181,9 @@ background-color: #d3b9b4;
 
 footer {
     font-size: 22px;
+}
+
+.footer-org {
+    margin: 10px; width: 23%; 
+    background-color: #d3b9b4;
 }
