@@ -1,26 +1,26 @@
-22/10/2025
-revision for assignment 3
+# 22/10/2025
+# revision for assignment 3
 
-ask the user their favoutite sport and what their best friends name is, then display a personal message
-ask for their fav sport with prompt "What is your favoutite sport? "
-ask what the uses best friends name is with the prompt: "What is your best friends name? "
-with the details inputted print: "Playing [sport] with [friend] sounds like fun!"
-then replace [sport] with their chosen sport and [friend] with their best friends name
+# ask the user their favoutite sport and what their best friends name is, then display a personal message
+# ask for their fav sport with prompt "What is your favoutite sport? "
+# ask what the uses best friends name is with the prompt: "What is your best friends name? "
+# with the details inputted print: "Playing [sport] with [friend] sounds like fun!"
+# then replace [sport] with their chosen sport and [friend] with their best friends name
 
-Sport = input("What is your favourite sport? ").strip().lower()
-Friend = input("What is your best friends name? ").capitalize().strip()
-print(f"Playing {Sport} with {Friend} sounds like fun!")
-
-
+# Sport = input("What is your favourite sport? ").strip().lower()
+# Friend = input("What is your best friends name? ").capitalize().strip()
+# print(f"Playing {Sport} with {Friend} sounds like fun!")
 
 
-Write a program to compare the lengths of two words entered by the user:
-frist, ask the user to enter the first work with the prompt "Enter the first word"
-next, ask the user to enter the second work with the prompt "enter the second word"
-compare the lengths of the two words
-if the first work is longer print: "The first word is longer"
-if the second word is longer print "the second word is longer"
-if both words are equal length print "Both words are the same length"
+
+
+# Write a program to compare the lengths of two words entered by the user:
+# frist, ask the user to enter the first work with the prompt "Enter the first word"
+# next, ask the user to enter the second work with the prompt "enter the second word"
+# compare the lengths of the two words
+# if the first work is longer print: "The first word is longer"
+# if the second word is longer print "the second word is longer"
+# if both words are equal length print "Both words are the same length"
 
 First = input("Enter the first word: ").strip().capitalize()
 Second = input("Enter the second word: ").strip().capitalize()
