@@ -2,13 +2,6 @@ const CONFIG = {
   discordUserId: "692126247458832455",
   siteCreated: "2026-07-10T00:00:00+12:00",
   location: "New Zealand",
-
-  /*
-    GitHub Pages cannot save a real global view count by itself.
-    Add your own counter API URL here later, or leave it empty.
-    Example expected response:
-    { "value": 1234 }
-  */
   viewCounterUrl: "https://api.counterapi.dev/v1/sparkyfoxer/profilev2/up"
 };
 
@@ -61,6 +54,7 @@ function timeAgo(dateInput) {
 
   for (const [name, amount] of units) {
     const value = Math.floor(seconds / amount);
+
     if (value >= 1) {
       return `${value} ${name}${value === 1 ? "" : "s"} ago`;
     }
@@ -75,21 +69,16 @@ function setSiteInfo() {
 }
 
 async function loadDiscordPresence() {
-  if (!CONFIG.discordUserId || CONFIG.discordUserId.includes("PUT_")) {
-    return;
-  }
-
   try {
     const res = await fetch(`https://api.lanyard.rest/v1/users/${CONFIG.discordUserId}`);
     const json = await res.json();
 
     if (!json.success) {
-      throw new Error("Lanyard response was not successful");
+      throw new Error("Lanyard failed");
     }
 
     const data = json.data;
     const status = data.discord_status || "offline";
-    const activity = data.activities?.find(item => item.type === 0 || item.type === 2 || item.type === 4);
 
     statusDot.className = `status-dot ${status}`;
     discordStatus.textContent = status;
@@ -98,6 +87,8 @@ async function loadDiscordPresence() {
       discordActivity.textContent = `Listening to ${data.spotify.song} by ${data.spotify.artist}`;
       return;
     }
+
+    const activity = data.activities?.find(item => item.type === 0 || item.type === 2 || item.type === 4);
 
     if (activity) {
       discordActivity.textContent = activity.state || activity.details || activity.name;
@@ -108,19 +99,22 @@ async function loadDiscordPresence() {
   } catch {
     statusDot.className = "status-dot offline";
     discordStatus.textContent = "Presence unavailable";
-    discordActivity.textContent = "Check your Discord ID and Lanyard setup.";
+    discordActivity.textContent = "Join Lanyard or check your Discord privacy settings.";
   }
 }
 
 async function loadViews() {
-  if (!CONFIG.viewCounterUrl) {
-    return;
-  }
-
   try {
-    const res = await fetch(CONFIG.viewCounterUrl);
+    const res = await fetch(CONFIG.viewCounterUrl, { cache: "no-store" });
     const json = await res.json();
-    viewCount.textContent = Number(json.value).toLocaleString();
+
+    const count = json.value ?? json.count ?? json.data?.value ?? json.data?.count;
+
+    if (count === undefined) {
+      throw new Error("No count found");
+    }
+
+    viewCount.textContent = Number(count).toLocaleString();
   } catch {
     viewCount.textContent = "Counter unavailable";
   }
@@ -129,6 +123,7 @@ async function loadViews() {
 setSiteInfo();
 loadDiscordPresence();
 loadViews();
+
 setInterval(() => {
   setSiteInfo();
   loadDiscordPresence();
