@@ -284,3 +284,9 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+.activity-time {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
