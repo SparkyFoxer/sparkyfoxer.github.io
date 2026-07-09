@@ -1,5 +1,5 @@
 const CONFIG = {
-  discordUserId: "PUT_YOUR_DISCORD_USER_ID_HERE",
+  discordUserId: "692126247458832455",
   siteCreated: "2026-07-10T00:00:00+12:00",
   location: "New Zealand",
 
@@ -9,7 +9,7 @@ const CONFIG = {
     Example expected response:
     { "value": 1234 }
   */
-  viewCounterUrl: ""
+  viewCounterUrl: "https://api.counterapi.dev/v1/sparkyfoxer/profilev2/up"
 };
 
 const enterScreen = document.querySelector("#enterScreen");
