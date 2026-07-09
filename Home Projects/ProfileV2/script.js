@@ -2,7 +2,8 @@ const CONFIG = {
   discordUserId: "692126247458832455",
   siteCreated: "2026-07-10T00:00:00+12:00",
   location: "New Zealand",
-  viewCounterUrl: "https://api.counterapi.dev/v1/sparkyfoxer/profilev2/up"
+  counterWorkspace: "sparkyfoxer",
+  counterName: "profilev2"
 };
 
 const enterScreen = document.querySelector("#enterScreen");
@@ -194,7 +195,10 @@ async function loadDiscordPresence() {
     discordStatus.textContent = status;
 
     if (activity) {
-      discordActivity.textContent = `${activity.title} ${activity.subtitle ? "ꜱ " + activity.subtitle : ""}`;
+      discordActivity.textContent = activity.subtitle
+        ? `${activity.title} • ${activity.subtitle}`
+        : activity.title;
+
       activeActivityStart = activity.start;
       activeActivityLabel = activity.timerLabel;
       updateActivityTimer();
@@ -217,18 +221,17 @@ async function loadDiscordPresence() {
 
 async function loadViews() {
   try {
-    const res = await fetch(CONFIG.viewCounterUrl, {
-      cache: "no-store"
-    });
+    if (window.Counter) {
+      const counter = new Counter({
+        workspace: CONFIG.counterWorkspace
+      });
 
-    const json = await res.json();
-    const count = json.value ?? json.count ?? json.data?.value ?? json.data?.count;
-
-    if (count === undefined) {
-      throw new Error("No counter value found");
+      const result = await counter.up(CONFIG.counterName);
+      viewCount.textContent = Number(result.value).toLocaleString();
+      return;
     }
 
-    viewCount.textContent = Number(count).toLocaleString();
+    throw new Error("CounterAPI browser library not loaded");
   } catch {
     viewCount.textContent = "Counter unavailable";
   }
