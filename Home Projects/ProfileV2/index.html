@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=offlinefix4">
+  <link rel="stylesheet" href="style.css?v=links1">
 </head>
 
 <body>
@@ -35,10 +35,14 @@
         </div>
 
         <div id="statusCard" class="status-card">
-          <div id="statusDot" class="status-dot offline"></div>
           <div>
-            <p class="small-label">Status</p>
-            <p id="discordStatus">Loading...</p>
+            <div class="status-heading-row">
+              <div id="statusDot" class="status-dot offline" title="Discord status"></div>
+              <div>
+                <p class="small-label">Status</p>
+                <p id="discordStatus">Loading...</p>
+              </div>
+            </div>
             <p id="discordCustomText" class="muted">Custom status will show above.</p>
             <p id="discordBioText" class="discord-bio">Bio loading...</p>
           </div>
@@ -75,6 +79,8 @@
               </div>
             </div>
 
+            
+
             <div id="otherActivities" class="other-activities"></div>
             <p id="activityEmpty" class="activity-empty">No current activity shown.</p>
           </div>
@@ -99,7 +105,8 @@
         </div>
 
         <nav class="links" aria-label="Profile links">
-          <a href="https://github.com/SparkyFoxer" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://t.me/sparkyfoxer" target="_blank" rel="noreferrer">Telegram</a>
+          <a href="https://www.twitch.tv/SparkyTheFox_" target="_blank" rel="noreferrer">Twitch</a>
           <a href="mailto:sparkyfoxer@gmail.com">Mail</a>
           <a href="about.html">About</a>
         </nav>
@@ -112,6 +119,6 @@
   </main>
 
   <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
-  <script src="script.js?v=offlinefix4"></script>
+  <script src="script.js?v=links1"></script>
 </body>
 </html>
