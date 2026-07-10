@@ -216,9 +216,36 @@
       renderError();
     }
   }
+  /* Weather startup lifecycle */
+  let refreshTimer = null;
 
-  loadWeather();
+  function startWeather() {
+    loadWeather();
 
-  // Refresh every fifteen minutes.
-  setInterval(loadWeather, 15 * 60 * 1000);
+    if (refreshTimer === null) {
+      refreshTimer = window.setInterval(
+        loadWeather,
+        15 * 60 * 1000
+      );
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      startWeather,
+      { once: true }
+    );
+  } else {
+    startWeather();
+  }
+
+  // Refresh after browser back/forward restores and when the tab wakes up.
+  window.addEventListener("pageshow", loadWeather);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      loadWeather();
+    }
+  });
 })();
