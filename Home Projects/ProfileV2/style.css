@@ -455,3 +455,59 @@ h1 {
   border-radius: 999px;
   background: #1db954;
 }
+
+/* Spotify compact card fix */
+.status-card .spotify-card {
+  display: grid !important;
+  grid-template-columns: 58px 1fr !important;
+  gap: 12px !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-top: 12px !important;
+  padding: 10px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+.status-card .spotify-art {
+  width: 58px !important;
+  height: 58px !important;
+  min-width: 58px !important;
+  max-width: 58px !important;
+  border-radius: 10px !important;
+  object-fit: cover !important;
+}
+
+.status-card .spotify-info {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.status-card .spotify-song,
+.status-card .spotify-artist {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.status-card .spotify-progress-row {
+  display: grid !important;
+  grid-template-columns: 34px 1fr 40px !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+}
+
+.status-card .spotify-progress {
+  height: 4px !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+
+.status-card .spotify-progress-fill {
+  height: 100% !important;
+  border-radius: 999px !important;
+  background: #1db954 !important;
+}
