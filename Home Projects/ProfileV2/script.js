@@ -540,3 +540,128 @@ setInterval(() => {
   updateSpotifyProgress();
   updateActivityTimers();
 }, 1000);
+
+/* Profile enter counter — direct CountAPI, no CDN/library */
+(() => {
+  const counterKey = "sparkyfoxer_profilev2_enter_clicks_v1";
+  const apiBase = "https://countapi.mileshilliard.com/api/v1";
+
+  const viewEl =
+    document.querySelector("#viewCount") ||
+    document.querySelector("#views") ||
+    document.querySelector("[data-view-count]");
+
+  if (!viewEl) {
+    console.warn("Enter counter: no counter display element found.");
+    return;
+  }
+
+  let countedThisLoad = false;
+
+  function formatEnters(value) {
+    const number = Number(value);
+
+    if (!Number.isFinite(number)) {
+      return "0 enters";
+    }
+
+    return `${number.toLocaleString()} ${number === 1 ? "enter" : "enters"}`;
+  }
+
+  async function counterRequest(action) {
+    const url = `${apiBase}/${action}/${encodeURIComponent(counterKey)}`;
+
+    const res = await fetch(url, {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    const raw = await res.text();
+
+    let data = null;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      throw new Error(`Counter returned non-JSON: ${raw}`);
+    }
+
+    if (!res.ok) {
+      const err = new Error(`Counter failed ${res.status}: ${raw}`);
+      err.status = res.status;
+      err.data = data;
+      throw err;
+    }
+
+    const value = Number(data.value ?? data.count ?? data.data?.value ?? data.data?.count);
+
+    if (!Number.isFinite(value)) {
+      throw new Error(`Counter response had no usable number: ${raw}`);
+    }
+
+    return value;
+  }
+
+  async function loadCurrentCount() {
+    try {
+      const count = await counterRequest("get");
+      viewEl.textContent = formatEnters(count);
+    } catch (err) {
+      // If the counter does not exist yet, show 0 until first enter click.
+      if (err.status === 404) {
+        viewEl.textContent = "0 enters";
+        return;
+      }
+
+      console.warn("Enter counter: could not load current count:", err);
+      viewEl.textContent = "0 enters";
+    }
+  }
+
+  async function countEnter() {
+    if (countedThisLoad) return;
+    countedThisLoad = true;
+
+    try {
+      viewEl.textContent = "Counting...";
+      const count = await counterRequest("hit");
+      viewEl.textContent = formatEnters(count);
+    } catch (err) {
+      countedThisLoad = false;
+      console.warn("Enter counter failed:", err);
+      viewEl.textContent = "Counter unavailable";
+    }
+  }
+
+  function isEnterClick(event) {
+    const clicked = event.target.closest(
+      "button, a, [role='button'], #enterScreen, #introScreen, .enter-screen, .intro-screen, .click-screen, .overlay"
+    );
+
+    if (!clicked) return false;
+
+    const text = (clicked.textContent || "").trim().toLowerCase();
+    const id = (clicked.id || "").toLowerCase();
+    const classes = (clicked.className || "").toString().toLowerCase();
+
+    const combined = `${text} ${id} ${classes}`;
+
+    return (
+      combined.includes("enter") ||
+      combined.includes("click to enter") ||
+      combined.includes("intro")
+    );
+  }
+
+  loadCurrentCount();
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      if (isEnterClick(event)) {
+        countEnter();
+      }
+    },
+    true
+  );
+})();
+
