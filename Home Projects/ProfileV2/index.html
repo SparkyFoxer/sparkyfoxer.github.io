@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=activityimage1">
+  <link rel="stylesheet" href="style.css?v=offlinefix4">
 </head>
 
 <body>
@@ -30,21 +30,21 @@
           <div class="title-block">
             <p class="eyebrow">online profile</p>
             <h1>Sparky Fox</h1>
-            <p class="bio">cycling, gaming, Linux, silly fox energy</p>
+            <p id="profileSubtitle" class="bio">Fox thing • Linux • music • games • OCE</p>
           </div>
         </div>
 
-        <div class="status-card">
+        <div id="statusCard" class="status-card">
           <div id="statusDot" class="status-dot offline"></div>
           <div>
-            <p class="small-label">Discord Status</p>
+            <p class="small-label">Status</p>
             <p id="discordStatus">Loading...</p>
             <p id="discordCustomText" class="muted">Custom status will show above.</p>
             <p id="discordBioText" class="discord-bio">Bio loading...</p>
           </div>
         </div>
 
-        <div class="activity-card">
+        <div id="activityCard" class="activity-card">
           <p class="small-label">Current Activity</p>
 
           <div id="activityList" class="activity-list">
@@ -83,7 +83,7 @@
 
         <div class="stats-grid">
           <div>
-            <p class="small-label">Created</p>
+            <p class="small-label">My Time</p>
             <p id="siteAge">Loading...</p>
           </div>
 
@@ -112,6 +112,6 @@
   </main>
 
   <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
-  <script src="script.js?v=activityimage1"></script>
+  <script src="script.js?v=offlinefix4"></script>
 </body>
 </html>

@@ -625,3 +625,41 @@ h1 {
   display: block;
   background: rgba(255, 255, 255, 0.08);
 }
+
+
+/* Custom status bubble emoji layout */
+.thought-bubble {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.status-emoji {
+  flex: 0 0 auto;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.status-text {
+  min-width: 0;
+  line-height: 1.25;
+}
+
+/* Make view/time numbers cleaner */
+#siteAge,
+#viewCount,
+#locationText {
+  font-weight: 700;
+}
+
+#statusCard.hidden {
+  display: none !important;
+}
+
+#activityCard.hidden {
+  display: none !important;
+}
+
+#statusCard.hidden {
+  display: flex !important;
+}

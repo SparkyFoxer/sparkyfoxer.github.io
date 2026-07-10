@@ -2,6 +2,14 @@ const CONFIG = {
   discordUserId: "692126247458832455",
   siteCreated: "2026-07-10T00:00:00+12:00",
   location: "New Zealand",
+  profileSubtitle: "Fox thing • Linux • music • games • OCE",
+  fallbackBio: `🦊 Sparky Foxer :3
+🌟 New Zealand | OCE
+🤙21 - Chill vibes
+🎮 CS2/FH6/BTD/Satisfactory
+🎵 EDM, DNB, Rock, Pop
+📺 Twitch: SparkyTheFox_
+⚽RL - D2 | 🔫CS2 - 8k`,
   viewCounterUrl: "https://api.counterapi.dev/v1/sparkyfoxer/profilev2/up",
   spotifyProfileUrl: ""
 };
@@ -13,14 +21,16 @@ const muteButton = document.querySelector("#muteButton");
 const audio = document.querySelector("#bgAudio");
 
 const thoughtBubble = document.querySelector("#thoughtBubble");
+const statusCard = document.querySelector("#statusCard");
+const activityCard = document.querySelector("#activityCard");
 const statusDot = document.querySelector("#statusDot");
 const discordStatus = document.querySelector("#discordStatus");
-const discordCustomText = document.querySelector("#discordCustomText");
 const discordBioText = document.querySelector("#discordBioText");
 
 const siteAge = document.querySelector("#siteAge");
 const viewCount = document.querySelector("#viewCount");
 const locationText = document.querySelector("#locationText");
+const profileSubtitle = document.querySelector("#profileSubtitle");
 
 const spotifyCard = document.querySelector("#spotifyCard");
 const spotifyArt = document.querySelector("#spotifyArt");
@@ -74,29 +84,6 @@ async function playFallbackIfNeeded(force = false) {
   }
 }
 
-function timeAgo(dateInput) {
-  const date = new Date(dateInput);
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-
-  const units = [
-    ["year", 31536000],
-    ["month", 2592000],
-    ["day", 86400],
-    ["hour", 3600],
-    ["minute", 60]
-  ];
-
-  for (const [name, amount] of units) {
-    const value = Math.floor(seconds / amount);
-
-    if (value >= 1) {
-      return `${value} ${name}${value === 1 ? "" : "s"} ago`;
-    }
-  }
-
-  return "just now";
-}
-
 function formatTime(ms) {
   const totalSeconds = Math.max(0, Math.floor(ms / 1000));
   const hours = Math.floor(totalSeconds / 3600);
@@ -118,44 +105,86 @@ function formatDiscordStatus(status) {
     offline: "Offline"
   };
 
-  return labels[status] || "Unknown";
+  return labels[status] || "Offline";
 }
 
 function setSiteInfo() {
-  siteAge.textContent = timeAgo(CONFIG.siteCreated);
+  const now = new Date();
+
+  siteAge.textContent = new Intl.DateTimeFormat("en-NZ", {
+    timeZone: "Pacific/Auckland",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  }).format(now);
+
   locationText.textContent = CONFIG.location;
+
+  if (profileSubtitle) {
+    profileSubtitle.textContent = CONFIG.profileSubtitle;
+  }
 }
 
-function setThoughtBubble(text) {
-  const cleanText = (text || "").trim();
+function showStatusCard(status) {
+  if (statusCard) {
+    statusCard.classList.remove("hidden");
+    statusCard.style.display = "flex";
+  }
 
+  statusDot.className = `status-dot ${status}`;
+  discordStatus.textContent = formatDiscordStatus(status);
+}
+
+function hideThoughtBubble() {
   if (!thoughtBubble) {
     return;
   }
 
-  if (!cleanText) {
-    thoughtBubble.classList.add("hidden");
+  thoughtBubble.classList.add("hidden");
+  thoughtBubble.textContent = "";
+  thoughtBubble.innerHTML = "";
+}
+
+function setThoughtBubble(status) {
+  if (!thoughtBubble) {
     return;
   }
 
-  thoughtBubble.textContent = cleanText;
+  const emoji = status?.emoji || "";
+  const text = status?.state || "";
+
+  if (!emoji && !text) {
+    hideThoughtBubble();
+    return;
+  }
+
+  thoughtBubble.innerHTML = "";
+
+  if (emoji) {
+    const emojiSpan = document.createElement("span");
+    emojiSpan.className = "status-emoji";
+    emojiSpan.textContent = emoji;
+    thoughtBubble.appendChild(emojiSpan);
+  }
+
+  if (text) {
+    const textSpan = document.createElement("span");
+    textSpan.className = "status-text";
+    textSpan.textContent = text;
+    thoughtBubble.appendChild(textSpan);
+  }
+
   thoughtBubble.classList.remove("hidden");
 }
-
 
 function setLiveBio(data) {
   if (!discordBioText) {
     return;
   }
 
-  const liveBio = data.kv?.bio || "";
+  const liveBio = data?.kv?.bio || CONFIG.fallbackBio;
 
-  if (liveBio.trim()) {
-    discordBioText.textContent = liveBio;
-    return;
-  }
-
-  discordBioText.textContent = "No live bio set.";
+  discordBioText.textContent = liveBio.trim() || CONFIG.fallbackBio;
 }
 
 function getCustomStatus(data) {
@@ -163,13 +192,44 @@ function getCustomStatus(data) {
   const custom = activities.find(activity => activity.type === 4);
 
   if (!custom) {
-    return "";
+    return { emoji: "", state: "" };
   }
 
-  const emoji = custom.emoji?.name || "";
-  const state = custom.state || "";
+  return {
+    emoji: custom.emoji?.name || "",
+    state: custom.state || ""
+  };
+}
 
-  return [emoji, state].filter(Boolean).join(" ");
+function showActivityCard() {
+  if (activityCard) {
+    activityCard.classList.remove("hidden");
+    activityCard.style.display = "";
+  }
+}
+
+function hideActivityCard() {
+  if (activityCard) {
+    activityCard.classList.add("hidden");
+    activityCard.style.display = "none";
+  }
+
+  if (otherActivities) {
+    otherActivities.innerHTML = "";
+  }
+
+  if (activityEmpty) {
+    activityEmpty.classList.add("hidden");
+  }
+
+  hideSpotifyCard(false);
+}
+
+function setOfflineView(data = null) {
+  showStatusCard("offline");
+  hideThoughtBubble();
+  setLiveBio(data || { kv: { bio: CONFIG.fallbackBio } });
+  hideActivityCard();
 }
 
 function getActivityPrefix(type) {
@@ -196,6 +256,15 @@ function getActivityEmoji(type) {
   return icons[type] || "•";
 }
 
+function shouldSkipActivity(activity, data) {
+  if (activity.type === 4) {
+    return true;
+  }
+
+  return data.listening_to_spotify &&
+    activity.type === 2 &&
+    String(activity.name || "").toLowerCase().includes("spotify");
+}
 
 function getActivityImageUrl(activity) {
   const asset = activity.assets?.large_image || activity.assets?.small_image || "";
@@ -248,19 +317,6 @@ function createActivityIcon(activity) {
   return icon;
 }
 
-function shouldSkipActivity(activity, data) {
-  if (activity.type === 4) {
-    return true;
-  }
-
-  const isSpotifyActivity =
-    data.listening_to_spotify &&
-    activity.type === 2 &&
-    String(activity.name || "").toLowerCase().includes("spotify");
-
-  return isSpotifyActivity;
-}
-
 function showSpotifyCard(spotify) {
   spotifyIsActive = true;
   spotifyStart = spotify.timestamps?.start || null;
@@ -291,17 +347,28 @@ function showSpotifyCard(spotify) {
   updateSpotifyProgress();
 }
 
-function hideSpotifyCard() {
+function hideSpotifyCard(playFallback = true) {
   spotifyIsActive = false;
   spotifyStart = null;
   spotifyEnd = null;
 
-  spotifyCard.classList.add("hidden");
-  spotifyProgressFill.style.width = "0%";
-  spotifyElapsed.textContent = "0:00";
-  spotifyDuration.textContent = "0:00";
+  if (spotifyCard) {
+    spotifyCard.classList.add("hidden");
+  }
 
-  if (userEntered) {
+  if (spotifyProgressFill) {
+    spotifyProgressFill.style.width = "0%";
+  }
+
+  if (spotifyElapsed) {
+    spotifyElapsed.textContent = "0:00";
+  }
+
+  if (spotifyDuration) {
+    spotifyDuration.textContent = "0:00";
+  }
+
+  if (playFallback && userEntered) {
     playFallbackIfNeeded();
   }
 }
@@ -387,7 +454,6 @@ function renderActivityCards(data) {
   activityEmpty.classList.toggle("hidden", hasSpotify || hasOtherActivities);
 }
 
-
 function updateActivityTimers() {
   document.querySelectorAll(".activity-timer[data-start]").forEach(timer => {
     const start = Number(timer.dataset.start);
@@ -414,11 +480,16 @@ async function loadDiscordPresence() {
     const data = json.data;
     const status = data.discord_status || "offline";
 
-    statusDot.className = `status-dot ${status}`;
-    discordStatus.textContent = `Status: ${formatDiscordStatus(status)}`;
-
-    setThoughtBubble(getCustomStatus(data));
     setLiveBio(data);
+
+    if (status === "offline") {
+      setOfflineView(data);
+      return;
+    }
+
+    showStatusCard(status);
+    showActivityCard();
+    setThoughtBubble(getCustomStatus(data));
 
     if (data.listening_to_spotify && data.spotify) {
       showSpotifyCard(data.spotify);
@@ -428,18 +499,10 @@ async function loadDiscordPresence() {
 
     renderActivityCards(data);
   } catch {
-    statusDot.className = "status-dot offline";
-    discordStatus.textContent = "Status unavailable";
-    setThoughtBubble("");
-
-    if (discordBioText) {
-      discordBioText.textContent = "Bio unavailable.";
-    }
-
-    hideSpotifyCard();
-    otherActivities.innerHTML = "";
-    activityEmpty.classList.remove("hidden");
-    activityEmpty.textContent = "Presence unavailable.";
+    showStatusCard("offline");
+    hideThoughtBubble();
+    setLiveBio({ kv: { bio: CONFIG.fallbackBio } });
+    hideActivityCard();
   }
 }
 
@@ -456,7 +519,7 @@ async function loadViews() {
       throw new Error("No counter value");
     }
 
-    viewCount.textContent = Number(count).toLocaleString();
+    viewCount.textContent = `${Number(count).toLocaleString()} views`;
   } catch {
     viewCount.textContent = "Counter unavailable";
   }
