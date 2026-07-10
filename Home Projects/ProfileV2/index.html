@@ -6,20 +6,166 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=aboutfox1">
+  <link rel="stylesheet" href="style.css?v=1783667779">
 </head>
 
-<body>
+<body class="site-locked">
+
+  <div id="siteEntryGate" class="site-entry-gate">
+    <div class="site-entry-card">
+      <button
+        id="siteEnterButton"
+        class="site-enter-button"
+        type="button"
+        onclick="window.SparkyEnter && window.SparkyEnter(event)"
+      >
+        what the fops doin? :3
+      </button>
+    </div>
+  </div>
+
+
+  
+
+
+  
+
+
+  
+
   <video id="bgVideo" class="bg-video" src="assets/background.mp4" autoplay muted loop playsinline></video>
-  <div class="bg-fallback"></div>
-  <div class="grain"></div>
+  
+  
 
-  <main class="page">
-    <section id="enterScreen" class="enter-screen">
-      <button id="enterButton" class="enter-button" type="button">click to enter</button>
-    </section>
+  <main class="profile-screen">
+  <div class="profile-dashboard">
 
-    <section id="profileScreen" class="profile-screen hidden">
+    <aside class="profile-side-panel profile-games-panel"
+           aria-label="Game activity">
+      <div class="about-mini-card about-game-card dashboard-game-card">
+  <h2>Games</h2>
+
+  <div class="game-current">
+    <p class="small-label">Now playing</p>
+    <p id="aboutGameNowText">Checking game activity...</p>
+  </div>
+
+  <div class="game-history">
+    <p class="small-label">Recently played</p>
+    <ul id="aboutGameHistoryList" class="last-played-list game-history-list">
+      <li>No games seen yet.</li>
+    </ul>
+  </div>
+
+  <!-- Kept for compatibility with the existing about.js -->
+  <p id="aboutGamingText" hidden aria-hidden="true"></p>
+</div>
+    
+
+<section id="pcMonitorCard" class="pc-monitor-card" aria-label="Live PC monitor">
+  <div class="pc-monitor-heading">
+    <div>
+      <p class="small-label">System monitor</p>
+      <h2>My PC</h2>
+    </div>
+    <span id="pcOnlineState" class="pc-online-state">Connecting</span>
+  </div>
+
+  <div class="pc-spec-list">
+    <p><span>CPU</span><strong>Ryzen 7 5800X</strong></p>
+    <p><span>GPU</span><strong>Sapphire RX 6700 XT 12 GB</strong></p>
+    <p><span>Memory</span><strong>32 GB DDR4-3200</strong></p>
+    <p><span>Board</span><strong>ROG STRIX B550-A GAMING</strong></p>
+    <p><span>Cooling</span><strong>Thermalright FW360 AIO</strong></p>
+    <p><span>Case / PSU</span><strong>LANCOOL II Mesh • CX650</strong></p>
+  </div>
+
+  <div class="pc-monitor-section">
+    <p class="small-label">Live usage</p>
+
+    <div class="pc-metric">
+      <div class="pc-metric-heading">
+        <span>CPU</span>
+        <span><strong id="pcCpuValue">--%</strong><small id="pcCpuTemp">--°C</small></span>
+      </div>
+      <div class="pc-usage-bar" role="progressbar" aria-label="CPU usage" aria-valuemin="0" aria-valuemax="100">
+        <span id="pcCpuBar"></span>
+      </div>
+    </div>
+
+    <div class="pc-metric">
+      <div class="pc-metric-heading">
+        <span>GPU</span>
+        <span><strong id="pcGpuValue">--%</strong><small id="pcGpuTemp">--°C</small></span>
+      </div>
+      <div class="pc-usage-bar" role="progressbar" aria-label="GPU usage" aria-valuemin="0" aria-valuemax="100">
+        <span id="pcGpuBar"></span>
+      </div>
+      <div class="pc-gpu-details">
+        <span>Hotspot <strong id="pcGpuHotspot">--°C</strong></span>
+        <span>Memory <strong id="pcGpuMemoryTemp">--°C</strong></span>
+        <span>Power <strong id="pcGpuPower">-- W</strong></span>
+      </div>
+    </div>
+
+    <div class="pc-metric">
+      <div class="pc-metric-heading">
+        <span>RAM</span><strong id="pcRamValue">--%</strong>
+      </div>
+      <div class="pc-usage-bar" role="progressbar" aria-label="RAM usage" aria-valuemin="0" aria-valuemax="100">
+        <span id="pcRamBar"></span>
+      </div>
+    </div>
+
+    <div class="pc-metric">
+      <div class="pc-metric-heading">
+        <span>VRAM</span><strong id="pcVramValue">--%</strong>
+      </div>
+      <div class="pc-usage-bar" role="progressbar" aria-label="VRAM usage" aria-valuemin="0" aria-valuemax="100">
+        <span id="pcVramBar"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pc-monitor-section">
+    <p class="small-label">Storage</p>
+
+    <div class="pc-metric">
+      <div class="pc-metric-heading">
+        <span>Fedora</span><strong id="pcStorageFedoraValue">--</strong>
+      </div>
+      <div class="pc-usage-bar" role="progressbar" aria-label="Fedora storage usage" aria-valuemin="0" aria-valuemax="100">
+        <span id="pcStorageFedoraBar"></span>
+      </div>
+    </div>
+
+    <div class="pc-metric">
+      <div class="pc-metric-heading">
+        <span>Games</span><strong id="pcStorageGamesValue">--</strong>
+      </div>
+      <div class="pc-usage-bar" role="progressbar" aria-label="Games storage usage" aria-valuemin="0" aria-valuemax="100">
+        <span id="pcStorageGamesBar"></span>
+      </div>
+    </div>
+
+    <div class="pc-metric">
+      <div class="pc-metric-heading">
+        <span>Storage</span><strong id="pcStorageStorageValue">--</strong>
+      </div>
+      <div class="pc-usage-bar" role="progressbar" aria-label="Storage drive usage" aria-valuemin="0" aria-valuemax="100">
+        <span id="pcStorageStorageBar"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pc-monitor-footer">
+    <span>Uptime <strong id="pcUptime">--</strong></span>
+    <span id="pcUpdatedText">Waiting for data</span>
+  </div>
+</section>
+</aside>
+
+    <div class="profile-center-column">
       <article class="profile-card">
         <div class="top-row">
           <div class="avatar-wrap">
@@ -34,7 +180,15 @@
           </div>
         </div>
 
-        <div id="statusCard" class="status-card">
+        <section class="about-section about-inline-section profile-inline-about">
+        <p class="small-label">Who I am</p>
+        <p>
+          Heya, I'm Sparky. I'm from New Zealand. I mostly play games, listen to music
+          and recently been messing and dailying with Fedora Linux! :3
+        </p>
+      </section>
+
+      <div id="statusCard" class="status-card">
           <div>
             <div class="status-heading-row">
               <div id="statusDot" class="status-dot offline" title="Discord status"></div>
@@ -94,8 +248,8 @@
           </div>
 
           <div>
-            <p class="small-label">Enters</p>
-            <p id="viewCount">Loading...</p>
+            <p class="small-label">Last Seen</p>
+            <p id="lastSeenText">Checking...</p>
           </div>
 
           <div>
@@ -119,20 +273,92 @@
             <img src="assets/mail.png" alt="" onerror="this.style.display='none'">
             <span>Mail</span>
           </a>
-
-          <a class="profile-link" href="about.html">
-            <span>🦊 About</span>
-          </a>
         </nav>
 
         <p class="footer-text">Made by Sparky Fox</p>
       </article>
+</div>
 
-      <button id="muteButton" class="mute-button" type="button">mute</button>
-    </section>
-  </main>
+    <aside class="profile-side-panel profile-music-panel"
+           aria-label="Music activity">
+
+<section id="localWeatherCard" class="local-weather-card" aria-label="Christchurch weather">
+  <div class="weather-heading">
+    <div>
+      <p class="small-label">Local weather</p>
+      <h2 id="weatherLocation">Christchurch</h2>
+    </div>
+
+    <span id="weatherIcon" class="weather-icon" aria-hidden="true">🌤️</span>
+  </div>
+
+  <div class="weather-current">
+    <p id="weatherTemperature" class="weather-temperature">--°</p>
+
+    <div class="weather-current-copy">
+      <p id="weatherCondition">Loading weather...</p>
+      <p id="weatherFeels" class="weather-secondary">Feels like --°</p>
+    </div>
+  </div>
+
+  <div class="weather-details">
+    <span title="Humidity">
+      💧 <strong id="weatherHumidity">--%</strong>
+    </span>
+
+    <span title="Wind speed">
+      💨 <strong id="weatherWind">-- km/h</strong>
+    </span>
+
+    <span title="Today's high and low">
+      🌡️ <strong id="weatherRange">--° / --°</strong>
+    </span>
+  </div>
+
+  <div class="weather-forecast-heading">
+    <p class="small-label">Next few days</p>
+    <p id="weatherUpdated" class="weather-updated"></p>
+  </div>
+
+  <ul id="weatherForecast" class="weather-forecast">
+    <li>Forecast loading...</li>
+  </ul>
+</section>
+
+      <div class="about-mini-card about-music-card dashboard-music-card">
+            <h2>Music</h2>
+
+            <div class="music-current">
+              <p class="small-label">Currently playing</p>
+              <p id="aboutMusicText">Loading live music...</p>
+            </div>
+
+            <div class="music-history">
+              <p class="small-label">Recently seen</p>
+              <ul id="aboutLastPlayedList" class="last-played-list">
+                <li>No songs seen yet.</li>
+              </ul>
+            </div>
+          </div>
+    </aside>
+
+  </div>
+</main>
 
   <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
-    <script src="script.js?v=aboutfox1"></script>
+    <script src="script.js?v=liveprofile1"></script>
+
+  <audio
+    id="siteMusic"
+    src="assets/song.mp3"
+    loop
+    preload="auto"
+  ></audio>
+  <script src="about.js?v=dashboard1"></script>
+  <script src="game-history.js?v=dashboard1"></script>
+
+    <script src="weather.js?v=weather1"></script>
+  <script src="pc-monitor.js?v=1783667779"></script>
+<script src="site-controller.js?v=dashboard1"></script>
 </body>
 </html>

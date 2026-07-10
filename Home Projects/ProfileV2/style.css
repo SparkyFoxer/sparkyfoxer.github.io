@@ -1519,3 +1519,1281 @@ video {
   font-weight: 700 !important;
   color: var(--text) !important;
 }
+
+/* Remove click-to-enter / intro screen */
+#enterScreen,
+#introScreen,
+#entryScreen,
+.enter-screen,
+.intro-screen,
+.entry-screen,
+.click-to-enter,
+.click-screen {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* Force profile to show without enter screen */
+body,
+.profile-screen,
+.profile-card {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.profile-screen {
+  display: flex !important;
+}
+
+.profile-card {
+  display: block !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+.hidden.profile-card,
+.profile-card.hidden,
+.profile-screen.hidden,
+main.hidden {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Keep only the old enter overlay hidden */
+#enterScreen,
+#introScreen,
+#entryScreen,
+.enter-screen,
+.intro-screen,
+.entry-screen,
+.click-to-enter,
+.click-screen {
+  display: none !important;
+}
+
+/* Re-center profile after removing enter screen */
+main.profile-screen,
+.profile-screen,
+.profile-screen.hidden,
+main.hidden.profile-screen {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-height: 100svh !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+.profile-card,
+.profile-card.hidden {
+  display: block !important;
+  width: min(100%, 680px) !important;
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.about-card,
+.about-card.hidden {
+  width: min(100%, 720px) !important;
+  max-width: 720px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (max-width: 560px) {
+  main.profile-screen,
+  .profile-screen,
+  .profile-screen.hidden,
+  main.hidden.profile-screen {
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .profile-card,
+  .profile-card.hidden,
+  .about-card,
+  .about-card.hidden {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Remove old manual music button */
+.bottom-audio-control,
+.backup-audio-button,
+#backupAudioButton,
+#siteAudioButton {
+  display: none !important;
+}
+
+/* In-page About/Profile view switching */
+#profileCard.hidden,
+#aboutCard.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#profileCard,
+#aboutCard {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.showing-about .thought-bubble {
+  display: none !important;
+}
+
+/* Hide removed manual music controls */
+.bottom-audio-control,
+.backup-audio-button,
+.site-audio-button,
+#backupAudioButton,
+#siteAudioButton {
+  display: none !important;
+}
+
+/* In-page About/Profile view switching */
+.view-hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#profileCard:not(.view-hidden),
+#aboutCard:not(.view-hidden) {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.showing-about .thought-bubble {
+  display: none !important;
+}
+
+/* Hard fix for in-page About/Profile switching */
+#profileCard.view-hidden,
+#aboutCard.view-hidden,
+#profileCard.hidden,
+#aboutCard.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#profileCard:not(.view-hidden):not(.hidden),
+#aboutCard:not(.view-hidden):not(.hidden) {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Remove enter screen and manual music controls */
+#enterScreen,
+#introScreen,
+#entryScreen,
+.enter-screen,
+.intro-screen,
+.entry-screen,
+.click-to-enter,
+.click-screen,
+.bottom-audio-control,
+.backup-audio-button,
+.site-audio-button,
+#backupAudioButton,
+#siteAudioButton,
+#muteButton {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Force main profile visible without enter screen */
+#profileScreen,
+.profile-screen {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* In-page Profile/About switching */
+#profileCard.view-hidden,
+#aboutCard.view-hidden,
+#profileCard.hidden,
+#aboutCard.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#profileCard:not(.view-hidden):not(.hidden),
+#aboutCard:not(.view-hidden):not(.hidden) {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.showing-about .thought-bubble {
+  display: none !important;
+}
+
+/* Restored click-to-enter gate */
+#enterScreen.enter-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 34%),
+    rgba(8, 6, 14, 0.72) !important;
+  backdrop-filter: blur(16px) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+body.entered #enterScreen,
+#enterScreen.entered {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.enter-card {
+  width: min(100%, 360px) !important;
+  padding: 22px !important;
+  border-radius: 28px !important;
+  text-align: center !important;
+  background: rgba(18, 14, 28, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45) !important;
+}
+
+.enter-kicker {
+  margin: 0 0 12px !important;
+  color: var(--muted) !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+}
+
+.enter-button {
+  width: 100% !important;
+  min-height: 48px !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: var(--text) !important;
+  font: inherit !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+}
+
+.enter-button:hover {
+  transform: translateY(-1px) !important;
+  background: rgba(255, 255, 255, 0.17) !important;
+}
+
+.enter-note {
+  margin: 12px 0 0 !important;
+  color: var(--muted) !important;
+  font-size: 0.82rem !important;
+}
+
+/* Hide page content until entered */
+body:not(.entered) main.profile-screen {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.entered main.profile-screen {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Keep old manual music controls gone */
+.bottom-audio-control,
+.backup-audio-button,
+.site-audio-button,
+#backupAudioButton,
+#siteAudioButton,
+#muteButton {
+  display: none !important;
+}
+
+/* Smaller custom enter button */
+.enter-button,
+#enterButton {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: max-content !important;
+  min-height: 38px !important;
+  padding: 9px 18px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  font-size: 0.9rem !important;
+}
+
+.enter-card {
+  width: auto !important;
+  min-width: 240px !important;
+  max-width: min(90vw, 330px) !important;
+  padding: 20px 22px !important;
+}
+
+@media (max-width: 560px) {
+  .enter-button,
+  #enterButton {
+    font-size: 0.86rem !important;
+    padding: 9px 16px !important;
+  }
+
+  .enter-card {
+    min-width: 220px !important;
+  }
+}
+
+/* Final enter gate behaviour */
+body:not(.entered) main.profile-screen {
+  display: flex !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.entered main.profile-screen {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+#enterScreen.enter-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 34%),
+    rgba(8, 6, 14, 0.76) !important;
+  backdrop-filter: blur(16px) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+body.entered #enterScreen,
+#enterScreen.entered {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.enter-card {
+  width: auto !important;
+  min-width: 220px !important;
+  max-width: min(90vw, 320px) !important;
+  padding: 20px 22px !important;
+  border-radius: 28px !important;
+  text-align: center !important;
+  background: rgba(18, 14, 28, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45) !important;
+}
+
+#enterButton.enter-button,
+.enter-button {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: max-content !important;
+  min-height: 38px !important;
+  padding: 9px 18px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+}
+
+.bottom-audio-control,
+.backup-audio-button,
+.site-audio-button,
+#backupAudioButton,
+#siteAudioButton,
+#muteButton {
+  display: none !important;
+}
+
+/* Inline enter gate final override */
+body:not(.entered) main.profile-screen {
+  display: flex !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.entered main.profile-screen {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+#enterScreen.enter-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 34%),
+    rgba(8, 6, 14, 0.76) !important;
+  backdrop-filter: blur(16px) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+body.entered #enterScreen {
+  display: none !important;
+}
+
+.enter-card {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: min(90vw, 300px) !important;
+  padding: 16px 18px !important;
+  border-radius: 24px !important;
+  text-align: center !important;
+  background: rgba(18, 14, 28, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45) !important;
+}
+
+#enterButton.enter-button,
+.enter-button {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: max-content !important;
+  min-height: 36px !important;
+  padding: 8px 16px !important;
+  margin: 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+}
+
+.bottom-audio-control,
+.backup-audio-button,
+.site-audio-button,
+#backupAudioButton,
+#siteAudioButton,
+#muteButton {
+  display: none !important;
+}
+
+/* Final first-entry gate */
+body:not(.entered) main.profile-screen {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.entered main.profile-screen {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+#enterScreen.enter-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  background: rgba(8, 6, 14, 0.76) !important;
+  backdrop-filter: blur(16px) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+body.entered #enterScreen {
+  display: none !important;
+}
+
+.enter-card {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: min(90vw, 270px) !important;
+  padding: 13px !important;
+  border-radius: 22px !important;
+  text-align: center !important;
+  background: rgba(18, 14, 28, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45) !important;
+}
+
+#enterButton.enter-button {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: max-content !important;
+  min-height: 34px !important;
+  padding: 7px 14px !important;
+  margin: 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  font-size: 0.86rem !important;
+  font-weight: 800 !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+}
+
+.bottom-audio-control,
+.backup-audio-button,
+.site-audio-button,
+#backupAudioButton,
+#siteAudioButton,
+#muteButton {
+  display: none !important;
+}
+
+/* One-time website entry gate */
+body.site-locked main.profile-screen {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.site-entered main.profile-screen,
+body.entered main.profile-screen {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+#siteEntryGate.site-entry-gate {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1000000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  background: rgba(8, 6, 14, 0.76) !important;
+  backdrop-filter: blur(16px) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+body.site-entered #siteEntryGate {
+  display: none !important;
+}
+
+.site-entry-card {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 11px !important;
+  border-radius: 20px !important;
+  background: rgba(18, 14, 28, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45) !important;
+}
+
+#siteEnterButton.site-enter-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: max-content !important;
+  min-height: 34px !important;
+  margin: 0 !important;
+  padding: 7px 14px !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+  font: inherit !important;
+  font-size: 0.86rem !important;
+  font-weight: 800 !important;
+  color: var(--text) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.17) !important;
+  cursor: pointer !important;
+}
+
+/* Permanently remove old music controls */
+.bottom-audio-control,
+.backup-audio-button,
+.site-audio-button,
+#backupAudioButton,
+#siteAudioButton,
+#muteButton {
+  display: none !important;
+}
+
+/* About page: Games and Music side by side */
+.about-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+}
+
+.about-game-card,
+.about-music-card {
+  grid-column: auto !important;
+  min-width: 0 !important;
+  height: 100% !important;
+}
+
+@media (max-width: 620px) {
+  .about-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .about-game-card,
+  .about-music-card {
+    grid-column: auto !important;
+  }
+}
+
+/* Games card now-playing and history layout */
+.game-current {
+  margin-bottom: 14px !important;
+}
+
+.game-history {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#aboutGameNowText {
+  margin: 0 !important;
+  color: var(--text) !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+.game-history-list {
+  margin-top: 10px !important;
+}
+
+.about-game-card,
+.about-music-card {
+  grid-column: auto !important;
+  min-width: 0 !important;
+  height: 100% !important;
+}
+
+/* Combined Profile, Games, About and Music dashboard */
+.profile-screen {
+  width: 100% !important;
+  min-height: 100svh !important;
+  padding: 78px 18px 50px !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+}
+
+.profile-dashboard {
+  width: min(100%, 1440px) !important;
+  margin: 0 auto !important;
+  display: grid !important;
+  grid-template-columns:
+    minmax(250px, 340px)
+    minmax(440px, 680px)
+    minmax(250px, 340px) !important;
+  grid-template-areas: "games profile music" !important;
+  gap: 18px !important;
+  align-items: start !important;
+}
+
+.profile-games-panel {
+  grid-area: games !important;
+}
+
+.profile-center-column {
+  grid-area: profile !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+}
+
+.profile-music-panel {
+  grid-area: music !important;
+}
+
+.profile-side-panel {
+  min-width: 0 !important;
+}
+
+.profile-side-panel > .about-mini-card,
+.dashboard-game-card,
+.dashboard-music-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  grid-column: auto !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  background: rgba(18, 14, 28, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(18px) !important;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.24) !important;
+}
+
+.profile-center-column > .profile-card {
+  width: 100% !important;
+  max-width: 680px !important;
+  margin: 0 !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.profile-about-wrapper {
+  width: 100% !important;
+  max-width: 680px !important;
+  margin: 0 !important;
+  padding: 16px 18px !important;
+  border-radius: 24px !important;
+  background: rgba(18, 14, 28, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(18px) !important;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.24) !important;
+}
+
+.profile-about-wrapper .about-inline-section,
+.profile-about-wrapper .about-section {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.profile-about-wrapper h2 {
+  margin-top: 0 !important;
+}
+
+.profile-side-panel .last-played-list {
+  max-height: 420px !important;
+  overflow-y: auto !important;
+  padding-right: 3px !important;
+}
+
+/* Medium screens: Profile first, Games and Music beneath it */
+@media (max-width: 1080px) {
+  .profile-dashboard {
+    width: min(100%, 760px) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-areas:
+      "profile profile"
+      "games music" !important;
+  }
+
+  .profile-center-column,
+  .profile-center-column > .profile-card,
+  .profile-about-wrapper {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Phones: everything stacks */
+@media (max-width: 650px) {
+  .profile-screen {
+    padding: 72px 12px 32px !important;
+  }
+
+  .profile-dashboard {
+    width: 100% !important;
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "profile"
+      "games"
+      "music" !important;
+    gap: 14px !important;
+  }
+
+  .profile-center-column {
+    gap: 14px !important;
+  }
+
+  .profile-side-panel > .about-mini-card,
+  .dashboard-game-card,
+  .dashboard-music-card,
+  .profile-about-wrapper {
+    border-radius: 22px !important;
+  }
+
+  .profile-side-panel .last-played-list {
+    max-height: none !important;
+  }
+}
+
+/* Who I am inside the main profile, between username and status */
+.profile-card .profile-inline-about {
+  width: 100% !important;
+  margin: 16px 0 18px !important;
+  padding: 14px 0 16px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.11) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.profile-card .profile-inline-about h2 {
+  margin: 0 0 7px !important;
+  color: var(--text) !important;
+  font-size: 0.95rem !important;
+}
+
+.profile-card .profile-inline-about p {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+}
+
+.profile-about-wrapper:empty {
+  display: none !important;
+}
+
+/* Weather above Music in the right-hand column */
+.profile-music-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  gap: 18px !important;
+  min-width: 0 !important;
+}
+
+.local-weather-card {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  background: rgba(18, 14, 28, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(18px) !important;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.24) !important;
+}
+
+.weather-heading {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.weather-heading h2 {
+  margin: 3px 0 0 !important;
+  color: var(--text) !important;
+  font-size: 1rem !important;
+}
+
+.weather-icon {
+  flex: 0 0 auto !important;
+  font-size: 2rem !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+}
+
+.weather-current {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-top: 12px !important;
+}
+
+.weather-temperature {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  color: var(--text) !important;
+  font-size: 2.25rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.weather-current-copy {
+  min-width: 0 !important;
+}
+
+.weather-current-copy p {
+  margin: 0 !important;
+}
+
+#weatherCondition {
+  color: var(--text) !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+}
+
+.weather-secondary {
+  margin-top: 3px !important;
+  color: var(--muted) !important;
+  font-size: 0.78rem !important;
+}
+
+.weather-details {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  margin-top: 14px !important;
+}
+
+.weather-details span {
+  min-width: 0 !important;
+  padding: 7px 5px !important;
+  border-radius: 11px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: var(--muted) !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  font-size: 0.7rem !important;
+}
+
+.weather-details strong {
+  color: var(--text) !important;
+  font-weight: 700 !important;
+}
+
+.weather-forecast-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.weather-updated {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: 0.67rem !important;
+}
+
+.weather-forecast {
+  list-style: none !important;
+  display: grid !important;
+  gap: 6px !important;
+  margin: 9px 0 0 !important;
+  padding: 0 !important;
+}
+
+.weather-forecast-item {
+  display: grid !important;
+  grid-template-columns: minmax(65px, 1fr) auto auto auto !important;
+  align-items: center !important;
+  gap: 7px !important;
+  min-width: 0 !important;
+  padding: 7px 8px !important;
+  border-radius: 11px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.065) !important;
+  font-size: 0.72rem !important;
+}
+
+.weather-forecast-day {
+  min-width: 0 !important;
+  color: var(--text) !important;
+  font-weight: 700 !important;
+}
+
+.weather-forecast-icon {
+  font-size: 1rem !important;
+}
+
+.weather-forecast-rain {
+  color: var(--muted) !important;
+  white-space: nowrap !important;
+}
+
+.weather-forecast-temperatures {
+  color: var(--text) !important;
+  white-space: nowrap !important;
+  font-weight: 700 !important;
+}
+
+/*
+ * Let Music occupy all space below Weather, reaching the bottom
+ * of the main profile column when that column is taller.
+ */
+.profile-music-panel .dashboard-music-card,
+.profile-music-panel .about-music-card {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.profile-music-panel .music-history {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.profile-music-panel .last-played-list {
+  flex: 1 1 auto !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+}
+
+/* Do not force equal-height columns on phones */
+@media (max-width: 650px) {
+  .profile-music-panel {
+    align-self: auto !important;
+  }
+
+  .profile-music-panel .dashboard-music-card,
+  .profile-music-panel .about-music-card {
+    flex: none !important;
+  }
+
+  .weather-details {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* BEGIN SPARKY PC MONITOR */
+.profile-games-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  gap: 18px !important;
+  min-width: 0 !important;
+}
+
+.pc-monitor-card {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 16px !important;
+  border-radius: 24px !important;
+  background: rgba(18, 14, 28, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(18px) !important;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.24) !important;
+  transition: opacity 180ms ease, filter 180ms ease !important;
+}
+
+.pc-monitor-card.is-offline {
+  opacity: 0.68 !important;
+  filter: saturate(0.65) !important;
+}
+
+.pc-monitor-heading {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.pc-monitor-heading h2 {
+  margin: 3px 0 0 !important;
+  color: var(--text) !important;
+  font-size: 1rem !important;
+}
+
+.pc-online-state {
+  padding: 5px 9px !important;
+  border-radius: 999px !important;
+  color: var(--text) !important;
+  background: rgba(35, 165, 90, 0.18) !important;
+  border: 1px solid rgba(35, 165, 90, 0.34) !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+}
+
+.pc-monitor-card.is-offline .pc-online-state {
+  background: rgba(116, 127, 141, 0.18) !important;
+  border-color: rgba(116, 127, 141, 0.34) !important;
+}
+
+.pc-spec-list {
+  display: grid !important;
+  gap: 6px !important;
+  margin: 14px 0 0 !important;
+}
+
+.pc-spec-list p,
+.pc-metric-heading,
+.pc-monitor-footer {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+.pc-spec-list p {
+  margin: 0 !important;
+  font-size: 0.72rem !important;
+  line-height: 1.35 !important;
+}
+
+.pc-spec-list span,
+.pc-metric-heading,
+.pc-monitor-footer {
+  color: var(--muted) !important;
+}
+
+.pc-spec-list strong,
+.pc-metric-heading strong,
+.pc-monitor-footer strong {
+  color: var(--text) !important;
+}
+
+.pc-spec-list strong {
+  min-width: 0 !important;
+  text-align: right !important;
+  overflow-wrap: anywhere !important;
+}
+
+.pc-monitor-section {
+  margin-top: 15px !important;
+  padding-top: 13px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.pc-metric {
+  margin-top: 11px !important;
+}
+
+.pc-metric-heading {
+  font-size: 0.72rem !important;
+}
+
+.pc-metric-heading > span:last-child {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 7px !important;
+}
+
+.pc-metric-heading small {
+  color: var(--muted) !important;
+  font-size: 0.67rem !important;
+}
+
+.pc-usage-bar {
+  width: 100% !important;
+  height: 8px !important;
+  margin-top: 6px !important;
+  overflow: hidden !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.075) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.pc-usage-bar > span {
+  display: block !important;
+  width: 0;
+  height: 100% !important;
+  border-radius: inherit !important;
+  background: linear-gradient(90deg, rgba(152, 113, 255, 0.9), rgba(92, 188, 255, 0.95)) !important;
+  box-shadow: 0 0 12px rgba(121, 151, 255, 0.45) !important;
+  transition: width 700ms ease !important;
+}
+
+.pc-gpu-details {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  margin-top: 7px !important;
+}
+
+.pc-gpu-details span {
+  padding: 6px 4px !important;
+  border-radius: 10px !important;
+  text-align: center !important;
+  color: var(--muted) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  font-size: 0.61rem !important;
+}
+
+.pc-gpu-details strong {
+  display: block !important;
+  margin-top: 2px !important;
+  color: var(--text) !important;
+  font-size: 0.67rem !important;
+}
+
+.pc-monitor-footer {
+  margin-top: 15px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  font-size: 0.65rem !important;
+}
+
+@media (max-width: 650px) {
+  .profile-games-panel { align-self: auto !important; }
+  .pc-monitor-card { flex: none !important; }
+}
+/* END SPARKY PC MONITOR */
