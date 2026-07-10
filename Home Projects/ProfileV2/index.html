@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=links1">
+  <link rel="stylesheet" href="style.css?v=linkicons1">
 </head>
 
 <body>
@@ -104,11 +104,25 @@
           </div>
         </div>
 
-        <nav class="links" aria-label="Profile links">
-          <a href="https://t.me/sparkyfoxer" target="_blank" rel="noreferrer">Telegram</a>
-          <a href="https://www.twitch.tv/SparkyTheFox_" target="_blank" rel="noreferrer">Twitch</a>
-          <a href="mailto:sparkyfoxer@gmail.com">Mail</a>
-          <a href="about.html">About</a>
+        <nav class="links image-links" aria-label="Profile links">
+          <a class="profile-link" href="https://t.me/sparkyfoxer" target="_blank" rel="noreferrer">
+            <img src="assets/telegram.png" alt="" onerror="this.style.display='none'">
+            <span>Telegram</span>
+          </a>
+
+          <a class="profile-link" href="https://www.twitch.tv/SparkyTheFox_" target="_blank" rel="noreferrer">
+            <img src="assets/twitch.png" alt="" onerror="this.style.display='none'">
+            <span>Twitch</span>
+          </a>
+
+          <a class="profile-link" href="mailto:sparkyfoxer@gmail.com">
+            <img src="assets/mail.png" alt="" onerror="this.style.display='none'">
+            <span>Mail</span>
+          </a>
+
+          <a class="profile-link" href="about.html">
+            <span>About</span>
+          </a>
         </nav>
 
         <p class="footer-text">Made by Sparky Fox</p>
@@ -119,6 +133,6 @@
   </main>
 
   <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
-  <script src="script.js?v=links1"></script>
+  <script src="script.js?v=linkicons1"></script>
 </body>
 </html>

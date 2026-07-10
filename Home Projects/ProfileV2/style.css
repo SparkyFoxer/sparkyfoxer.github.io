@@ -1198,3 +1198,56 @@ h1 {
     bottom: calc(100% + 10px) !important;
   }
 }
+
+/* Centre Time, Views, and Location stat cards */
+.stats-grid {
+  align-items: stretch !important;
+}
+
+.stats-grid .stat,
+.stats-grid > div {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.stats-grid .small-label,
+.stats-grid p,
+#siteAge,
+#viewCount,
+#views,
+#location,
+#profileLocation {
+  width: 100% !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Link buttons with uploaded icons */
+.image-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+.image-links .profile-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.image-links .profile-link img {
+  width: 20px !important;
+  height: 20px !important;
+  object-fit: contain !important;
+  display: block !important;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.22));
+}
+
+.image-links .profile-link span {
+  line-height: 1 !important;
+}
