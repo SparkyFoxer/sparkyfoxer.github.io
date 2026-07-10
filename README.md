@@ -1,4 +1,4 @@
-# Sparky profile
+# Profile setup info
 
 This is a static GitHub Pages profile.
 
