@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=activityimage1">
+  <link rel="stylesheet" href="style.css?v=spotifywide1">
 </head>
 
 <body>
@@ -45,41 +45,37 @@
         </div>
 
         <div class="activity-card">
-          <p class="small-label">Current Activity</p>
+          <p class="small-label">Current activity</p>
+          <p id="discordActivity">Checking Discord...</p>
+          <p id="discordElapsed" class="activity-time">No timer for this activity.</p>
 
-          <div id="activityList" class="activity-list">
-            <div id="spotifyCard" class="spotify-card hidden">
-              <img id="spotifyArt" class="spotify-art" src="" alt="Spotify album cover">
+          <div id="spotifyCard" class="spotify-card hidden">
+            <img id="spotifyArt" class="spotify-art" src="" alt="Spotify album cover">
 
-              <div class="spotify-info">
-                <div class="spotify-header">
-                  <span>Listening to Spotify</span>
-                  <span>♪</span>
+            <div class="spotify-info">
+              <div class="spotify-header">
+                <span>Listening to Spotify</span>
+                <span>♪</span>
+              </div>
+
+              <div id="spotifySong" class="spotify-song">Song</div>
+              <div id="spotifyArtist" class="spotify-artist">Artist</div>
+
+              <div class="spotify-progress-row">
+                <span id="spotifyElapsed">0:00</span>
+                <div class="spotify-progress">
+                  <div id="spotifyProgressFill" class="spotify-progress-fill"></div>
                 </div>
+                <span id="spotifyDuration">0:00</span>
+              </div>
 
-                <div id="spotifySong" class="spotify-song">Song</div>
-                <div id="spotifyArtist" class="spotify-artist">Artist</div>
-
-                <div class="spotify-progress-row">
-                  <span id="spotifyElapsed">0:00</span>
-                  <div class="spotify-progress">
-                    <div id="spotifyProgressFill" class="spotify-progress-fill"></div>
-                  </div>
-                  <span id="spotifyDuration">0:00</span>
-                </div>
-
-                <div class="spotify-actions">
-                  <a id="spotifyTrackButton" href="#" target="_blank" rel="noreferrer">Open song</a>
-                  <a id="spotifyProfileButton" href="#" target="_blank" rel="noreferrer">Profile</a>
-                </div>
+              <div class="spotify-actions">
+                <a id="spotifyTrackButton" href="#" target="_blank" rel="noreferrer">Open song</a>
+                <a id="spotifyProfileButton" href="#" target="_blank" rel="noreferrer">Profile</a>
               </div>
             </div>
-
-            <div id="otherActivities" class="other-activities"></div>
-            <p id="activityEmpty" class="activity-empty">No current activity shown.</p>
           </div>
         </div>
-
 
         <div class="stats-grid">
           <div>
@@ -112,6 +108,6 @@
   </main>
 
   <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
-  <script src="script.js?v=activityimage1"></script>
+  <script src="script.js?v=spotifywide1"></script>
 </body>
 </html>

@@ -17,6 +17,8 @@ const statusDot = document.querySelector("#statusDot");
 const discordStatus = document.querySelector("#discordStatus");
 const discordCustomText = document.querySelector("#discordCustomText");
 const discordBioText = document.querySelector("#discordBioText");
+const discordActivity = document.querySelector("#discordActivity");
+const discordElapsed = document.querySelector("#discordElapsed");
 
 const siteAge = document.querySelector("#siteAge");
 const viewCount = document.querySelector("#viewCount");
@@ -32,13 +34,12 @@ const spotifyProgressFill = document.querySelector("#spotifyProgressFill");
 const spotifyTrackButton = document.querySelector("#spotifyTrackButton");
 const spotifyProfileButton = document.querySelector("#spotifyProfileButton");
 
-const otherActivities = document.querySelector("#otherActivities");
-const activityEmpty = document.querySelector("#activityEmpty");
-
 let userEntered = false;
 let spotifyIsActive = false;
 let spotifyStart = null;
 let spotifyEnd = null;
+let activeActivityStart = null;
+let activeActivityLabel = "";
 
 enterButton.addEventListener("click", async () => {
   userEntered = true;
@@ -124,24 +125,11 @@ function formatDiscordStatus(status) {
 function setSiteInfo() {
   siteAge.textContent = timeAgo(CONFIG.siteCreated);
   locationText.textContent = CONFIG.location;
-}
 
-function setThoughtBubble(text) {
-  const cleanText = (text || "").trim();
-
-  if (!thoughtBubble) {
-    return;
+  if (discordBioText) {
+    discordBioText.textContent = `Bio: ${CONFIG.discordBio}`;
   }
-
-  if (!cleanText) {
-    thoughtBubble.classList.add("hidden");
-    return;
-  }
-
-  thoughtBubble.textContent = cleanText;
-  thoughtBubble.classList.remove("hidden");
 }
-
 
 function setLiveBio(data) {
   if (!discordBioText) {
@@ -158,6 +146,20 @@ function setLiveBio(data) {
   discordBioText.textContent = "No live bio set.";
 }
 
+function setThoughtBubble(text) {
+  const cleanText = (text || "").trim();
+
+  if (!cleanText) {
+    thoughtBubble.classList.add("hidden");
+    
+    return;
+  }
+
+  thoughtBubble.textContent = cleanText;
+  thoughtBubble.classList.remove("hidden");
+  
+}
+
 function getCustomStatus(data) {
   const activities = data.activities || [];
   const custom = activities.find(activity => activity.type === 4);
@@ -172,93 +174,28 @@ function getCustomStatus(data) {
   return [emoji, state].filter(Boolean).join(" ");
 }
 
-function getActivityPrefix(type) {
-  const prefixes = {
-    0: "Playing",
-    1: "Streaming",
-    2: "Listening to",
-    3: "Watching",
-    5: "Competing in"
-  };
+function updateActivityTimer() {
+  if (!activeActivityStart) {
+    discordElapsed.textContent = "No timer for this activity.";
+    return;
+  }
 
-  return prefixes[type] || "Doing";
+  discordElapsed.textContent = `${activeActivityLabel} for ${formatTime(Date.now() - activeActivityStart)}`;
 }
 
-function getActivityEmoji(type) {
-  const icons = {
-    0: "🎮",
-    1: "📡",
-    2: "🎧",
-    3: "📺",
-    5: "🏆"
-  };
-
-  return icons[type] || "•";
-}
-
-
-function getActivityImageUrl(activity) {
-  const asset = activity.assets?.large_image || activity.assets?.small_image || "";
-
-  if (!asset) {
-    return "";
+function updateSpotifyProgress() {
+  if (!spotifyIsActive || !spotifyStart || !spotifyEnd) {
+    return;
   }
 
-  if (asset.startsWith("https://") || asset.startsWith("http://")) {
-    return asset;
-  }
+  const now = Date.now();
+  const elapsed = Math.max(0, now - spotifyStart);
+  const duration = Math.max(1, spotifyEnd - spotifyStart);
+  const percent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
 
-  if (asset.startsWith("mp:")) {
-    return `https://media.discordapp.net/${asset.slice(3)}`;
-  }
-
-  if (asset.startsWith("app-assets/")) {
-    return `https://cdn.discordapp.com/${asset}.png?size=256`;
-  }
-
-  if (activity.application_id) {
-    return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${asset}.png?size=256`;
-  }
-
-  return "";
-}
-
-function createActivityIcon(activity) {
-  const imageUrl = getActivityImageUrl(activity);
-
-  if (imageUrl) {
-    const img = document.createElement("img");
-    img.className = "activity-image";
-    img.src = imageUrl;
-    img.alt = `${activity.name || "Activity"} image`;
-
-    img.onerror = () => {
-      const fallback = document.createElement("div");
-      fallback.className = "activity-icon";
-      fallback.textContent = getActivityEmoji(activity.type);
-      img.replaceWith(fallback);
-    };
-
-    return img;
-  }
-
-  const icon = document.createElement("div");
-  icon.className = "activity-icon";
-  icon.textContent = getActivityEmoji(activity.type);
-  return icon;
-}
-
-function shouldSkipActivity(activity, data) {
-  if (activity.type === 4) {
-    return true;
-  }
-
-  const isSpotifyActivity =
-    data.listening_to_spotify &&
-    activity.type === 2 &&
-    String(activity.name || "").toLowerCase().includes("spotify");
-
-  return isSpotifyActivity;
+  spotifyElapsed.textContent = formatTime(elapsed);
+  spotifyDuration.textContent = formatTime(duration);
+  spotifyProgressFill.style.width = `${percent}%`;
 }
 
 function showSpotifyCard(spotify) {
@@ -285,9 +222,19 @@ function showSpotifyCard(spotify) {
     spotifyProfileButton.classList.add("hidden");
   }
 
+  discordActivity.textContent = "";
+  discordActivity.classList.add("hidden");
+  activeActivityStart = null;
+  activeActivityLabel = "";
+
+  if (discordElapsed) {
+    discordElapsed.classList.add("hidden");
+  }
+
   audio.pause();
   muteButton.textContent = "play fallback";
 
+  updateActivityTimer();
   updateSpotifyProgress();
 }
 
@@ -296,107 +243,56 @@ function hideSpotifyCard() {
   spotifyStart = null;
   spotifyEnd = null;
 
+  if (discordElapsed) {
+    discordElapsed.classList.remove("hidden");
+  }
+
+  if (discordActivity) {
+    discordActivity.classList.remove("hidden");
+  }
+
   spotifyCard.classList.add("hidden");
   spotifyProgressFill.style.width = "0%";
   spotifyElapsed.textContent = "0:00";
   spotifyDuration.textContent = "0:00";
+
+  discordActivity.classList.remove("hidden");
+  discordElapsed.classList.remove("hidden");
 
   if (userEntered) {
     playFallbackIfNeeded();
   }
 }
 
-function updateSpotifyProgress() {
-  if (!spotifyIsActive || !spotifyStart || !spotifyEnd) {
-    return;
-  }
+function getActivityPrefix(type) {
+  const prefixes = {
+    0: "Playing",
+    1: "Streaming",
+    2: "Listening to",
+    3: "Watching",
+    4: "Status",
+    5: "Competing in"
+  };
 
-  const now = Date.now();
-  const elapsed = Math.max(0, now - spotifyStart);
-  const duration = Math.max(1, spotifyEnd - spotifyStart);
-  const percent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
-
-  spotifyElapsed.textContent = formatTime(elapsed);
-  spotifyDuration.textContent = formatTime(duration);
-  spotifyProgressFill.style.width = `${percent}%`;
+  return prefixes[type] || "Doing";
 }
 
-function renderActivityCards(data) {
-  const activities = (data.activities || []).filter(activity => !shouldSkipActivity(activity, data));
+function pickActivity(data) {
+  const activities = data.activities || [];
+  const activity = activities.find(item => [0, 2, 3, 5].includes(item.type));
 
-  otherActivities.innerHTML = "";
-
-  for (const activity of activities) {
-    const prefix = getActivityPrefix(activity.type);
-    const details = [activity.details, activity.state].filter(Boolean).join(" • ");
-    const start = activity.timestamps?.start || "";
-    const title = `${prefix} ${activity.name || "Unknown"}`;
-
-    const item = document.createElement("div");
-    item.className = "activity-item";
-
-    const icon = createActivityIcon(activity);
-
-    const info = document.createElement("div");
-    info.className = "activity-info";
-
-    const header = document.createElement("div");
-    header.className = "activity-header";
-
-    const headerLeft = document.createElement("span");
-    headerLeft.textContent = prefix;
-
-    const headerRight = document.createElement("span");
-    headerRight.textContent = activity.application_id ? "Rich Presence" : "";
-
-    const titleEl = document.createElement("div");
-    titleEl.className = "activity-title";
-    titleEl.textContent = title;
-
-    const detailEl = document.createElement("div");
-    detailEl.className = "activity-detail";
-    detailEl.textContent = details || "Activity shown on Discord.";
-
-    const timer = document.createElement("div");
-    timer.className = "activity-timer";
-
-    if (start) {
-      timer.dataset.start = start;
-      timer.dataset.label = prefix;
-      timer.textContent = `${prefix} for ${formatTime(Date.now() - Number(start))}`;
-    } else {
-      timer.textContent = "No timer for this activity.";
-    }
-
-    header.appendChild(headerLeft);
-    header.appendChild(headerRight);
-    info.appendChild(header);
-    info.appendChild(titleEl);
-    info.appendChild(detailEl);
-    info.appendChild(timer);
-
-    item.appendChild(icon);
-    item.appendChild(info);
-
-    otherActivities.appendChild(item);
+  if (!activity) {
+    return null;
   }
 
-  const hasSpotify = data.listening_to_spotify && data.spotify;
-  const hasOtherActivities = activities.length > 0;
+  const prefix = getActivityPrefix(activity.type);
+  const details = [activity.details, activity.state].filter(Boolean).join(" • ");
 
-  activityEmpty.classList.toggle("hidden", hasSpotify || hasOtherActivities);
-}
-
-
-function updateActivityTimers() {
-  document.querySelectorAll(".activity-timer[data-start]").forEach(timer => {
-    const start = Number(timer.dataset.start);
-    const label = timer.dataset.label || "Active";
-
-    if (!Number.isNaN(start)) {
-      timer.textContent = `${label} for ${formatTime(Date.now() - start)}`;
-    }
-  });
+  return {
+    text: details ? `${prefix} ${activity.name} • ${details}` : `${prefix} ${activity.name}`,
+    start: activity.timestamps?.start || null,
+    label: prefix
+  };
 }
 
 async function loadDiscordPresence() {
@@ -422,24 +318,37 @@ async function loadDiscordPresence() {
 
     if (data.listening_to_spotify && data.spotify) {
       showSpotifyCard(data.spotify);
-    } else {
-      hideSpotifyCard();
-    }
-
-    renderActivityCards(data);
-  } catch {
-    statusDot.className = "status-dot offline";
-    discordStatus.textContent = "Status unavailable";
-    setThoughtBubble("");
-
-    if (discordBioText) {
-      discordBioText.textContent = "Bio unavailable.";
+      return;
     }
 
     hideSpotifyCard();
-    otherActivities.innerHTML = "";
-    activityEmpty.classList.remove("hidden");
-    activityEmpty.textContent = "Presence unavailable.";
+
+    const activity = pickActivity(data);
+
+    if (activity) {
+      discordActivity.textContent = activity.text;
+      activeActivityStart = activity.start;
+      activeActivityLabel = activity.label;
+      updateActivityTimer();
+      return;
+    }
+
+    discordActivity.textContent = "No current activity shown.";
+    activeActivityStart = null;
+    activeActivityLabel = "";
+    updateActivityTimer();
+  } catch {
+    statusDot.className = "status-dot offline";
+    discordStatus.textContent = "Status unavailable";
+    discordActivity.textContent = "Join Lanyard or check Discord activity settings.";
+    setThoughtBubble("");
+    if (discordBioText) {
+      discordBioText.textContent = "Bio unavailable.";
+    }
+    hideSpotifyCard();
+    activeActivityStart = null;
+    activeActivityLabel = "";
+    updateActivityTimer();
   }
 }
 
@@ -465,8 +374,8 @@ async function loadViews() {
 setSiteInfo();
 loadDiscordPresence();
 loadViews();
+updateActivityTimer();
 updateSpotifyProgress();
-updateActivityTimers();
 
 setInterval(() => {
   setSiteInfo();
@@ -474,6 +383,6 @@ setInterval(() => {
 }, 30000);
 
 setInterval(() => {
+  updateActivityTimer();
   updateSpotifyProgress();
-  updateActivityTimers();
 }, 1000);
