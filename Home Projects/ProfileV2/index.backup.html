@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sparky Fox</title>
+  <meta name="description" content="Sparky Fox profile page" />
+  <link rel="icon" href="assets/avatar.png" type="image/png" />
+  <link rel="stylesheet" href="style.css?v=spotifyfix1" />
+</head>
+
+<body>
+  <video id="bgVideo" class="bg-video" src="assets/background.mp4" autoplay muted loop playsinline></video>
+  <div class="bg-fallback"></div>
+  <div class="grain"></div>
+
+  <main class="page" aria-label="Profile page">
+    <section id="enterScreen" class="enter-screen">
+      <button id="enterButton" class="enter-button" type="button">
+        click to enter
+      </button>
+    </section>
+
+    <section id="profileScreen" class="profile-screen hidden">
+      <article class="profile-card">
+        <div class="top-row">
+          <img class="avatar" src="assets/avatar.png" alt="Sparky Fox avatar" />
+          <div>
+            <p class="eyebrow">online profile</p>
+            <h1>Sparky Fox</h1>
+            <p class="bio">cycling, gaming, Linux, silly fox energy</p>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-dot" id="statusDot"></div>
+          <div>
+            <p class="small-label">Discord</p>
+            <p id="discordStatus">Set your Discord user ID in script.js</p>
+            <p id="discordActivity" class="muted">Presence will show here.</p>
+            <p id="discordElapsed" class="activity-time">No activity timer.</p>
+            <div id="spotifyCard" class="spotify-card hidden">
+              <img id="spotifyArt" class="spotify-art" src="" alt="Spotify album art">
+              <div class="spotify-info">
+                <div class="spotify-top">
+                  <span>Listening to Spotify</span>
+                  <span class="spotify-icon">♬</span>
+                </div>
+                <div id="spotifySong" class="spotify-song">Song</div>
+                <div id="spotifyArtist" class="spotify-artist">Artist</div>
+                <div class="spotify-progress-row">
+                  <span id="spotifyElapsed">0:00</span>
+                  <div class="spotify-progress">
+                    <div id="spotifyProgressFill" class="spotify-progress-fill"></div>
+                  </div>
+                  <span id="spotifyDuration">0:00</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div>
+            <p class="small-label">Created</p>
+            <p id="siteAge">Loading...</p>
+          </div>
+          <div>
+            <p class="small-label">Views</p>
+            <p id="viewCount">Add a counter API</p>
+          </div>
+          <div>
+            <p class="small-label">Location</p>
+            <p id="locationText">New Zealand</p>
+          </div>
+        </div>
+
+        <nav class="links" aria-label="Profile links">
+          <a href="https://github.com/SparkyFoxer" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="mailto:sparkyfoxer@gmail.com">Mail</a>
+          <a href="about.html">About</a>
+        </nav>
+
+        <p class="footer-text">Made by Sparky Fox</p>
+      </article>
+
+      <button id="muteButton" class="mute-button" type="button">mute</button>
+    </section>
+  </main>
+
+  <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
+  <script src="script.js?v=spotifyfix1"></script>
+</body>
+</html>

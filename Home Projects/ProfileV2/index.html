@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sparky Fox</title>
-  <meta name="description" content="Sparky Fox profile page" />
-  <link rel="icon" href="assets/avatar.png" type="image/png" />
-  <link rel="stylesheet" href="style.css?v=spotifyfix1" />
+  <meta name="description" content="Sparky Fox profile page">
+  <link rel="icon" href="assets/avatar.png" type="image/png">
+  <link rel="stylesheet" href="style.css?v=statusfix1">
 </head>
 
 <body>
@@ -14,18 +14,20 @@
   <div class="bg-fallback"></div>
   <div class="grain"></div>
 
-  <main class="page" aria-label="Profile page">
+  <main class="page">
     <section id="enterScreen" class="enter-screen">
-      <button id="enterButton" class="enter-button" type="button">
-        click to enter
-      </button>
+      <button id="enterButton" class="enter-button" type="button">click to enter</button>
     </section>
 
     <section id="profileScreen" class="profile-screen hidden">
       <article class="profile-card">
         <div class="top-row">
-          <img class="avatar" src="assets/avatar.png" alt="Sparky Fox avatar" />
-          <div>
+          <div class="avatar-wrap">
+            <div id="thoughtBubble" class="thought-bubble hidden">Status</div>
+            <img class="avatar" src="assets/avatar.png" alt="Sparky Fox avatar">
+          </div>
+
+          <div class="title-block">
             <p class="eyebrow">online profile</p>
             <h1>Sparky Fox</h1>
             <p class="bio">cycling, gaming, Linux, silly fox energy</p>
@@ -33,31 +35,45 @@
         </div>
 
         <div class="status-card">
-          <div class="status-dot" id="statusDot"></div>
+          <div id="statusDot" class="status-dot offline"></div>
           <div>
-            <p class="small-label">Discord</p>
-            <p id="discordStatus">Set your Discord user ID in script.js</p>
-            <p id="discordActivity" class="muted">Presence will show here.</p>
-            <p id="discordElapsed" class="activity-time">No activity timer.</p>
-            <div id="spotifyCard" class="spotify-card hidden">
-              <img id="spotifyArt" class="spotify-art" src="" alt="Spotify album art">
-              <div class="spotify-info">
-                <div class="spotify-top">
-                  <span>Listening to Spotify</span>
-                  <span class="spotify-icon">♬</span>
+            <p class="small-label">Discord Status</p>
+            <p id="discordStatus">Loading...</p>
+            <p id="discordCustomText" class="muted">Custom status will show above.</p>
+            <p id="discordBioText" class="discord-bio">Bio loading...</p>
+          </div>
+        </div>
+
+        <div class="activity-card">
+          <p class="small-label">Current activity</p>
+          <p id="discordActivity">Checking Discord...</p>
+          <p id="discordElapsed" class="activity-time">No timer for this activity.</p>
+
+          <div id="spotifyCard" class="spotify-card hidden">
+            <img id="spotifyArt" class="spotify-art" src="" alt="Spotify album cover">
+
+            <div class="spotify-info">
+              <div class="spotify-header">
+                <span>Listening to Spotify</span>
+                <span>♪</span>
+              </div>
+
+              <div id="spotifySong" class="spotify-song">Song</div>
+              <div id="spotifyArtist" class="spotify-artist">Artist</div>
+
+              <div class="spotify-progress-row">
+                <span id="spotifyElapsed">0:00</span>
+                <div class="spotify-progress">
+                  <div id="spotifyProgressFill" class="spotify-progress-fill"></div>
                 </div>
-                <div id="spotifySong" class="spotify-song">Song</div>
-                <div id="spotifyArtist" class="spotify-artist">Artist</div>
-                <div class="spotify-progress-row">
-                  <span id="spotifyElapsed">0:00</span>
-                  <div class="spotify-progress">
-                    <div id="spotifyProgressFill" class="spotify-progress-fill"></div>
-                  </div>
-                  <span id="spotifyDuration">0:00</span>
-                </div>
+                <span id="spotifyDuration">0:00</span>
+              </div>
+
+              <div class="spotify-actions">
+                <a id="spotifyTrackButton" href="#" target="_blank" rel="noreferrer">Open song</a>
+                <a id="spotifyProfileButton" href="#" target="_blank" rel="noreferrer">Profile</a>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -66,10 +82,12 @@
             <p class="small-label">Created</p>
             <p id="siteAge">Loading...</p>
           </div>
+
           <div>
             <p class="small-label">Views</p>
-            <p id="viewCount">Add a counter API</p>
+            <p id="viewCount">Loading...</p>
           </div>
+
           <div>
             <p class="small-label">Location</p>
             <p id="locationText">New Zealand</p>
@@ -90,7 +108,6 @@
   </main>
 
   <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
-  <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
-  <script src="script.js?v=spotifyfix1"></script>
+  <script src="script.js?v=statusfix1"></script>
 </body>
 </html>
