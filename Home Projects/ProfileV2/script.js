@@ -2,8 +2,7 @@ const CONFIG = {
   discordUserId: "692126247458832455",
   siteCreated: "2026-07-10T00:00:00+12:00",
   location: "New Zealand",
-  counterWorkspace: "sparkyfoxer",
-  counterName: "profilev2"
+  viewCounterUrl: "https://api.counterapi.dev/v1/sparkyfoxer/profilev2/up"
 };
 
 const enterScreen = document.querySelector("#enterScreen");
@@ -59,7 +58,6 @@ function timeAgo(dateInput) {
 
   for (const [name, amount] of units) {
     const value = Math.floor(seconds / amount);
-
     if (value >= 1) {
       return `${value} ${name}${value === 1 ? "" : "s"} ago`;
     }
@@ -69,37 +67,14 @@ function timeAgo(dateInput) {
 }
 
 function formatDuration(ms) {
-  if (!ms || ms < 0) {
-    return "";
-  }
-
-  const totalSeconds = Math.floor(ms / 1000);
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  if (hours > 0) {
-    return `${hours}h ${minutes}m ${seconds}s`;
-  }
-
-  if (minutes > 0) {
-    return `${minutes}m ${seconds}s`;
-  }
-
+  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+  if (minutes > 0) return `${minutes}m ${seconds}s`;
   return `${seconds}s`;
-}
-
-function parseTimestamp(value) {
-  if (!value) {
-    return null;
-  }
-
-  if (typeof value === "number") {
-    return value;
-  }
-
-  const parsed = new Date(value).getTime();
-  return Number.isNaN(parsed) ? null : parsed;
 }
 
 function setSiteInfo() {
@@ -108,67 +83,53 @@ function setSiteInfo() {
 }
 
 function updateActivityTimer() {
-  if (!discordElapsed) {
-    return;
-  }
+  if (!discordElapsed) return;
 
   if (!activeActivityStart) {
-    discordElapsed.textContent = "No activity timer.";
+    discordElapsed.textContent = "No timer for this activity.";
     return;
   }
 
   discordElapsed.textContent = `${activeActivityLabel} for ${formatDuration(Date.now() - activeActivityStart)}`;
 }
 
-function getActivityPrefix(type) {
-  const prefixes = {
-    0: "Playing",
-    1: "Streaming",
-    2: "Listening to",
-    3: "Watching",
-    4: "Status",
-    5: "Competing in"
-  };
-
-  return prefixes[type] || "Doing";
-}
-
-function pickBestActivity(data) {
+function pickActivity(data) {
   if (data.listening_to_spotify && data.spotify) {
     return {
-      title: `Listening to ${data.spotify.song}`,
-      subtitle: `by ${data.spotify.artist}`,
-      start: parseTimestamp(data.spotify.timestamps?.start),
-      timerLabel: "Listening"
+      text: `Listening to ${data.spotify.song} by ${data.spotify.artist}`,
+      start: data.spotify.timestamps?.start || null,
+      label: "Listening"
     };
   }
 
   const activities = data.activities || [];
+  const activity = activities.find(item => [0, 2, 3, 5].includes(item.type));
 
-  const mainActivity = activities.find(activity => {
-    return activity.type === 0 || activity.type === 2 || activity.type === 3 || activity.type === 5;
-  });
+  if (activity) {
+    const names = {
+      0: "Playing",
+      2: "Listening to",
+      3: "Watching",
+      5: "Competing in"
+    };
 
-  if (mainActivity) {
-    const prefix = getActivityPrefix(mainActivity.type);
-    const extra = [mainActivity.details, mainActivity.state].filter(Boolean).join(" • ");
+    const prefix = names[activity.type] || "Doing";
+    const details = [activity.details, activity.state].filter(Boolean).join(" • ");
 
     return {
-      title: `${prefix} ${mainActivity.name}`,
-      subtitle: extra || "Activity shown on Discord.",
-      start: parseTimestamp(mainActivity.timestamps?.start),
-      timerLabel: prefix
+      text: details ? `${prefix} ${activity.name} • ${details}` : `${prefix} ${activity.name}`,
+      start: activity.timestamps?.start || null,
+      label: prefix
     };
   }
 
-  const customStatus = activities.find(activity => activity.type === 4);
+  const custom = activities.find(item => item.type === 4);
 
-  if (customStatus) {
+  if (custom) {
     return {
-      title: customStatus.state || customStatus.name || "Custom status",
-      subtitle: "Discord custom status.",
+      text: custom.state || "Custom status",
       start: null,
-      timerLabel: "Status"
+      label: "Status"
     };
   }
 
@@ -183,24 +144,19 @@ async function loadDiscordPresence() {
 
     const json = await res.json();
 
-    if (!json.success) {
-      throw new Error("Lanyard failed");
-    }
+    if (!json.success) throw new Error("Lanyard failed");
 
     const data = json.data;
     const status = data.discord_status || "offline";
-    const activity = pickBestActivity(data);
+    const activity = pickActivity(data);
 
     statusDot.className = `status-dot ${status}`;
     discordStatus.textContent = status;
 
     if (activity) {
-      discordActivity.textContent = activity.subtitle
-        ? `${activity.title} • ${activity.subtitle}`
-        : activity.title;
-
+      discordActivity.textContent = activity.text;
       activeActivityStart = activity.start;
-      activeActivityLabel = activity.timerLabel;
+      activeActivityLabel = activity.label;
       updateActivityTimer();
       return;
     }
@@ -212,7 +168,7 @@ async function loadDiscordPresence() {
   } catch {
     statusDot.className = "status-dot offline";
     discordStatus.textContent = "Presence unavailable";
-    discordActivity.textContent = "Join Lanyard or check your Discord activity settings.";
+    discordActivity.textContent = "Join Lanyard or check Discord activity settings.";
     activeActivityStart = null;
     activeActivityLabel = "";
     updateActivityTimer();
@@ -221,17 +177,16 @@ async function loadDiscordPresence() {
 
 async function loadViews() {
   try {
-    if (window.Counter) {
-      const counter = new Counter({
-        workspace: CONFIG.counterWorkspace
-      });
+    const res = await fetch(CONFIG.viewCounterUrl, {
+      cache: "no-store"
+    });
 
-      const result = await counter.up(CONFIG.counterName);
-      viewCount.textContent = Number(result.value).toLocaleString();
-      return;
-    }
+    const json = await res.json();
+    const count = json.count ?? json.value ?? json.data?.count ?? json.data?.value;
 
-    throw new Error("CounterAPI browser library not loaded");
+    if (count === undefined) throw new Error("No counter value");
+
+    viewCount.textContent = Number(count).toLocaleString();
   } catch {
     viewCount.textContent = "Counter unavailable";
   }
