@@ -1,667 +1,635 @@
-const CONFIG = {
-  discordUserId: "692126247458832455",
-  siteCreated: "2026-07-10T00:00:00+12:00",
-  location: "New Zealand",
-  profileSubtitle: "Fox thing • Linux • music • games • OCE",
-  fallbackBio: `🦊 Sparky Foxer :3
+/* Main profile live data: Discord, bio, activity, time and last seen */
+(() => {
+  const DISCORD_ID = "692126247458832455";
+  const LANYARD_URL =
+    `https://api.lanyard.rest/v1/users/${DISCORD_ID}`;
+
+  const LAST_SEEN_URL =
+    "https://spotify-genres.sparkyfoxer.workers.dev/last-seen";
+
+  const FALLBACK_BIO = `🦊 Sparky Foxer :3
 🌟 New Zealand | OCE
-🤙21 - Chill vibes
+🤙 21 - Chill vibes
 🎮 CS2/FH6/BTD/Satisfactory
 🎵 EDM, DNB, Rock, Pop
 📺 Twitch: SparkyTheFox_
-⚽RL - D2 | 🔫CS2 - 8k`,
-  viewCounterUrl: "https://api.counterapi.dev/v1/sparkyfoxer/profilev2/up",
-  spotifyProfileUrl: ""
-};
+⚽ RL - D2 | 🔫 CS2 - 8k`;
 
-const enterScreen = document.querySelector("#enterScreen");
-const profileScreen = document.querySelector("#profileScreen");
-const enterButton = document.querySelector("#enterButton");
-const muteButton = document.querySelector("#muteButton");
-const audio = document.querySelector("#bgAudio");
+  const nodes = {};
 
-const thoughtBubble = document.querySelector("#thoughtBubble");
-const statusCard = document.querySelector("#statusCard");
-const activityCard = document.querySelector("#activityCard");
-const statusDot = document.querySelector("#statusDot");
-const discordStatus = document.querySelector("#discordStatus");
-const discordBioText = document.querySelector("#discordBioText");
+  let discordStatus = "offline";
+  let lastSeenData = null;
 
-const siteAge = document.querySelector("#siteAge");
-const viewCount = document.querySelector("#viewCount");
-const locationText = document.querySelector("#locationText");
-const profileSubtitle = document.querySelector("#profileSubtitle");
+  let spotifyStart = 0;
+  let spotifyEnd = 0;
 
-const spotifyCard = document.querySelector("#spotifyCard");
-const spotifyArt = document.querySelector("#spotifyArt");
-const spotifySong = document.querySelector("#spotifySong");
-const spotifyArtist = document.querySelector("#spotifyArtist");
-const spotifyElapsed = document.querySelector("#spotifyElapsed");
-const spotifyDuration = document.querySelector("#spotifyDuration");
-const spotifyProgressFill = document.querySelector("#spotifyProgressFill");
-const spotifyTrackButton = document.querySelector("#spotifyTrackButton");
-const spotifyProfileButton = document.querySelector("#spotifyProfileButton");
+  function first(...selectors) {
+    for (const selector of selectors) {
+      const element = document.querySelector(selector);
+      if (element) return element;
+    }
 
-const otherActivities = document.querySelector("#otherActivities");
-const activityEmpty = document.querySelector("#activityEmpty");
-
-let userEntered = false;
-let spotifyIsActive = false;
-let spotifyStart = null;
-let spotifyEnd = null;
-
-enterButton.addEventListener("click", async () => {
-  userEntered = true;
-  enterScreen.classList.add("hidden");
-  profileScreen.classList.remove("hidden");
-
-  await playFallbackIfNeeded();
-});
-
-muteButton.addEventListener("click", async () => {
-  if (audio.paused) {
-    await playFallbackIfNeeded(true);
-    return;
+    return null;
   }
 
-  audio.pause();
-  muteButton.textContent = "play audio";
-});
+  function show(element, display = "") {
+    if (!element) return;
 
-async function playFallbackIfNeeded(force = false) {
-  if (spotifyIsActive && !force) {
-    audio.pause();
-    muteButton.textContent = "play fallback";
-    return;
+    element.classList.remove(
+      "hidden",
+      "view-hidden",
+      "locked",
+      "is-hidden"
+    );
+
+    element.style.display = display;
+    element.style.opacity = "1";
+    element.style.visibility = "visible";
+    element.style.pointerEvents = "auto";
   }
 
-  try {
-    audio.volume = 0.35;
-    await audio.play();
-    muteButton.textContent = "mute";
-  } catch {
-    muteButton.textContent = "play audio";
-  }
-}
+  function hide(element) {
+    if (!element) return;
 
-function formatTime(ms) {
-  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  if (hours > 0) {
-    return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    element.classList.add("hidden");
+    element.style.display = "none";
   }
 
-  return `${minutes}:${String(seconds).padStart(2, "0")}`;
-}
-
-function formatDiscordStatus(status) {
-  const labels = {
-    online: "Online",
-    idle: "Idle",
-    dnd: "Do Not Disturb",
-    offline: "Offline"
-  };
-
-  return labels[status] || "Offline";
-}
-
-function setSiteInfo() {
-  const now = new Date();
-
-  siteAge.textContent = new Intl.DateTimeFormat("en-NZ", {
-    timeZone: "Pacific/Auckland",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true
-  }).format(now);
-
-  locationText.textContent = CONFIG.location;
-
-  if (profileSubtitle) {
-    profileSubtitle.textContent = CONFIG.profileSubtitle;
-  }
-}
-
-function showStatusCard(status) {
-  if (statusCard) {
-    statusCard.classList.remove("hidden");
-    statusCard.style.display = "flex";
-  }
-
-  statusDot.className = `status-dot ${status}`;
-  discordStatus.textContent = formatDiscordStatus(status);
-}
-
-function hideThoughtBubble() {
-  if (!thoughtBubble) {
-    return;
-  }
-
-  thoughtBubble.classList.add("hidden");
-  thoughtBubble.textContent = "";
-  thoughtBubble.innerHTML = "";
-}
-
-function setThoughtBubble(status) {
-  if (!thoughtBubble) {
-    return;
-  }
-
-  const emoji = status?.emoji || "";
-  const text = status?.state || "";
-
-  if (!emoji && !text) {
-    hideThoughtBubble();
-    return;
-  }
-
-  thoughtBubble.innerHTML = "";
-
-  if (emoji) {
-    const emojiSpan = document.createElement("span");
-    emojiSpan.className = "status-emoji";
-    emojiSpan.textContent = emoji;
-    thoughtBubble.appendChild(emojiSpan);
-  }
-
-  if (text) {
-    const textSpan = document.createElement("span");
-    textSpan.className = "status-text";
-    textSpan.textContent = text;
-    thoughtBubble.appendChild(textSpan);
-  }
-
-  thoughtBubble.classList.remove("hidden");
-}
-
-function setLiveBio(data) {
-  if (!discordBioText) {
-    return;
-  }
-
-  const liveBio = data?.kv?.bio || CONFIG.fallbackBio;
-
-  discordBioText.textContent = liveBio.trim() || CONFIG.fallbackBio;
-}
-
-function getCustomStatus(data) {
-  const activities = data.activities || [];
-  const custom = activities.find(activity => activity.type === 4);
-
-  if (!custom) {
-    return { emoji: "", state: "" };
-  }
-
-  return {
-    emoji: custom.emoji?.name || "",
-    state: custom.state || ""
-  };
-}
-
-function showActivityCard() {
-  if (activityCard) {
-    activityCard.classList.remove("hidden");
-    activityCard.style.display = "";
-  }
-}
-
-function hideActivityCard() {
-  if (activityCard) {
-    activityCard.classList.add("hidden");
-    activityCard.style.display = "none";
-  }
-
-  if (otherActivities) {
-    otherActivities.innerHTML = "";
-  }
-
-  if (activityEmpty) {
-    activityEmpty.classList.add("hidden");
-  }
-
-  hideSpotifyCard(false);
-}
-
-function setOfflineView(data = null) {
-  showStatusCard("offline");
-  hideThoughtBubble();
-  setLiveBio(data || { kv: { bio: CONFIG.fallbackBio } });
-  hideActivityCard();
-}
-
-function getActivityPrefix(type) {
-  const prefixes = {
-    0: "Playing",
-    1: "Streaming",
-    2: "Listening to",
-    3: "Watching",
-    5: "Competing in"
-  };
-
-  return prefixes[type] || "Doing";
-}
-
-function getActivityEmoji(type) {
-  const icons = {
-    0: "🎮",
-    1: "📡",
-    2: "🎧",
-    3: "📺",
-    5: "🏆"
-  };
-
-  return icons[type] || "•";
-}
-
-function shouldSkipActivity(activity, data) {
-  if (activity.type === 4) {
-    return true;
-  }
-
-  return data.listening_to_spotify &&
-    activity.type === 2 &&
-    String(activity.name || "").toLowerCase().includes("spotify");
-}
-
-function getActivityImageUrl(activity) {
-  const asset = activity.assets?.large_image || activity.assets?.small_image || "";
-
-  if (!asset) {
-    return "";
-  }
-
-  if (asset.startsWith("https://") || asset.startsWith("http://")) {
-    return asset;
-  }
-
-  if (asset.startsWith("mp:")) {
-    return `https://media.discordapp.net/${asset.slice(3)}`;
-  }
-
-  if (asset.startsWith("app-assets/")) {
-    return `https://cdn.discordapp.com/${asset}.png?size=256`;
-  }
-
-  if (activity.application_id) {
-    return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${asset}.png?size=256`;
-  }
-
-  return "";
-}
-
-function createActivityIcon(activity) {
-  const imageUrl = getActivityImageUrl(activity);
-
-  if (imageUrl) {
-    const img = document.createElement("img");
-    img.className = "activity-image";
-    img.src = imageUrl;
-    img.alt = `${activity.name || "Activity"} image`;
-
-    img.onerror = () => {
-      const fallback = document.createElement("div");
-      fallback.className = "activity-icon";
-      fallback.textContent = getActivityEmoji(activity.type);
-      img.replaceWith(fallback);
+  function statusLabel(status) {
+    const labels = {
+      online: "Online",
+      idle: "Idle",
+      dnd: "Do Not Disturb",
+      offline: "Offline"
     };
 
-    return img;
+    return labels[status] || "Offline";
   }
 
-  const icon = document.createElement("div");
-  icon.className = "activity-icon";
-  icon.textContent = getActivityEmoji(activity.type);
-  return icon;
-}
+  function setStatus(status) {
+    discordStatus = status || "offline";
 
-function showSpotifyCard(spotify) {
-  spotifyIsActive = true;
-  spotifyStart = spotify.timestamps?.start || null;
-  spotifyEnd = spotify.timestamps?.end || null;
+    show(nodes.statusCard);
 
-  spotifyCard.classList.remove("hidden");
-  spotifyArt.src = spotify.album_art_url || "";
-  spotifySong.textContent = spotify.song || "Unknown song";
-  spotifyArtist.textContent = spotify.artist || "Unknown artist";
+    if (nodes.statusDot) {
+      nodes.statusDot.className =
+        `status-dot ${discordStatus}`;
 
-  if (spotify.track_id) {
-    spotifyTrackButton.href = `https://open.spotify.com/track/${spotify.track_id}`;
-    spotifyTrackButton.classList.remove("hidden");
-  } else {
-    spotifyTrackButton.classList.add("hidden");
-  }
-
-  if (CONFIG.spotifyProfileUrl) {
-    spotifyProfileButton.href = CONFIG.spotifyProfileUrl;
-    spotifyProfileButton.classList.remove("hidden");
-  } else {
-    spotifyProfileButton.classList.add("hidden");
-  }
-
-  audio.pause();
-  muteButton.textContent = "play fallback";
-
-  updateSpotifyProgress();
-}
-
-function hideSpotifyCard(playFallback = true) {
-  spotifyIsActive = false;
-  spotifyStart = null;
-  spotifyEnd = null;
-
-  if (spotifyCard) {
-    spotifyCard.classList.add("hidden");
-  }
-
-  if (spotifyProgressFill) {
-    spotifyProgressFill.style.width = "0%";
-  }
-
-  if (spotifyElapsed) {
-    spotifyElapsed.textContent = "0:00";
-  }
-
-  if (spotifyDuration) {
-    spotifyDuration.textContent = "0:00";
-  }
-
-  if (playFallback && userEntered) {
-    playFallbackIfNeeded();
-  }
-}
-
-function updateSpotifyProgress() {
-  if (!spotifyIsActive || !spotifyStart || !spotifyEnd) {
-    return;
-  }
-
-  const now = Date.now();
-  const elapsed = Math.max(0, now - spotifyStart);
-  const duration = Math.max(1, spotifyEnd - spotifyStart);
-  const percent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
-
-  spotifyElapsed.textContent = formatTime(elapsed);
-  spotifyDuration.textContent = formatTime(duration);
-  spotifyProgressFill.style.width = `${percent}%`;
-}
-
-function renderActivityCards(data) {
-  const activities = (data.activities || []).filter(activity => !shouldSkipActivity(activity, data));
-
-  otherActivities.innerHTML = "";
-
-  for (const activity of activities) {
-    const prefix = getActivityPrefix(activity.type);
-    const details = [activity.details, activity.state].filter(Boolean).join(" • ");
-    const start = activity.timestamps?.start || "";
-    const title = `${prefix} ${activity.name || "Unknown"}`;
-
-    const item = document.createElement("div");
-    item.className = "activity-item";
-
-    const icon = createActivityIcon(activity);
-
-    const info = document.createElement("div");
-    info.className = "activity-info";
-
-    const header = document.createElement("div");
-    header.className = "activity-header";
-
-    const headerLeft = document.createElement("span");
-    headerLeft.textContent = prefix;
-
-    const headerRight = document.createElement("span");
-    headerRight.textContent = activity.application_id ? "Rich Presence" : "";
-
-    const titleEl = document.createElement("div");
-    titleEl.className = "activity-title";
-    titleEl.textContent = title;
-
-    const detailEl = document.createElement("div");
-    detailEl.className = "activity-detail";
-    detailEl.textContent = details || "Activity shown on Discord.";
-
-    const timer = document.createElement("div");
-    timer.className = "activity-timer";
-
-    if (start) {
-      timer.dataset.start = start;
-      timer.dataset.label = prefix;
-      timer.textContent = `${prefix} for ${formatTime(Date.now() - Number(start))}`;
-    } else {
-      timer.textContent = "No timer for this activity.";
+      nodes.statusDot.title = statusLabel(discordStatus);
     }
 
-    header.appendChild(headerLeft);
-    header.appendChild(headerRight);
-    info.appendChild(header);
-    info.appendChild(titleEl);
-    info.appendChild(detailEl);
-    info.appendChild(timer);
+    if (nodes.statusText) {
+      nodes.statusText.textContent =
+        statusLabel(discordStatus);
+    }
 
-    item.appendChild(icon);
-    item.appendChild(info);
-
-    otherActivities.appendChild(item);
+    renderLastSeen();
   }
 
-  const hasSpotify = data.listening_to_spotify && data.spotify;
-  const hasOtherActivities = activities.length > 0;
+  function setBio(data) {
+    if (!nodes.bio) return;
 
-  activityEmpty.classList.toggle("hidden", hasSpotify || hasOtherActivities);
-}
+    const liveBio =
+      String(data?.kv?.bio || "").trim() ||
+      FALLBACK_BIO;
 
-function updateActivityTimers() {
-  document.querySelectorAll(".activity-timer[data-start]").forEach(timer => {
-    const start = Number(timer.dataset.start);
-    const label = timer.dataset.label || "Active";
+    nodes.bio.textContent = liveBio;
+  }
 
-    if (!Number.isNaN(start)) {
-      timer.textContent = `${label} for ${formatTime(Date.now() - start)}`;
-    }
-  });
-}
+  function renderCustomStatus(data) {
+    if (!nodes.thoughtBubble) return;
 
-async function loadDiscordPresence() {
-  try {
-    const res = await fetch(`https://api.lanyard.rest/v1/users/${CONFIG.discordUserId}`, {
-      cache: "no-store"
-    });
+    const activities = data?.activities || [];
 
-    const json = await res.json();
+    const customStatus = activities.find(
+      (activity) => activity?.type === 4
+    );
 
-    if (!json.success) {
-      throw new Error("Lanyard failed");
-    }
+    const emoji =
+      customStatus?.emoji?.name ||
+      customStatus?.emoji?.id ||
+      "";
 
-    const data = json.data;
-    const status = data.discord_status || "offline";
+    const text =
+      String(customStatus?.state || "").trim();
 
-    setLiveBio(data);
+    nodes.thoughtBubble.replaceChildren();
 
-    if (status === "offline") {
-      setOfflineView(data);
+    if (!emoji && !text) {
+      hide(nodes.thoughtBubble);
       return;
     }
 
-    showStatusCard(status);
-    showActivityCard();
-    setThoughtBubble(getCustomStatus(data));
+    if (emoji) {
+      const emojiElement = document.createElement("span");
+      emojiElement.className = "status-emoji";
+      emojiElement.textContent = emoji;
+      nodes.thoughtBubble.appendChild(emojiElement);
+    }
 
-    if (data.listening_to_spotify && data.spotify) {
-      showSpotifyCard(data.spotify);
+    if (text) {
+      const textElement = document.createElement("span");
+      textElement.className = "status-text";
+      textElement.textContent = text;
+      nodes.thoughtBubble.appendChild(textElement);
+    }
+
+    show(nodes.thoughtBubble);
+  }
+
+  function formatDuration(milliseconds) {
+    const seconds = Math.max(
+      0,
+      Math.floor(milliseconds / 1000)
+    );
+
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    if (days > 0) return `${days}d ${hours}h`;
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    if (minutes > 0) return `${minutes}m`;
+
+    return `${seconds}s`;
+  }
+
+  function updateClock() {
+    if (!nodes.time) return;
+
+    nodes.time.textContent =
+      new Intl.DateTimeFormat("en-NZ", {
+        timeZone: "Pacific/Auckland",
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      }).format(new Date());
+  }
+
+  function renderLastSeen() {
+    if (!nodes.lastSeen) return;
+
+    if (
+      lastSeenData?.is_online &&
+      lastSeenData?.online_since
+    ) {
+      const started =
+        new Date(lastSeenData.online_since).getTime();
+
+      nodes.lastSeen.textContent =
+        `${statusLabel(lastSeenData.status)} for ` +
+        formatDuration(Date.now() - started);
+
+      return;
+    }
+
+    if (lastSeenData?.last_seen_at) {
+      const lastOnline =
+        new Date(lastSeenData.last_seen_at).getTime();
+
+      nodes.lastSeen.textContent =
+        `Last online ` +
+        `${formatDuration(Date.now() - lastOnline)} ago`;
+
+      return;
+    }
+
+    if (discordStatus !== "offline") {
+      nodes.lastSeen.textContent =
+        `${statusLabel(discordStatus)} now`;
     } else {
-      hideSpotifyCard();
+      nodes.lastSeen.textContent =
+        "Last seen unavailable";
     }
-
-    renderActivityCards(data);
-  } catch {
-    showStatusCard("offline");
-    hideThoughtBubble();
-    setLiveBio({ kv: { bio: CONFIG.fallbackBio } });
-    hideActivityCard();
-  }
-}
-
-async function loadViews() {
-  try {
-    const res = await fetch(CONFIG.viewCounterUrl, {
-      cache: "no-store"
-    });
-
-    const json = await res.json();
-    const count = json.count ?? json.value ?? json.data?.count ?? json.data?.value;
-
-    if (count === undefined) {
-      throw new Error("No counter value");
-    }
-
-    viewCount.textContent = `${Number(count).toLocaleString()} views`;
-  } catch {
-    viewCount.textContent = "Counter unavailable";
-  }
-}
-
-setSiteInfo();
-loadDiscordPresence();
-loadViews();
-updateSpotifyProgress();
-updateActivityTimers();
-
-setInterval(() => {
-  setSiteInfo();
-  loadDiscordPresence();
-}, 30000);
-
-setInterval(() => {
-  updateSpotifyProgress();
-  updateActivityTimers();
-}, 1000);
-
-/* Profile enter counter — direct CountAPI, no CDN/library */
-(() => {
-  const counterKey = "sparkyfoxer_profilev2_enter_clicks_v1";
-  const apiBase = "https://countapi.mileshilliard.com/api/v1";
-
-  const viewEl =
-    document.querySelector("#viewCount") ||
-    document.querySelector("#views") ||
-    document.querySelector("[data-view-count]");
-
-  if (!viewEl) {
-    console.warn("Enter counter: no counter display element found.");
-    return;
   }
 
-  let countedThisLoad = false;
+  async function loadLastSeen() {
+    if (!nodes.lastSeen) return;
 
-  function formatEnters(value) {
-    const number = Number(value);
-
-    if (!Number.isFinite(number)) {
-      return "0 enters";
-    }
-
-    return `${number.toLocaleString()} ${number === 1 ? "enter" : "enters"}`;
-  }
-
-  async function counterRequest(action) {
-    const url = `${apiBase}/${action}/${encodeURIComponent(counterKey)}`;
-
-    const res = await fetch(url, {
-      method: "GET",
-      cache: "no-store"
-    });
-
-    const raw = await res.text();
-
-    let data = null;
     try {
-      data = JSON.parse(raw);
-    } catch {
-      throw new Error(`Counter returned non-JSON: ${raw}`);
-    }
+      const response = await fetch(LAST_SEEN_URL, {
+        cache: "no-store"
+      });
 
-    if (!res.ok) {
-      const err = new Error(`Counter failed ${res.status}: ${raw}`);
-      err.status = res.status;
-      err.data = data;
-      throw err;
-    }
-
-    const value = Number(data.value ?? data.count ?? data.data?.value ?? data.data?.count);
-
-    if (!Number.isFinite(value)) {
-      throw new Error(`Counter response had no usable number: ${raw}`);
-    }
-
-    return value;
-  }
-
-  async function loadCurrentCount() {
-    try {
-      const count = await counterRequest("get");
-      viewEl.textContent = formatEnters(count);
-    } catch (err) {
-      // If the counter does not exist yet, show 0 until first enter click.
-      if (err.status === 404) {
-        viewEl.textContent = "0 enters";
-        return;
+      if (!response.ok) {
+        throw new Error(
+          `Last seen returned ${response.status}`
+        );
       }
 
-      console.warn("Enter counter: could not load current count:", err);
-      viewEl.textContent = "0 enters";
+      lastSeenData = await response.json();
+      renderLastSeen();
+    } catch (error) {
+      console.warn("Last seen failed:", error);
+      renderLastSeen();
     }
   }
 
-  async function countEnter() {
-    if (countedThisLoad) return;
-    countedThisLoad = true;
+  function activityImageUrl(activity) {
+    const asset =
+      activity?.assets?.large_image ||
+      activity?.assets?.small_image ||
+      "";
 
-    try {
-      viewEl.textContent = "Counting...";
-      const count = await counterRequest("hit");
-      viewEl.textContent = formatEnters(count);
-    } catch (err) {
-      countedThisLoad = false;
-      console.warn("Enter counter failed:", err);
-      viewEl.textContent = "Counter unavailable";
+    if (!asset) return "";
+
+    if (
+      asset.startsWith("https://") ||
+      asset.startsWith("http://")
+    ) {
+      return asset;
     }
+
+    if (asset.startsWith("mp:")) {
+      return `https://media.discordapp.net/${asset.slice(3)}`;
+    }
+
+    if (activity?.application_id) {
+      return (
+        "https://cdn.discordapp.com/app-assets/" +
+        `${activity.application_id}/${asset}.png?size=256`
+      );
+    }
+
+    return "";
   }
 
-  function isEnterClick(event) {
-    const clicked = event.target.closest(
-      "button, a, [role='button'], #enterScreen, #introScreen, .enter-screen, .intro-screen, .click-screen, .overlay"
-    );
+  function activityPrefix(type) {
+    const labels = {
+      0: "Playing",
+      1: "Streaming",
+      2: "Listening to",
+      3: "Watching",
+      5: "Competing in"
+    };
 
-    if (!clicked) return false;
-
-    const text = (clicked.textContent || "").trim().toLowerCase();
-    const id = (clicked.id || "").toLowerCase();
-    const classes = (clicked.className || "").toString().toLowerCase();
-
-    const combined = `${text} ${id} ${classes}`;
-
-    return (
-      combined.includes("enter") ||
-      combined.includes("click to enter") ||
-      combined.includes("intro")
-    );
+    return labels[type] || "Active in";
   }
 
-  loadCurrentCount();
+  function createActivity(activity) {
+    const item = document.createElement("div");
+    item.className = "activity-item";
 
-  document.addEventListener(
-    "click",
-    (event) => {
-      if (isEnterClick(event)) {
-        countEnter();
+    const imageUrl = activityImageUrl(activity);
+
+    if (imageUrl) {
+      const image = document.createElement("img");
+      image.className = "activity-image";
+      image.src = imageUrl;
+      image.alt = "";
+      item.appendChild(image);
+    } else {
+      const icon = document.createElement("div");
+      icon.className = "activity-icon";
+      icon.textContent = "•";
+      item.appendChild(icon);
+    }
+
+    const information = document.createElement("div");
+    information.className = "activity-info";
+
+    const heading = document.createElement("div");
+    heading.className = "activity-title";
+    heading.textContent =
+      `${activityPrefix(activity.type)} ` +
+      `${activity.name || "Unknown activity"}`;
+
+    const detail = document.createElement("div");
+    detail.className = "activity-detail";
+
+    detail.textContent = [
+      activity.details,
+      activity.state
+    ].filter(Boolean).join(" • ");
+
+    information.appendChild(heading);
+
+    if (detail.textContent) {
+      information.appendChild(detail);
+    }
+
+    if (activity.timestamps?.start) {
+      const timer = document.createElement("div");
+      timer.className = "activity-timer";
+      timer.dataset.start =
+        String(activity.timestamps.start);
+
+      information.appendChild(timer);
+    }
+
+    item.appendChild(information);
+    return item;
+  }
+
+  function renderSpotify(spotify) {
+    if (!nodes.spotifyCard) return;
+
+    if (!spotify) {
+      spotifyStart = 0;
+      spotifyEnd = 0;
+      hide(nodes.spotifyCard);
+      return;
+    }
+
+    spotifyStart =
+      Number(spotify.timestamps?.start || 0);
+
+    spotifyEnd =
+      Number(spotify.timestamps?.end || 0);
+
+    show(nodes.spotifyCard);
+
+    if (nodes.spotifyArt) {
+      nodes.spotifyArt.src =
+        spotify.album_art_url || "";
+
+      nodes.spotifyArt.alt =
+        spotify.album || "Spotify album artwork";
+    }
+
+    if (nodes.spotifySong) {
+      nodes.spotifySong.textContent =
+        spotify.song || "Unknown song";
+    }
+
+    if (nodes.spotifyArtist) {
+      nodes.spotifyArtist.textContent =
+        spotify.artist || "Unknown artist";
+    }
+
+    if (nodes.spotifyTrackButton) {
+      if (spotify.track_id) {
+        nodes.spotifyTrackButton.href =
+          `https://open.spotify.com/track/${spotify.track_id}`;
+
+        show(nodes.spotifyTrackButton);
+      } else {
+        hide(nodes.spotifyTrackButton);
       }
-    },
-    true
-  );
+    }
+
+    updateSpotifyProgress();
+  }
+
+  function formatTrackTime(milliseconds) {
+    const seconds = Math.max(
+      0,
+      Math.floor(milliseconds / 1000)
+    );
+
+    const minutes = Math.floor(seconds / 60);
+    const remaining = seconds % 60;
+
+    return `${minutes}:${String(remaining).padStart(2, "0")}`;
+  }
+
+  function updateSpotifyProgress() {
+    if (!spotifyStart || !spotifyEnd) return;
+
+    const elapsed = Math.max(
+      0,
+      Date.now() - spotifyStart
+    );
+
+    const duration = Math.max(
+      1,
+      spotifyEnd - spotifyStart
+    );
+
+    const percentage = Math.min(
+      100,
+      Math.max(0, elapsed / duration * 100)
+    );
+
+    if (nodes.spotifyElapsed) {
+      nodes.spotifyElapsed.textContent =
+        formatTrackTime(elapsed);
+    }
+
+    if (nodes.spotifyDuration) {
+      nodes.spotifyDuration.textContent =
+        formatTrackTime(duration);
+    }
+
+    if (nodes.spotifyProgress) {
+      nodes.spotifyProgress.style.width =
+        `${percentage}%`;
+    }
+  }
+
+  function updateActivityTimers() {
+    document
+      .querySelectorAll(".activity-timer[data-start]")
+      .forEach((timer) => {
+        const start = Number(timer.dataset.start);
+
+        if (!Number.isFinite(start)) return;
+
+        timer.textContent =
+          `Active for ${formatDuration(Date.now() - start)}`;
+      });
+  }
+
+  function renderActivities(data) {
+    show(nodes.activityCard);
+
+    const activities =
+      (data?.activities || []).filter((activity) => {
+        if (!activity) return false;
+
+        // Discord custom status has its own bubble.
+        if (activity.type === 4) return false;
+
+        // Spotify has its own card.
+        if (
+          data?.listening_to_spotify &&
+          activity.type === 2 &&
+          String(activity.name || "")
+            .toLowerCase()
+            .includes("spotify")
+        ) {
+          return false;
+        }
+
+        return true;
+      });
+
+    renderSpotify(
+      data?.listening_to_spotify
+        ? data.spotify
+        : null
+    );
+
+    if (nodes.otherActivities) {
+      nodes.otherActivities.replaceChildren();
+
+      for (const activity of activities) {
+        nodes.otherActivities.appendChild(
+          createActivity(activity)
+        );
+      }
+    }
+
+    const hasAnything =
+      Boolean(
+        data?.listening_to_spotify &&
+        data?.spotify
+      ) || activities.length > 0;
+
+    if (nodes.activityEmpty) {
+      nodes.activityEmpty.textContent =
+        "No current activity shown.";
+
+      nodes.activityEmpty.classList.toggle(
+        "hidden",
+        hasAnything
+      );
+
+      nodes.activityEmpty.style.display =
+        hasAnything ? "none" : "";
+    }
+
+    updateActivityTimers();
+  }
+
+  async function loadDiscordPresence() {
+    try {
+      const response = await fetch(LANYARD_URL, {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Lanyard returned ${response.status}`
+        );
+      }
+
+      const result = await response.json();
+
+      if (!result.success || !result.data) {
+        throw new Error("Lanyard returned no profile data");
+      }
+
+      const data = result.data;
+
+      setStatus(data.discord_status || "offline");
+      setBio(data);
+      renderCustomStatus(data);
+      renderActivities(data);
+    } catch (error) {
+      console.warn("Discord presence failed:", error);
+
+      setStatus("offline");
+      setBio(null);
+      renderCustomStatus(null);
+
+      show(nodes.activityCard);
+
+      if (nodes.activityEmpty) {
+        nodes.activityEmpty.textContent =
+          "Discord activity unavailable.";
+
+        nodes.activityEmpty.classList.remove("hidden");
+        nodes.activityEmpty.style.display = "";
+      }
+    }
+  }
+
+  function initialise() {
+    nodes.statusCard =
+      first("#statusCard", ".status-card");
+
+    nodes.activityCard =
+      first("#activityCard", ".activity-card");
+
+    nodes.statusDot =
+      first("#statusDot", ".status-dot");
+
+    nodes.statusText =
+      first("#discordStatus", "[data-discord-status]");
+
+    nodes.bio =
+      first("#discordBioText", "[data-discord-bio]");
+
+    nodes.thoughtBubble =
+      first("#thoughtBubble", ".thought-bubble");
+
+    nodes.time =
+      first(
+        "#siteAge",
+        "#profileTime",
+        "#localTime",
+        "[data-profile-time]"
+      );
+
+    nodes.lastSeen =
+      first(
+        "#lastSeenText",
+        "#viewCount",
+        "#views",
+        "[data-last-seen]"
+      );
+
+    nodes.location =
+      first("#locationText", "[data-location]");
+
+    nodes.spotifyCard =
+      first("#spotifyCard");
+
+    nodes.spotifyArt =
+      first("#spotifyArt");
+
+    nodes.spotifySong =
+      first("#spotifySong");
+
+    nodes.spotifyArtist =
+      first("#spotifyArtist");
+
+    nodes.spotifyElapsed =
+      first("#spotifyElapsed");
+
+    nodes.spotifyDuration =
+      first("#spotifyDuration");
+
+    nodes.spotifyProgress =
+      first("#spotifyProgressFill");
+
+    nodes.spotifyTrackButton =
+      first("#spotifyTrackButton");
+
+    nodes.otherActivities =
+      first("#otherActivities");
+
+    nodes.activityEmpty =
+      first("#activityEmpty");
+
+    if (nodes.location) {
+      nodes.location.textContent = "New Zealand";
+    }
+
+    updateClock();
+    renderLastSeen();
+
+    loadDiscordPresence();
+    loadLastSeen();
+
+    setInterval(updateClock, 1000);
+    setInterval(updateSpotifyProgress, 1000);
+    setInterval(updateActivityTimers, 1000);
+    setInterval(renderLastSeen, 1000);
+
+    setInterval(loadDiscordPresence, 30000);
+    setInterval(loadLastSeen, 60000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initialise,
+      { once: true }
+    );
+  } else {
+    initialise();
+  }
 })();
-
