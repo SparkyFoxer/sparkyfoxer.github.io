@@ -1,22 +1,104 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-NZ">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>About Sparky Fox</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>About Sparky Foxer</title>
+
+  <link rel="stylesheet" href="style.css?v=aboutmusic2">
 </head>
+
 <body>
-  <div class="bg-fallback"></div>
-  <main class="enter-screen">
-    <article class="profile-card">
-      <p class="eyebrow">about</p>
-      <h1>Sparky Fox</h1>
-      <p class="bio">Add a longer about section here.</p>
-      <nav class="links">
-        <a href="index.html">Back home</a>
-      </nav>
-    </article>
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="assets/background.mp4" type="video/mp4">
+  </video>
+
+  <div class="bg-overlay"></div>
+
+  <main class="profile-screen about-screen">
+    <section class="profile-card about-card">
+      <div class="top-row">
+        <div class="avatar-wrap">
+          <img class="avatar" src="assets/avatar.png" alt="Sparky Foxer avatar">
+        </div>
+
+        <div class="title-block">
+          <p class="eyebrow">About me</p>
+          <h1>Sparky Foxer</h1>
+          <p class="bio">Fox thing • Linux • music • games • OCE</p>
+        </div>
+      </div>
+
+      <section class="about-section">
+        <p class="small-label">Who I am</p>
+        <p>
+          Heya, I'm Sparky. I'm from New Zealand. I mostly play games, listen to music
+          and recently been messing and dailying with Fedora Linux! :3
+        </p>
+      </section>
+
+      <section class="about-section">
+        <p class="small-label">Stuff I like</p>
+
+        <div class="about-grid">
+          <div class="about-mini-card">
+            <h2>Gaming</h2>
+            <p id="aboutGamingText">Loading live game activity...</p>
+          </div>
+
+          <div class="about-mini-card">
+            <h2>Tech</h2>
+            <p>
+              Bit of a tinkerer, love to mess with things to learn about them.
+              I know a bit about PC hardware, and I'm learning some software things too.
+            </p>
+          </div>
+
+          <div class="about-mini-card about-music-card">
+            <h2>Music</h2>
+
+            <div class="music-current">
+              <p class="small-label">Currently playing</p>
+              <p id="aboutMusicText">Loading live music...</p>
+            </div>
+
+            <div class="music-history">
+              <p class="small-label">Recently seen</p>
+              <ul id="aboutLastPlayedList" class="last-played-list">
+                <li>No songs seen yet.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <p class="small-label">Find me</p>
+
+        <nav class="links image-links about-links" aria-label="About links">
+          <a class="profile-link" href="https://t.me/sparkyfoxer" target="_blank" rel="noreferrer">
+            <img src="assets/telegram.png" alt="" onerror="this.style.display='none'">
+            <span>Telegram</span>
+          </a>
+
+          <a class="profile-link" href="https://www.twitch.tv/SparkyTheFox_" target="_blank" rel="noreferrer">
+            <img src="assets/twitch.png" alt="" onerror="this.style.display='none'">
+            <span>Twitch</span>
+          </a>
+
+          <a class="profile-link" href="mailto:sparkyfoxer@gmail.com">
+            <img src="assets/mail.png" alt="" onerror="this.style.display='none'">
+            <span>Mail</span>
+          </a>
+
+          <a class="profile-link" href="index.html">
+            <span>Back</span>
+          </a>
+        </nav>
+      </section>
+    </section>
   </main>
+  <script src="about.js?v=aboutmusic2"></script>
 </body>
 </html>

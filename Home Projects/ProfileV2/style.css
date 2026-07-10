@@ -1251,3 +1251,116 @@ h1 {
 .image-links .profile-link span {
   line-height: 1 !important;
 }
+
+/* About page */
+.about-screen {
+  padding-top: 70px !important;
+  padding-bottom: 70px !important;
+}
+
+.about-card {
+  max-width: 720px !important;
+}
+
+.about-section {
+  margin-top: 18px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.about-section p {
+  color: var(--muted) !important;
+  line-height: 1.55 !important;
+}
+
+.about-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 12px !important;
+}
+
+.about-mini-card {
+  padding: 14px !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.075) !important;
+  border: 1px solid rgba(255, 255, 255, 0.11) !important;
+}
+
+.about-mini-card h2 {
+  margin: 0 0 8px !important;
+  font-size: 1rem !important;
+  color: var(--text) !important;
+}
+
+.about-mini-card p {
+  margin: 0 !important;
+  font-size: 0.9rem !important;
+}
+
+.about-links {
+  margin-top: 12px !important;
+}
+
+@media (max-width: 560px) {
+  .about-screen {
+    padding-top: 45px !important;
+    padding-bottom: 45px !important;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Live About page text */
+.about-live-extra {
+  margin-top: 8px !important;
+  font-size: 0.82rem !important;
+  opacity: 0.8 !important;
+}
+
+/* Wider music card + recently seen songs */
+.about-music-card {
+  grid-column: 1 / -1 !important;
+}
+
+.music-current {
+  margin-bottom: 14px !important;
+}
+
+.music-history {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.last-played-list {
+  list-style: none !important;
+  margin: 10px 0 0 !important;
+  padding: 0 !important;
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.last-played-list li {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  padding: 10px 11px !important;
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.track-main {
+  color: var(--text) !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+}
+
+.track-meta {
+  color: var(--muted) !important;
+  font-size: 0.78rem !important;
+  line-height: 1.35 !important;
+}
