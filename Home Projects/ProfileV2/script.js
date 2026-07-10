@@ -18,24 +18,31 @@ const siteAge = document.querySelector("#siteAge");
 const viewCount = document.querySelector("#viewCount");
 const locationText = document.querySelector("#locationText");
 
+const spotifyCard = document.querySelector("#spotifyCard");
+const spotifyArt = document.querySelector("#spotifyArt");
+const spotifySong = document.querySelector("#spotifySong");
+const spotifyArtist = document.querySelector("#spotifyArtist");
+const spotifyElapsed = document.querySelector("#spotifyElapsed");
+const spotifyDuration = document.querySelector("#spotifyDuration");
+const spotifyProgressFill = document.querySelector("#spotifyProgressFill");
+
+let userEntered = false;
 let activeActivityStart = null;
 let activeActivityLabel = "";
+let spotifyStart = null;
+let spotifyEnd = null;
 
 enterButton.addEventListener("click", async () => {
+  userEntered = true;
   enterScreen.classList.add("hidden");
   profileScreen.classList.remove("hidden");
 
-  try {
-    audio.volume = 0.35;
-    await audio.play();
-  } catch {
-    muteButton.textContent = "play audio";
-  }
+  await playFallbackIfNeeded();
 });
 
 muteButton.addEventListener("click", async () => {
   if (audio.paused) {
-    await audio.play();
+    await playFallbackIfNeeded(true);
     muteButton.textContent = "mute";
     return;
   }
@@ -43,6 +50,24 @@ muteButton.addEventListener("click", async () => {
   audio.pause();
   muteButton.textContent = "play audio";
 });
+
+async function playFallbackIfNeeded(force = false) {
+  const spotifyActive = spotifyCard && !spotifyCard.classList.contains("hidden");
+
+  if (spotifyActive && !force) {
+    audio.pause();
+    muteButton.textContent = "spotify active";
+    return;
+  }
+
+  try {
+    audio.volume = 0.35;
+    await audio.play();
+    muteButton.textContent = "mute";
+  } catch {
+    muteButton.textContent = "play audio";
+  }
+}
 
 function timeAgo(dateInput) {
   const date = new Date(dateInput);
@@ -58,6 +83,7 @@ function timeAgo(dateInput) {
 
   for (const [name, amount] of units) {
     const value = Math.floor(seconds / amount);
+
     if (value >= 1) {
       return `${value} ${name}${value === 1 ? "" : "s"} ago`;
     }
@@ -68,13 +94,10 @@ function timeAgo(dateInput) {
 
 function formatDuration(ms) {
   const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
-  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
-  if (minutes > 0) return `${minutes}m ${seconds}s`;
-  return `${seconds}s`;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
 function setSiteInfo() {
@@ -83,7 +106,9 @@ function setSiteInfo() {
 }
 
 function updateActivityTimer() {
-  if (!discordElapsed) return;
+  if (!discordElapsed) {
+    return;
+  }
 
   if (!activeActivityStart) {
     discordElapsed.textContent = "No timer for this activity.";
@@ -93,43 +118,102 @@ function updateActivityTimer() {
   discordElapsed.textContent = `${activeActivityLabel} for ${formatDuration(Date.now() - activeActivityStart)}`;
 }
 
-function pickActivity(data) {
-  if (data.listening_to_spotify && data.spotify) {
-    return {
-      text: `Listening to ${data.spotify.song} by ${data.spotify.artist}`,
-      start: data.spotify.timestamps?.start || null,
-      label: "Listening"
-    };
+function updateSpotifyProgress() {
+  if (!spotifyCard || spotifyCard.classList.contains("hidden") || !spotifyStart || !spotifyEnd) {
+    return;
   }
 
+  const now = Date.now();
+  const elapsed = Math.max(0, now - spotifyStart);
+  const duration = Math.max(1, spotifyEnd - spotifyStart);
+  const percent = Math.min(100, Math.max(0, (elapsed / duration) * 100));
+
+  spotifyElapsed.textContent = formatDuration(elapsed);
+  spotifyDuration.textContent = formatDuration(duration);
+  spotifyProgressFill.style.width = `${percent}%`;
+}
+
+function showSpotifyCard(spotify) {
+  if (!spotifyCard || !spotify) {
+    return;
+  }
+
+  spotifyStart = spotify.timestamps?.start || null;
+  spotifyEnd = spotify.timestamps?.end || null;
+
+  spotifyCard.classList.remove("hidden");
+  spotifyArt.src = spotify.album_art_url || "";
+  spotifySong.textContent = spotify.song || "Unknown song";
+  spotifyArtist.textContent = spotify.artist || "Unknown artist";
+
+  discordActivity.textContent = `Listening to ${spotify.song} by ${spotify.artist}`;
+  activeActivityStart = spotifyStart;
+  activeActivityLabel = "Listening";
+
+  audio.pause();
+  muteButton.textContent = "spotify active";
+
+  updateActivityTimer();
+  updateSpotifyProgress();
+}
+
+function hideSpotifyCard() {
+  spotifyStart = null;
+  spotifyEnd = null;
+
+  if (spotifyCard) {
+    spotifyCard.classList.add("hidden");
+  }
+
+  if (spotifyProgressFill) {
+    spotifyProgressFill.style.width = "0%";
+  }
+
+  if (userEntered) {
+    playFallbackIfNeeded();
+  }
+}
+
+function getActivityPrefix(type) {
+  const prefixes = {
+    0: "Playing",
+    1: "Streaming",
+    2: "Listening to",
+    3: "Watching",
+    4: "Status",
+    5: "Competing in"
+  };
+
+  return prefixes[type] || "Doing";
+}
+
+function pickBestActivity(data) {
   const activities = data.activities || [];
-  const activity = activities.find(item => [0, 2, 3, 5].includes(item.type));
 
-  if (activity) {
-    const names = {
-      0: "Playing",
-      2: "Listening to",
-      3: "Watching",
-      5: "Competing in"
-    };
+  const mainActivity = activities.find(activity => {
+    return activity.type === 0 || activity.type === 2 || activity.type === 3 || activity.type === 5;
+  });
 
-    const prefix = names[activity.type] || "Doing";
-    const details = [activity.details, activity.state].filter(Boolean).join(" • ");
+  if (mainActivity) {
+    const prefix = getActivityPrefix(mainActivity.type);
+    const extra = [mainActivity.details, mainActivity.state].filter(Boolean).join(" • ");
 
     return {
-      text: details ? `${prefix} ${activity.name} • ${details}` : `${prefix} ${activity.name}`,
-      start: activity.timestamps?.start || null,
-      label: prefix
+      title: `${prefix} ${mainActivity.name}`,
+      subtitle: extra || "Activity shown on Discord.",
+      start: mainActivity.timestamps?.start || null,
+      timerLabel: prefix
     };
   }
 
-  const custom = activities.find(item => item.type === 4);
+  const customStatus = activities.find(activity => activity.type === 4);
 
-  if (custom) {
+  if (customStatus) {
     return {
-      text: custom.state || "Custom status",
+      title: customStatus.state || customStatus.name || "Custom status",
+      subtitle: "Discord custom status.",
       start: null,
-      label: "Status"
+      timerLabel: "Status"
     };
   }
 
@@ -144,19 +228,32 @@ async function loadDiscordPresence() {
 
     const json = await res.json();
 
-    if (!json.success) throw new Error("Lanyard failed");
+    if (!json.success) {
+      throw new Error("Lanyard failed");
+    }
 
     const data = json.data;
     const status = data.discord_status || "offline";
-    const activity = pickActivity(data);
 
     statusDot.className = `status-dot ${status}`;
     discordStatus.textContent = status;
 
+    if (data.listening_to_spotify && data.spotify) {
+      showSpotifyCard(data.spotify);
+      return;
+    }
+
+    hideSpotifyCard();
+
+    const activity = pickBestActivity(data);
+
     if (activity) {
-      discordActivity.textContent = activity.text;
+      discordActivity.textContent = activity.subtitle
+        ? `${activity.title} • ${activity.subtitle}`
+        : activity.title;
+
       activeActivityStart = activity.start;
-      activeActivityLabel = activity.label;
+      activeActivityLabel = activity.timerLabel;
       updateActivityTimer();
       return;
     }
@@ -171,6 +268,7 @@ async function loadDiscordPresence() {
     discordActivity.textContent = "Join Lanyard or check Discord activity settings.";
     activeActivityStart = null;
     activeActivityLabel = "";
+    hideSpotifyCard();
     updateActivityTimer();
   }
 }
@@ -184,7 +282,9 @@ async function loadViews() {
     const json = await res.json();
     const count = json.count ?? json.value ?? json.data?.count ?? json.data?.value;
 
-    if (count === undefined) throw new Error("No counter value");
+    if (count === undefined) {
+      throw new Error("No counter value");
+    }
 
     viewCount.textContent = Number(count).toLocaleString();
   } catch {
@@ -196,10 +296,14 @@ setSiteInfo();
 loadDiscordPresence();
 loadViews();
 updateActivityTimer();
+updateSpotifyProgress();
 
 setInterval(() => {
   setSiteInfo();
   loadDiscordPresence();
 }, 30000);
 
-setInterval(updateActivityTimer, 1000);
+setInterval(() => {
+  updateActivityTimer();
+  updateSpotifyProgress();
+}, 1000);

@@ -39,6 +39,25 @@
             <p id="discordStatus">Set your Discord user ID in script.js</p>
             <p id="discordActivity" class="muted">Presence will show here.</p>
             <p id="discordElapsed" class="activity-time">No activity timer.</p>
+            <div id="spotifyCard" class="spotify-card hidden">
+              <img id="spotifyArt" class="spotify-art" src="" alt="Spotify album art">
+              <div class="spotify-info">
+                <div class="spotify-top">
+                  <span>Listening to Spotify</span>
+                  <span class="spotify-icon">♬</span>
+                </div>
+                <div id="spotifySong" class="spotify-song">Song</div>
+                <div id="spotifyArtist" class="spotify-artist">Artist</div>
+                <div class="spotify-progress-row">
+                  <span id="spotifyElapsed">0:00</span>
+                  <div class="spotify-progress">
+                    <div id="spotifyProgressFill" class="spotify-progress-fill"></div>
+                  </div>
+                  <span id="spotifyDuration">0:00</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -72,6 +91,6 @@
 
   <audio id="bgAudio" src="assets/song.mp3" loop preload="auto"></audio>
   <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
-  <script src="script.js?v=5"></script>
+  <script src="script.js?v=spotifycard1"></script>
 </body>
 </html>
