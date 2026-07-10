@@ -1,6 +1,6 @@
-# Sparky profile starter
+# Sparky profile
 
-This is a static GitHub Pages profile starter.
+This is a static GitHub Pages profile.
 
 ## Files
 
