@@ -7,6 +7,9 @@
   const GENRE_ENDPOINT = "";
 
   const MUSIC_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
+  const GAME_STATE_KEY = "sparky_about_current_game_v1";
+  const LAST_GAME_KEY = "sparky_about_last_game_v1";
+
   const MAX_HISTORY = 6;
 
   const gamingEl = document.querySelector("#aboutGamingText");
@@ -18,14 +21,64 @@
     return String(value || "").trim();
   }
 
-  function formatList(items) {
-    const clean = items.map(cleanText).filter(Boolean);
+  function safeRead(key, fallback = null) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key) || "null");
+      return value ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
 
-    if (clean.length === 0) return "";
-    if (clean.length === 1) return clean[0];
-    if (clean.length === 2) return `${clean[0]} and ${clean[1]}`;
+  function safeWrite(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
 
-    return `${clean.slice(0, -1).join(", ")}, and ${clean.at(-1)}`;
+  function formatDuration(ms) {
+    const totalSeconds = Math.max(0, Math.floor(Number(ms || 0) / 1000));
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+
+    if (minutes > 0) {
+      return `${minutes}m ${seconds}s`;
+    }
+
+    return `${seconds}s`;
+  }
+
+  function formatTime(isoOrMs) {
+    const date = new Date(isoOrMs);
+
+    if (Number.isNaN(date.getTime())) return "";
+
+    return new Intl.DateTimeFormat("en-NZ", {
+      timeZone: "Pacific/Auckland",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    }).format(date);
+  }
+
+  function getGameActivities(data) {
+    const activities = data?.activities || [];
+
+    return activities.filter((activity) => {
+      if (!activity || !activity.name) return false;
+
+      // Ignore Discord custom status.
+      if (activity.type === 4) return false;
+
+      // Ignore Spotify. Music has its own section.
+      if (activity.type === 2) return false;
+      if (activity.name.toLowerCase() === "spotify") return false;
+
+      return true;
+    });
   }
 
   function describeGame(activity) {
@@ -46,50 +99,115 @@
     return line;
   }
 
-  function getGameActivities(data) {
-    const activities = data?.activities || [];
+  function getGameKey(game) {
+    return `${game.name || ""}|${game.details || ""}|${game.state || ""}`;
+  }
 
-    return activities.filter((activity) => {
-      if (!activity || !activity.name) return false;
-      if (activity.type === 4) return false;
-      if (activity.name.toLowerCase() === "spotify") return false;
-      if (activity.type === 2) return false;
+  function renderLastGame(lastGame) {
+    if (!gamingEl) return;
 
-      return true;
-    });
+    if (!lastGame) {
+      gamingEl.textContent = "No completed game session seen yet.";
+      return;
+    }
+
+    const duration = formatDuration(lastGame.durationMs);
+    const ended = formatTime(lastGame.endedAt);
+
+    gamingEl.textContent =
+      `Last played: ${lastGame.label || lastGame.name || "Unknown game"} • ${duration}${ended ? ` • ended ${ended}` : ""}`;
+  }
+
+  function renderCurrentGame(game) {
+    if (!gamingEl) return;
+
+    const now = Date.now();
+    const duration = formatDuration(now - game.startedAt);
+
+    gamingEl.textContent =
+      `Currently playing: ${game.label || game.name || "Unknown game"} • ${duration}`;
   }
 
   function renderGaming(data) {
     if (!gamingEl) return;
 
     const games = getGameActivities(data);
+    const activity = games[0];
 
-    if (!games.length) {
-      gamingEl.textContent = "No live game activity showing right now.";
+    const savedCurrent = safeRead(GAME_STATE_KEY, null);
+    const savedLast = safeRead(LAST_GAME_KEY, null);
+
+    if (activity) {
+      const label = describeGame(activity);
+      const game = {
+        name: cleanText(activity.name),
+        details: cleanText(activity.details),
+        state: cleanText(activity.state),
+        label,
+        key: getGameKey({
+          name: cleanText(activity.name),
+          details: cleanText(activity.details),
+          state: cleanText(activity.state)
+        }),
+        startedAt: activity.timestamps?.start
+          ? Number(activity.timestamps.start)
+          : savedCurrent?.key === label
+            ? Number(savedCurrent.startedAt)
+            : Date.now(),
+        lastSeenAt: Date.now()
+      };
+
+      const previousKey = savedCurrent?.key;
+      const currentKey = game.key;
+
+      if (previousKey && previousKey !== currentKey && savedCurrent?.startedAt) {
+        const endedAt = Date.now();
+        const lastGame = {
+          ...savedCurrent,
+          endedAt,
+          durationMs: Math.max(0, endedAt - Number(savedCurrent.startedAt))
+        };
+
+        safeWrite(LAST_GAME_KEY, lastGame);
+      }
+
+      safeWrite(GAME_STATE_KEY, game);
+      renderCurrentGame(game);
       return;
     }
 
-    gamingEl.textContent = `Currently: ${formatList(games.map(describeGame))}`;
+    // If a game was previously active and is now gone, treat it as closed.
+    if (savedCurrent?.startedAt) {
+      const endedAt = Date.now();
+
+      const lastGame = {
+        ...savedCurrent,
+        endedAt,
+        durationMs: Math.max(0, endedAt - Number(savedCurrent.startedAt))
+      };
+
+      safeWrite(LAST_GAME_KEY, lastGame);
+      localStorage.removeItem(GAME_STATE_KEY);
+      renderLastGame(lastGame);
+      return;
+    }
+
+    renderLastGame(savedLast);
   }
 
   function getMusicHistory() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(MUSIC_HISTORY_KEY) || "[]");
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
+    const parsed = safeRead(MUSIC_HISTORY_KEY, []);
+    return Array.isArray(parsed) ? parsed : [];
   }
 
   function saveMusicHistory(history) {
-    localStorage.setItem(MUSIC_HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)));
+    safeWrite(MUSIC_HISTORY_KEY, history.slice(0, MAX_HISTORY));
   }
 
   function addTrackToHistory(track) {
     if (!track.trackId && !track.song) return;
 
     const history = getMusicHistory();
-
     const key = track.trackId || `${track.song}-${track.artist}-${track.album}`;
 
     const filtered = history.filter((item) => {
@@ -107,21 +225,6 @@
 
     saveMusicHistory(updated);
     renderMusicHistory(updated);
-  }
-
-  function formatSeenTime(iso) {
-    if (!iso) return "";
-
-    const date = new Date(iso);
-
-    if (Number.isNaN(date.getTime())) return "";
-
-    return new Intl.DateTimeFormat("en-NZ", {
-      timeZone: "Pacific/Auckland",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true
-    }).format(date);
   }
 
   function renderMusicHistory(history = getMusicHistory()) {
@@ -150,7 +253,7 @@
 
       if (item.album) parts.push(item.album);
 
-      const seen = formatSeenTime(item.seenAt);
+      const seen = formatTime(item.seenAt);
       if (seen) parts.push(`seen ${seen}`);
 
       meta.textContent = parts.join(" • ");
@@ -241,7 +344,7 @@
         return;
       }
 
-      genreEl.textContent = `Genres: ${formatList(genres.slice(0, 5))}`;
+      genreEl.textContent = `Genres: ${genres.slice(0, 5).join(", ")}`;
     } catch (err) {
       console.warn("Genre lookup failed:", err);
       genreEl.textContent = "";
@@ -265,7 +368,7 @@
     } catch (err) {
       console.warn("About live data failed:", err);
 
-      if (gamingEl) gamingEl.textContent = "Live game activity unavailable.";
+      if (gamingEl) gamingEl.textContent = "Game activity unavailable.";
       if (musicEl) musicEl.textContent = "Live music unavailable.";
       if (genreEl) genreEl.textContent = "";
 

@@ -1513,3 +1513,9 @@ video {
     font-size: 1.55rem !important;
   }
 }
+
+/* Last game played card */
+#aboutGamingText {
+  font-weight: 700 !important;
+  color: var(--text) !important;
+}
