@@ -7,6 +7,7 @@
   const GENRE_ENDPOINT = "";
 
   const MUSIC_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
+  const CURRENT_MUSIC_KEY = "sparky_about_current_spotify_v1";
   const MAX_HISTORY = 6;
 
   const musicEl = document.querySelector("#aboutMusicText");
@@ -52,27 +53,70 @@
     safeWrite(MUSIC_HISTORY_KEY, history.slice(0, MAX_HISTORY));
   }
 
-  function addTrackToHistory(track) {
-    if (!track.trackId && !track.song) return;
+  function trackKey(track) {
+    if (!track) return "";
 
-    const history = getMusicHistory();
-    const key = track.trackId || `${track.song}-${track.artist}-${track.album}`;
+    return cleanText(track.trackId) ||
+      [track.song, track.artist, track.album]
+        .map(cleanText)
+        .join("|")
+        .toLowerCase();
+  }
 
-    const filtered = history.filter((item) => {
-      const itemKey = item.trackId || `${item.song}-${item.artist}-${item.album}`;
-      return itemKey !== key;
-    });
+  function addTrackToHistory(track, history = getMusicHistory()) {
+    const key = trackKey(track);
+    if (!key) return history;
 
-    const updated = [
+    const filtered = history.filter((item) => trackKey(item) !== key);
+
+    return [
       {
         ...track,
         seenAt: new Date().toISOString()
       },
       ...filtered
     ].slice(0, MAX_HISTORY);
+  }
 
-    saveMusicHistory(updated);
-    renderMusicHistory(updated);
+  function setCurrentTrack(track) {
+    const currentKey = trackKey(track);
+    if (!currentKey) return;
+
+    const previous = safeRead(CURRENT_MUSIC_KEY, null);
+    const previousKey = trackKey(previous);
+    let history = getMusicHistory()
+      .filter((item) => trackKey(item) !== currentKey);
+
+    if (previousKey && previousKey !== currentKey) {
+      history = addTrackToHistory(previous, history);
+    }
+
+    safeWrite(CURRENT_MUSIC_KEY, {
+      ...track,
+      firstSeenAt:
+        previousKey === currentKey
+          ? previous.firstSeenAt
+          : new Date().toISOString(),
+      lastSeenAt: new Date().toISOString()
+    });
+
+    saveMusicHistory(history);
+    renderMusicHistory(history);
+  }
+
+  function finishCurrentTrack() {
+    const current = safeRead(CURRENT_MUSIC_KEY, null);
+
+    if (!trackKey(current)) {
+      renderMusicHistory();
+      return;
+    }
+
+    const history = addTrackToHistory(current);
+
+    localStorage.removeItem(CURRENT_MUSIC_KEY);
+    saveMusicHistory(history);
+    renderMusicHistory(history);
   }
 
   function renderMusicHistory(history = getMusicHistory()) {
@@ -156,7 +200,7 @@
         genreEl.textContent = "";
       }
 
-      renderMusicHistory();
+      finishCurrentTrack();
       return;
     }
 
@@ -168,7 +212,7 @@
     musicEl.textContent =
       `${song || "Unknown song"} — ${artist || "Unknown artist"}${album ? ` • ${album}` : ""}`;
 
-    addTrackToHistory({
+    setCurrentTrack({
       trackId,
       song,
       artist,

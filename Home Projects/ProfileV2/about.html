@@ -6,7 +6,7 @@
 
   <title>About Sparky Foxer</title>
 
-  <link rel="stylesheet" href="style.css?v=emoji-cleanup1">
+  <link rel="stylesheet" href="style.css?v=music-controls1">
 </head>
 
 <body>
@@ -111,7 +111,40 @@
       </section>
     </section>
   </main>
-  <script src="about.js?v=emoji-cleanup1"></script>
+
+  <audio
+    id="siteMusic"
+    src="assets/song.mp3"
+    loop
+    preload="auto"
+  ></audio>
+
+  <div class="site-audio-controls" aria-label="Background music controls">
+    <button
+      id="siteMuteButton"
+      class="site-mute-button"
+      type="button"
+      aria-label="Mute background music"
+      aria-pressed="false"
+    >
+      <span id="siteMuteIcon" aria-hidden="true">🔊</span>
+      <span class="site-audio-label">Music</span>
+    </button>
+
+    <input
+      id="siteVolumeSlider"
+      class="site-volume-slider"
+      type="range"
+      min="0"
+      max="100"
+      step="1"
+      value="55"
+      aria-label="Background music volume"
+    >
+  </div>
+
+  <script src="about.js?v=music-controls1"></script>
   <script src="game-history.js?v=sharedhistory1"></script>
+  <script src="site-controller.js?v=music-controls1"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=emoji-cleanup1">
+  <link rel="stylesheet" href="style.css?v=music-controls1">
   <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 </head>
 
@@ -246,7 +246,7 @@
           </div>
 
           <div>
-            <p class="small-label">Last Seen</p>
+            <p class="small-label">Discord Last Seen</p>
             <p id="lastSeenText">Checking...</p>
           </div>
 
@@ -356,12 +356,37 @@
     loop
     preload="auto"
   ></audio>
-  <script src="about.js?v=emoji-cleanup1"></script>
+
+  <div class="site-audio-controls" aria-label="Background music controls">
+    <button
+      id="siteMuteButton"
+      class="site-mute-button"
+      type="button"
+      aria-label="Mute background music"
+      aria-pressed="false"
+    >
+      <span id="siteMuteIcon" aria-hidden="true">🔊</span>
+      <span class="site-audio-label">Music</span>
+    </button>
+
+    <input
+      id="siteVolumeSlider"
+      class="site-volume-slider"
+      type="range"
+      min="0"
+      max="100"
+      step="1"
+      value="55"
+      aria-label="Background music volume"
+    >
+  </div>
+
+  <script src="about.js?v=music-controls1"></script>
   <script src="game-history.js?v=sharedhistory1"></script>
 
     <script defer src="weather.js?v=startup-2"></script>
   <script src="pc-monitor.js?v=1783667779"></script>
   <script src="pc-offline-visual.js?v=offline-sleep-2"></script>
-<script src="site-controller.js?v=emoji-cleanup1"></script>
+<script src="site-controller.js?v=music-controls1"></script>
 </body>
 </html>

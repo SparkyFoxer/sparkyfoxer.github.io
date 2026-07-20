@@ -2,6 +2,11 @@ const STATE_KEY = "sparky-game-history:v1";
 const MAX_HISTORY = 6;
 const LANYARD_BASE_URL = "https://api.lanyard.rest/v1/users";
 
+const HISTORY_NOISE_NAMES = new Set([
+  "pv-bwrap",
+  "srt-bwrap"
+]);
+
 const PUBLIC_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
@@ -32,6 +37,17 @@ function cleanText(value) {
   return String(value || "").trim().slice(0, 300);
 }
 
+export function shouldSaveToHistory(value) {
+  const name = cleanText(value?.name || value).toLowerCase();
+
+  if (!name || HISTORY_NOISE_NAMES.has(name)) return false;
+
+  return !(
+    name.startsWith("pressure-vessel-") ||
+    name.startsWith("steam-runtime-launcher-")
+  );
+}
+
 function cleanSession(value) {
   if (!value || typeof value !== "object") return null;
 
@@ -57,6 +73,7 @@ export function normaliseState(value) {
     ? value.history
         .map(cleanSession)
         .filter(Boolean)
+        .filter(shouldSaveToHistory)
         .slice(0, MAX_HISTORY)
     : [];
 
@@ -132,9 +149,15 @@ function finishSession(session, endedAt) {
 }
 
 function addHistoryItem(history, session) {
+  const cleanHistory = history.filter(shouldSaveToHistory);
+
+  if (!shouldSaveToHistory(session)) {
+    return cleanHistory.slice(0, MAX_HISTORY);
+  }
+
   return [
     session,
-    ...history.filter((item) => item.id !== session.id)
+    ...cleanHistory.filter((item) => item.id !== session.id)
   ].slice(0, MAX_HISTORY);
 }
 

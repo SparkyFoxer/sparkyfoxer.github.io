@@ -3,7 +3,10 @@
   const ENTERED_KEY = "sparky_site_entered_v1";
   const TIME_KEY = "sparky_site_music_time_v1";
   const UPDATED_KEY = "sparky_site_music_updated_v1";
+  const VOLUME_KEY = "sparky_site_music_volume_v1";
+  const MUTED_KEY = "sparky_site_music_muted_v1";
   const AUDIO_SRC = "assets/song.mp3";
+  const DEFAULT_VOLUME = 0.55;
   const RESUME_TIMEOUT = 30 * 60 * 1000;
   const SAVE_INTERVAL = 5000;
 
@@ -29,7 +32,93 @@
 
   audio.loop = true;
   audio.preload = "auto";
-  audio.volume = 0.55;
+
+  const savedVolumeValue = localStorage.getItem(VOLUME_KEY);
+  const savedVolume = savedVolumeValue === null
+    ? Number.NaN
+    : Number(savedVolumeValue);
+
+  audio.volume = Number.isFinite(savedVolume)
+    ? Math.min(1, Math.max(0, savedVolume))
+    : DEFAULT_VOLUME;
+
+  audio.muted = localStorage.getItem(MUTED_KEY) === "true";
+
+  const muteButton = document.querySelector("#siteMuteButton");
+  const muteIcon = document.querySelector("#siteMuteIcon");
+  const volumeSlider = document.querySelector("#siteVolumeSlider");
+
+  function syncAudioControls() {
+    const silent = audio.muted || audio.volume === 0;
+    const percentage = Math.round(audio.volume * 100);
+
+    if (muteIcon) {
+      muteIcon.textContent = silent
+        ? "🔇"
+        : audio.volume < 0.5
+          ? "🔉"
+          : "🔊";
+    }
+
+    if (muteButton) {
+      muteButton.setAttribute("aria-pressed", String(silent));
+      muteButton.setAttribute(
+        "aria-label",
+        silent ? "Unmute background music" : "Mute background music"
+      );
+      muteButton.title = silent
+        ? "Unmute background music"
+        : "Mute background music";
+    }
+
+    if (volumeSlider) {
+      volumeSlider.value = String(percentage);
+      volumeSlider.setAttribute(
+        "aria-valuetext",
+        `${percentage}% background music volume`
+      );
+      volumeSlider.style.setProperty("--volume", `${percentage}%`);
+    }
+  }
+
+  function saveAudioSettings() {
+    localStorage.setItem(VOLUME_KEY, String(audio.volume));
+    localStorage.setItem(MUTED_KEY, String(audio.muted));
+  }
+
+  if (muteButton) {
+    muteButton.addEventListener("click", () => {
+      const currentlySilent = audio.muted || audio.volume === 0;
+
+      if (currentlySilent && audio.volume === 0) {
+        audio.volume = DEFAULT_VOLUME;
+      }
+
+      audio.muted = !currentlySilent;
+      saveAudioSettings();
+      syncAudioControls();
+
+      if (!audio.muted && audio.paused) {
+        playMusic();
+      }
+    });
+  }
+
+  if (volumeSlider) {
+    volumeSlider.addEventListener("input", () => {
+      const percentage = Number(volumeSlider.value);
+      audio.volume = Math.min(1, Math.max(0, percentage / 100));
+      audio.muted = audio.volume === 0;
+      saveAudioSettings();
+      syncAudioControls();
+
+      if (!audio.muted && audio.paused) {
+        playMusic();
+      }
+    });
+  }
+
+  syncAudioControls();
 
   function saveTime() {
     if (!Number.isFinite(audio.currentTime)) return;

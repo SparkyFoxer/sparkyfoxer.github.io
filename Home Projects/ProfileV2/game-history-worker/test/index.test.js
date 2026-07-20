@@ -4,7 +4,8 @@ import test from "node:test";
 import {
   findGame,
   normaliseState,
-  reconcileState
+  reconcileState,
+  shouldSaveToHistory
 } from "../src/index.js";
 
 const START = 1_800_000_000_000;
@@ -103,4 +104,65 @@ test("history is limited to six sessions", () => {
   assert.equal(result.history.length, 6);
   assert.equal(result.history[0].name, "Newest game");
   assert.equal(result.history.at(-1).name, "Old game 4");
+});
+
+test("Steam Linux helper processes are not saved to history", () => {
+  const ignoredNames = [
+    "srt-bwrap",
+    "pv-bwrap",
+    "pressure-vessel-wrap",
+    "pressure-vessel-adverb",
+    "steam-runtime-launcher-service"
+  ];
+
+  for (const name of ignoredNames) {
+    assert.equal(shouldSaveToHistory(name), false, name);
+  }
+
+  assert.equal(shouldSaveToHistory("Scrap Mechanic"), true);
+  assert.equal(shouldSaveToHistory("cs2"), true);
+});
+
+test("existing helper entries are removed from shared history", () => {
+  const state = normaliseState({
+    history: [
+      {
+        id: "helper",
+        name: "srt-bwrap",
+        startedAt: START,
+        endedAt: START + 10_000,
+        durationMs: 10_000
+      },
+      {
+        id: "game",
+        name: "cs2",
+        startedAt: START,
+        endedAt: START + 20_000,
+        durationMs: 20_000
+      }
+    ]
+  });
+
+  assert.deepEqual(state.history.map((item) => item.name), ["cs2"]);
+});
+
+test("ending a helper session does not add it to history", () => {
+  const active = reconcileState({}, game("srt-bwrap", START, ""), START).state;
+  const result = reconcileState(active, null, START + 10_000);
+
+  assert.equal(result.changed, true);
+  assert.equal(result.state.active, null);
+  assert.equal(result.state.history.length, 0);
+});
+
+test("switching from a helper to a game keeps history clean", () => {
+  const active = reconcileState({}, game("pressure-vessel-wrap", START, ""), START).state;
+  const result = reconcileState(
+    active,
+    game("Scrap Mechanic", START + 10_000, "scrap-mechanic"),
+    START + 10_000
+  );
+
+  assert.equal(result.state.active.name, "Scrap Mechanic");
+  assert.equal(result.state.history.length, 0);
 });

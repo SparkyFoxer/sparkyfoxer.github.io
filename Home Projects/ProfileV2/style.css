@@ -2949,3 +2949,132 @@ body.site-entered #siteEntryGate {
     transition: none;
   }
 }
+
+/* === COMPACT BACKGROUND MUSIC CONTROLS === */
+.site-audio-controls {
+  --volume: 55%;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(18, 14, 28, 0.76);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.34);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition:
+    opacity 180ms ease,
+    visibility 180ms ease,
+    transform 180ms ease;
+}
+
+body.entered .site-audio-controls,
+body.site-entered .site-audio-controls {
+  opacity: 0.88;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.site-audio-controls:hover,
+.site-audio-controls:focus-within {
+  opacity: 1 !important;
+}
+
+.site-mute-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px 7px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--text);
+  background: transparent;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+#siteMuteIcon {
+  width: 1.2em;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.site-volume-slider {
+  width: 104px;
+  height: 4px;
+  margin: 0;
+  border-radius: 999px;
+  appearance: none;
+  -webkit-appearance: none;
+  background:
+    linear-gradient(
+      to right,
+      var(--pink) 0 var(--volume),
+      rgba(255, 255, 255, 0.18) var(--volume) 100%
+    );
+  cursor: pointer;
+}
+
+.site-volume-slider::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(18, 14, 28, 0.9);
+  border-radius: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--text);
+  box-shadow: 0 0 0 1px rgba(255, 113, 200, 0.55);
+}
+
+.site-volume-slider::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(18, 14, 28, 0.9);
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow: 0 0 0 1px rgba(255, 113, 200, 0.55);
+}
+
+.site-mute-button:focus-visible,
+.site-volume-slider:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .site-audio-controls {
+    right: 10px;
+    bottom: 10px;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+
+  .site-mute-button {
+    min-height: 28px;
+    padding: 3px 5px;
+    font-size: 0.72rem;
+  }
+
+  .site-volume-slider {
+    width: 78px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-audio-controls {
+    transition: none;
+  }
+}
