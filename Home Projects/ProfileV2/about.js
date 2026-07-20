@@ -7,12 +7,8 @@
   const GENRE_ENDPOINT = "";
 
   const MUSIC_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
-  const GAME_STATE_KEY = "sparky_about_current_game_v1";
-  const LAST_GAME_KEY = "sparky_about_last_game_v1";
-
   const MAX_HISTORY = 6;
 
-  const gamingEl = document.querySelector("#aboutGamingText");
   const musicEl = document.querySelector("#aboutMusicText");
   const genreEl = document.querySelector("#aboutGenreText");
   const lastPlayedEl = document.querySelector("#aboutLastPlayedList");
@@ -34,23 +30,6 @@
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  function formatDuration(ms) {
-    const totalSeconds = Math.max(0, Math.floor(Number(ms || 0) / 1000));
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    if (hours > 0) {
-      return `${hours}h ${minutes}m`;
-    }
-
-    if (minutes > 0) {
-      return `${minutes}m ${seconds}s`;
-    }
-
-    return `${seconds}s`;
-  }
-
   function formatTime(isoOrMs) {
     const date = new Date(isoOrMs);
 
@@ -62,137 +41,6 @@
       minute: "2-digit",
       hour12: true
     }).format(date);
-  }
-
-  function getGameActivities(data) {
-    const activities = data?.activities || [];
-
-    return activities.filter((activity) => {
-      if (!activity || !activity.name) return false;
-
-      // Ignore Discord custom status.
-      if (activity.type === 4) return false;
-
-      // Ignore Spotify. Music has its own section.
-      if (activity.type === 2) return false;
-      if (activity.name.toLowerCase() === "spotify") return false;
-
-      return true;
-    });
-  }
-
-  function describeGame(activity) {
-    const name = cleanText(activity.name);
-    const details = cleanText(activity.details);
-    const state = cleanText(activity.state);
-
-    let line = name;
-
-    if (details && state) {
-      line += ` — ${details}, ${state}`;
-    } else if (details) {
-      line += ` — ${details}`;
-    } else if (state) {
-      line += ` — ${state}`;
-    }
-
-    return line;
-  }
-
-  function getGameKey(game) {
-    return `${game.name || ""}|${game.details || ""}|${game.state || ""}`;
-  }
-
-  function renderLastGame(lastGame) {
-    if (!gamingEl) return;
-
-    if (!lastGame) {
-      gamingEl.textContent = "No completed game session seen yet.";
-      return;
-    }
-
-    const duration = formatDuration(lastGame.durationMs);
-    const ended = formatTime(lastGame.endedAt);
-
-    gamingEl.textContent =
-      `Last played: ${lastGame.label || lastGame.name || "Unknown game"} • ${duration}${ended ? ` • ended ${ended}` : ""}`;
-  }
-
-  function renderCurrentGame(game) {
-    if (!gamingEl) return;
-
-    const now = Date.now();
-    const duration = formatDuration(now - game.startedAt);
-
-    gamingEl.textContent =
-      `Currently playing: ${game.label || game.name || "Unknown game"} • ${duration}`;
-  }
-
-  function renderGaming(data) {
-    if (!gamingEl) return;
-
-    const games = getGameActivities(data);
-    const activity = games[0];
-
-    const savedCurrent = safeRead(GAME_STATE_KEY, null);
-    const savedLast = safeRead(LAST_GAME_KEY, null);
-
-    if (activity) {
-      const label = describeGame(activity);
-      const game = {
-        name: cleanText(activity.name),
-        details: cleanText(activity.details),
-        state: cleanText(activity.state),
-        label,
-        key: getGameKey({
-          name: cleanText(activity.name),
-          details: cleanText(activity.details),
-          state: cleanText(activity.state)
-        }),
-        startedAt: activity.timestamps?.start
-          ? Number(activity.timestamps.start)
-          : savedCurrent?.key === label
-            ? Number(savedCurrent.startedAt)
-            : Date.now(),
-        lastSeenAt: Date.now()
-      };
-
-      const previousKey = savedCurrent?.key;
-      const currentKey = game.key;
-
-      if (previousKey && previousKey !== currentKey && savedCurrent?.startedAt) {
-        const endedAt = Date.now();
-        const lastGame = {
-          ...savedCurrent,
-          endedAt,
-          durationMs: Math.max(0, endedAt - Number(savedCurrent.startedAt))
-        };
-
-        safeWrite(LAST_GAME_KEY, lastGame);
-      }
-
-      safeWrite(GAME_STATE_KEY, game);
-      renderCurrentGame(game);
-      return;
-    }
-
-    // If a game was previously active and is now gone, treat it as closed.
-    if (savedCurrent?.startedAt) {
-      const endedAt = Date.now();
-
-      const lastGame = {
-        ...savedCurrent,
-        endedAt,
-        durationMs: Math.max(0, endedAt - Number(savedCurrent.startedAt))
-      };
-
-      safeWrite(LAST_GAME_KEY, lastGame);
-      localStorage.removeItem(GAME_STATE_KEY);
-      renderLastGame(lastGame);
-      return;
-    }
-
-    renderLastGame(savedLast);
   }
 
   function getMusicHistory() {
@@ -363,12 +211,10 @@
       const json = await res.json();
       const data = json.data;
 
-      renderGaming(data);
       await renderMusic(data);
     } catch (err) {
       console.warn("About live data failed:", err);
 
-      if (gamingEl) gamingEl.textContent = "Game activity unavailable.";
       if (musicEl) musicEl.textContent = "Live music unavailable.";
       if (genreEl) genreEl.textContent = "";
 

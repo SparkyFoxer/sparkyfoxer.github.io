@@ -5,6 +5,7 @@
   const UPDATED_KEY = "sparky_site_music_updated_v1";
   const AUDIO_SRC = "assets/song.mp3";
   const RESUME_TIMEOUT = 30 * 60 * 1000;
+  const SAVE_INTERVAL = 5000;
 
   const isAboutPage =
     location.pathname.endsWith("/about.html") ||
@@ -13,19 +14,6 @@
   // Allows easy testing with ?resetgate=1
   if (new URLSearchParams(location.search).has("resetgate")) {
     sessionStorage.removeItem(ENTERED_KEY);
-  }
-
-  /*
-   * Disable the old fallback player without depending on its scripts.
-   * The new player uses the separate siteMusic ID.
-   */
-  const legacyAudio = document.querySelector("#bgAudio");
-
-  if (legacyAudio) {
-    legacyAudio.pause();
-    legacyAudio.muted = true;
-    legacyAudio.removeAttribute("src");
-    legacyAudio.load();
   }
 
   let audio = document.querySelector("#siteMusic");
@@ -182,7 +170,7 @@
     }
   });
 
-  setInterval(saveTime, 250);
+  setInterval(saveTime, SAVE_INTERVAL);
 
   const alreadyEntered =
     sessionStorage.getItem(ENTERED_KEY) === "true";

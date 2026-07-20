@@ -433,11 +433,6 @@ h1 {
   white-space: normal !important;
 }
 
-/* Hide duplicated custom status text in Discord card */
-#discordCustomText {
-  display: none !important;
-}
-
 @media (max-width: 560px) {
   .profile-card {
     margin-top: 52px;
@@ -529,6 +524,11 @@ h1 {
 .activity-info {
   min-width: 0;
   overflow: hidden;
+}
+
+.activity-icon {
+  font-size: 1.8rem;
+  line-height: 1;
 }
 
 .spotify-header,
@@ -638,6 +638,13 @@ h1 {
   flex: 0 0 auto;
   font-size: 1rem;
   line-height: 1;
+}
+
+.status-emoji-image {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .status-text {
@@ -1512,12 +1519,6 @@ video {
   .title-block h1 {
     font-size: 1.55rem !important;
   }
-}
-
-/* Last game played card */
-#aboutGamingText {
-  font-weight: 700 !important;
-  color: var(--text) !important;
 }
 
 /* Remove click-to-enter / intro screen */

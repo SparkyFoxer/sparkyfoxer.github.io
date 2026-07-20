@@ -105,26 +105,35 @@
       (activity) => activity?.type === 4
     );
 
-    const emoji =
-      customStatus?.emoji?.name ||
-      customStatus?.emoji?.id ||
-      "";
+    const emoji = customStatus?.emoji || null;
 
     const text =
       String(customStatus?.state || "").trim();
 
     nodes.thoughtBubble.replaceChildren();
 
-    if (!emoji && !text) {
+    if (!emoji?.name && !emoji?.id && !text) {
       hide(nodes.thoughtBubble);
       return;
     }
 
-    if (emoji) {
-      const emojiElement = document.createElement("span");
-      emojiElement.className = "status-emoji";
-      emojiElement.textContent = emoji;
-      nodes.thoughtBubble.appendChild(emojiElement);
+    if (emoji?.id) {
+      const emojiImage = document.createElement("img");
+      const extension = emoji.animated ? "gif" : "webp";
+
+      emojiImage.className = "status-emoji status-emoji-image";
+      emojiImage.src =
+        `https://cdn.discordapp.com/emojis/${emoji.id}.${extension}` +
+        "?size=32&quality=lossless";
+      emojiImage.alt = emoji.name
+        ? `:${emoji.name}:`
+        : "Custom status emoji";
+      nodes.thoughtBubble.appendChild(emojiImage);
+    } else if (emoji?.name) {
+      const emojiText = document.createElement("span");
+      emojiText.className = "status-emoji";
+      emojiText.textContent = emoji.name;
+      nodes.thoughtBubble.appendChild(emojiText);
     }
 
     if (text) {
@@ -267,6 +276,26 @@
     return labels[type] || "Active in";
   }
 
+  function activityEmoji(type) {
+    const emojis = {
+      0: "🎮",
+      1: "📡",
+      2: "🎵",
+      3: "📺",
+      5: "🏆"
+    };
+
+    return emojis[type] || "✨";
+  }
+
+  function createActivityIcon(activity) {
+    const icon = document.createElement("div");
+    icon.className = "activity-icon";
+    icon.textContent = activityEmoji(activity?.type);
+    icon.setAttribute("aria-hidden", "true");
+    return icon;
+  }
+
   function createActivity(activity) {
     const item = document.createElement("div");
     item.className = "activity-item";
@@ -278,12 +307,14 @@
       image.className = "activity-image";
       image.src = imageUrl;
       image.alt = "";
+      image.addEventListener(
+        "error",
+        () => image.replaceWith(createActivityIcon(activity)),
+        { once: true }
+      );
       item.appendChild(image);
     } else {
-      const icon = document.createElement("div");
-      icon.className = "activity-icon";
-      icon.textContent = "•";
-      item.appendChild(icon);
+      item.appendChild(createActivityIcon(activity));
     }
 
     const information = document.createElement("div");
@@ -614,10 +645,12 @@
     loadDiscordPresence();
     loadLastSeen();
 
-    setInterval(updateClock, 1000);
-    setInterval(updateSpotifyProgress, 1000);
-    setInterval(updateActivityTimers, 1000);
-    setInterval(renderLastSeen, 1000);
+    setInterval(() => {
+      updateClock();
+      updateSpotifyProgress();
+      updateActivityTimers();
+      renderLastSeen();
+    }, 1000);
 
     setInterval(loadDiscordPresence, 30000);
     setInterval(loadLastSeen, 60000);
