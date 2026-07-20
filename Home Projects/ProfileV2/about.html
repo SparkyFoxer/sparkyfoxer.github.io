@@ -6,7 +6,7 @@
 
   <title>About Sparky Foxer</title>
 
-  <link rel="stylesheet" href="style.css?v=music-controls1">
+  <link rel="stylesheet" href="style.css?v=weekly-weather1">
 </head>
 
 <body>
@@ -15,6 +15,7 @@
   </video>
 
   <div class="bg-overlay"></div>
+  <div id="weatherAmbience" class="weather-ambience" aria-hidden="true"></div>
 
   <main class="profile-screen about-screen">
     <section class="profile-card about-card">
@@ -54,6 +55,13 @@
               <p class="small-label">Recently played</p>
               <ul id="aboutGameHistoryList" class="last-played-list game-history-list">
                 <li>No games recorded yet.</li>
+              </ul>
+            </div>
+
+            <div class="game-weekly">
+              <p class="small-label">Top games • last 7 days</p>
+              <ul id="aboutGameWeeklyList" class="last-played-list weekly-game-list">
+                <li>Building weekly stats...</li>
               </ul>
             </div>
 
@@ -144,7 +152,8 @@
   </div>
 
   <script src="about.js?v=music-controls1"></script>
-  <script src="game-history.js?v=sharedhistory1"></script>
+  <script src="game-history.js?v=weekly-weather1"></script>
+  <script src="weather-ambience.js?v=weekly-weather1"></script>
   <script src="site-controller.js?v=music-controls1"></script>
 </body>
 </html>

@@ -2226,6 +2226,57 @@ body.site-entered #siteEntryGate {
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
+.game-weekly {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.weekly-game-list {
+  margin-top: 9px !important;
+}
+
+.weekly-game-list .weekly-game-item {
+  gap: 7px !important;
+  padding: 8px 9px !important;
+}
+
+.weekly-game-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.weekly-game-heading .track-main {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8rem !important;
+}
+
+.weekly-game-heading .track-meta {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-size: 0.7rem !important;
+}
+
+.weekly-game-bar {
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.weekly-game-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--pink), rgba(125, 211, 252, 0.92));
+  box-shadow: 0 0 8px rgba(255, 113, 200, 0.28);
+}
+
 #aboutGameNowText {
   margin: 0 !important;
   color: var(--text) !important;
@@ -2947,6 +2998,128 @@ body.site-entered #siteEntryGate {
   .pc-monitor-card > :not(.pc-offline-overlay),
   .pc-offline-overlay {
     transition: none;
+  }
+}
+
+/* === SUBTLE WEATHER AMBIENCE === */
+.weather-ambience {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.48;
+}
+
+.weather-ambience::before,
+.weather-ambience::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.weather-ambience[data-weather="clear"]::before {
+  inset: -12%;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(255, 206, 128, 0.22), transparent 22%),
+    radial-gradient(circle at 14% 82%, rgba(255, 113, 200, 0.08), transparent 30%);
+  animation: weatherGlow 14s ease-in-out infinite;
+}
+
+.weather-ambience[data-weather="clouds"]::before,
+.weather-ambience[data-weather="clouds"]::after {
+  width: 72vw;
+  height: 34vh;
+  border-radius: 50%;
+  background: rgba(210, 215, 235, 0.1);
+  filter: blur(48px);
+}
+
+.weather-ambience[data-weather="clouds"]::before {
+  top: 4%;
+  left: -30%;
+  animation: weatherCloudDrift 38s ease-in-out infinite alternate;
+}
+
+.weather-ambience[data-weather="clouds"]::after {
+  right: -34%;
+  bottom: 5%;
+  opacity: 0.65;
+  animation: weatherCloudDrift 46s ease-in-out infinite alternate-reverse;
+}
+
+.weather-ambience[data-weather="rain"]::before,
+.weather-ambience[data-weather="storm"]::before {
+  inset: -30%;
+  background-image: repeating-linear-gradient(
+    108deg,
+    transparent 0 28px,
+    rgba(170, 205, 255, 0.22) 29px 30px,
+    transparent 31px 58px
+  );
+  background-size: 72px 72px;
+  opacity: 0.34;
+  animation: weatherRain 1.2s linear infinite;
+}
+
+.weather-ambience[data-weather="storm"]::after {
+  inset: 0;
+  background: radial-gradient(circle at 70% 15%, rgba(135, 155, 255, 0.16), transparent 34%);
+  animation: weatherStormGlow 9s ease-in-out infinite;
+}
+
+.weather-ambience[data-weather="snow"]::before,
+.weather-ambience[data-weather="snow"]::after {
+  inset: -20% 0 0;
+  background-image:
+    radial-gradient(circle, rgba(245, 247, 255, 0.52) 0 1px, transparent 1.8px),
+    radial-gradient(circle, rgba(245, 247, 255, 0.32) 0 1.4px, transparent 2px);
+  background-position: 0 0, 26px 34px;
+  background-size: 58px 72px, 92px 108px;
+  opacity: 0.34;
+  animation: weatherSnow 16s linear infinite;
+}
+
+.weather-ambience[data-weather="snow"]::after {
+  opacity: 0.2;
+  animation-duration: 24s;
+  animation-direction: reverse;
+}
+
+.profile-screen {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes weatherGlow {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes weatherCloudDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(24vw, 2vh, 0); }
+}
+
+@keyframes weatherRain {
+  from { transform: translate3d(0, -72px, 0); }
+  to { transform: translate3d(-24px, 72px, 0); }
+}
+
+@keyframes weatherSnow {
+  from { transform: translate3d(0, -8%, 0); }
+  to { transform: translate3d(22px, 18%, 0); }
+}
+
+@keyframes weatherStormGlow {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-ambience::before,
+  .weather-ambience::after {
+    animation: none !important;
   }
 }
 

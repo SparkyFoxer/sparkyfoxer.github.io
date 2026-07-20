@@ -9,11 +9,13 @@
 
   const nowText = document.querySelector("#aboutGameNowText");
   const historyList = document.querySelector("#aboutGameHistoryList");
+  const weeklyList = document.querySelector("#aboutGameWeeklyList");
 
   if (!nowText || !historyList) return;
 
   let activeGame = null;
   let gameHistory = [];
+  let weeklyGames = [];
 
   function formatDuration(milliseconds) {
     const totalSeconds = Math.max(
@@ -39,6 +41,23 @@
       hour: "numeric",
       minute: "2-digit"
     }).format(new Date(timestamp));
+  }
+
+  function formatWeeklyDuration(milliseconds) {
+    const minutes = Math.max(
+      0,
+      Math.round(Number(milliseconds || 0) / 60000)
+    );
+
+    if (minutes < 1) return "<1m";
+    if (minutes < 60) return `${minutes}m`;
+
+    const hours = minutes / 60;
+    const rounded = hours >= 10
+      ? String(Math.round(hours))
+      : hours.toFixed(1);
+
+    return `${rounded}h`;
   }
 
   function findGame(activities) {
@@ -111,6 +130,58 @@
     }
   }
 
+  function renderWeekly() {
+    if (!weeklyList) return;
+
+    weeklyList.replaceChildren();
+
+    if (!weeklyGames.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "No game time recorded this week yet.";
+      weeklyList.appendChild(empty);
+      return;
+    }
+
+    const longestDuration = Math.max(
+      ...weeklyGames.map((game) => Number(game.durationMs || 0)),
+      1
+    );
+
+    weeklyGames.slice(0, 3).forEach((game, index) => {
+      const item = document.createElement("li");
+      item.className = "weekly-game-item";
+
+      const heading = document.createElement("div");
+      heading.className = "weekly-game-heading";
+
+      const title = document.createElement("span");
+      title.className = "track-main";
+      title.textContent = `${index + 1}. ${game.name}`;
+
+      const metadata = document.createElement("span");
+      metadata.className = "track-meta";
+
+      const sessions = Math.max(0, Number(game.sessions || 0));
+      metadata.textContent =
+        `${formatWeeklyDuration(game.durationMs)} • ` +
+        `${sessions} ${sessions === 1 ? "session" : "sessions"}`;
+
+      const bar = document.createElement("div");
+      bar.className = "weekly-game-bar";
+      bar.setAttribute("aria-hidden", "true");
+
+      const fill = document.createElement("span");
+      fill.className = "weekly-game-bar-fill";
+      fill.style.width =
+        `${Math.max(4, Number(game.durationMs || 0) / longestDuration * 100)}%`;
+
+      heading.append(title, metadata);
+      bar.appendChild(fill);
+      item.append(heading, bar);
+      weeklyList.appendChild(item);
+    });
+  }
+
   async function loadDirectPresence() {
     const response = await fetch(LANYARD_URL, {
       cache: "no-store"
@@ -149,6 +220,10 @@
       gameHistory = Array.isArray(payload.history)
         ? payload.history.slice(0, 6)
         : [];
+
+      weeklyGames = Array.isArray(payload.weekly?.games)
+        ? payload.weekly.games.slice(0, 3)
+        : [];
     } catch (trackerError) {
       console.warn("Shared game history failed:", trackerError);
 
@@ -165,10 +240,12 @@
 
     renderCurrent();
     renderHistory();
+    renderWeekly();
   }
 
   renderCurrent();
   renderHistory();
+  renderWeekly();
   refreshGameActivity();
 
   setInterval(refreshGameActivity, 15000);

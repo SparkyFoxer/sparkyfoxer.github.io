@@ -1,5 +1,7 @@
 const STATE_KEY = "sparky-game-history:v1";
 const MAX_HISTORY = 6;
+const MAX_WEEKLY_SESSIONS = 200;
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const LANYARD_BASE_URL = "https://api.lanyard.rest/v1/users";
 
 const HISTORY_NOISE_NAMES = new Set([
@@ -19,9 +21,10 @@ const PUBLIC_HEADERS = {
 
 function emptyState() {
   return {
-    version: 1,
+    version: 2,
     active: null,
     history: [],
+    weeklySessions: [],
     updatedAt: null
   };
 }
@@ -66,7 +69,7 @@ function cleanSession(value) {
   };
 }
 
-export function normaliseState(value) {
+export function normaliseState(value, now = Date.now()) {
   if (!value || typeof value !== "object") return emptyState();
 
   const history = Array.isArray(value.history)
@@ -77,10 +80,32 @@ export function normaliseState(value) {
         .slice(0, MAX_HISTORY)
     : [];
 
+  const weeklySource = Array.isArray(value.weeklySessions)
+    ? value.weeklySessions
+    : history;
+
+  const seenSessions = new Set();
+  const weeklySessions = weeklySource
+    .map(cleanSession)
+    .filter(Boolean)
+    .filter(shouldSaveToHistory)
+    .filter((session) => {
+      if (!session.startedAt || !session.endedAt) return false;
+      if (session.endedAt < now - WEEK_MS) return false;
+
+      const key = session.id || `${session.name}:${session.startedAt}`;
+      if (seenSessions.has(key)) return false;
+
+      seenSessions.add(key);
+      return true;
+    })
+    .slice(0, MAX_WEEKLY_SESSIONS);
+
   return {
-    version: 1,
+    version: 2,
     active: cleanSession(value.active),
     history,
+    weeklySessions,
     updatedAt: finiteTimestamp(value.updatedAt)
   };
 }
@@ -161,8 +186,89 @@ function addHistoryItem(history, session) {
   ].slice(0, MAX_HISTORY);
 }
 
+function addWeeklySession(sessions, session, now) {
+  const recentSessions = sessions.filter((item) => (
+    shouldSaveToHistory(item) &&
+    item.endedAt &&
+    item.endedAt >= now - WEEK_MS
+  ));
+
+  if (!shouldSaveToHistory(session)) {
+    return recentSessions.slice(0, MAX_WEEKLY_SESSIONS);
+  }
+
+  return [
+    session,
+    ...recentSessions.filter((item) => item.id !== session.id)
+  ].slice(0, MAX_WEEKLY_SESSIONS);
+}
+
+function recordFinishedSession(state, session, now) {
+  state.history = addHistoryItem(state.history, session);
+  state.weeklySessions = addWeeklySession(
+    state.weeklySessions,
+    session,
+    now
+  );
+}
+
+export function summariseWeekly(previousValue, now = Date.now()) {
+  const state = normaliseState(previousValue, now);
+  const windowStart = now - WEEK_MS;
+  const sessions = [...state.weeklySessions];
+
+  if (state.active && shouldSaveToHistory(state.active)) {
+    sessions.push({
+      ...state.active,
+      endedAt: now,
+      durationMs: Math.max(0, now - state.active.startedAt)
+    });
+  }
+
+  const games = new Map();
+  const seenSessions = new Set();
+
+  for (const session of sessions) {
+    if (!session.startedAt || !session.endedAt) continue;
+
+    const sessionKey = session.id || `${session.name}:${session.startedAt}`;
+    if (seenSessions.has(sessionKey)) continue;
+    seenSessions.add(sessionKey);
+
+    const startedAt = Math.max(session.startedAt, windowStart);
+    const endedAt = Math.min(session.endedAt, now);
+    const durationMs = Math.max(0, endedAt - startedAt);
+
+    if (!durationMs) continue;
+
+    const gameKey = session.name.toLowerCase();
+    const existing = games.get(gameKey) || {
+      name: session.name,
+      durationMs: 0,
+      sessions: 0,
+      lastPlayedAt: 0
+    };
+
+    existing.durationMs += durationMs;
+    existing.sessions += 1;
+    existing.lastPlayedAt = Math.max(existing.lastPlayedAt, endedAt);
+    games.set(gameKey, existing);
+  }
+
+  return {
+    windowStart,
+    windowEnd: now,
+    games: [...games.values()]
+      .sort((first, second) => (
+        second.durationMs - first.durationMs ||
+        second.lastPlayedAt - first.lastPlayedAt
+      ))
+      .slice(0, 5)
+  };
+}
+
 export function reconcileState(previousValue, currentGame, now = Date.now()) {
-  const state = normaliseState(previousValue);
+  const state = normaliseState(previousValue, now);
   let changed = false;
 
   if (currentGame) {
@@ -176,17 +282,19 @@ export function reconcileState(previousValue, currentGame, now = Date.now()) {
         state: currentGame.state || state.active.state
       };
     } else {
-      state.history = addHistoryItem(
-        state.history,
-        finishSession(state.active, now)
+      recordFinishedSession(
+        state,
+        finishSession(state.active, now),
+        now
       );
       state.active = createActiveSession(currentGame, now);
       changed = true;
     }
   } else if (state.active) {
-    state.history = addHistoryItem(
-      state.history,
-      finishSession(state.active, now)
+    recordFinishedSession(
+      state,
+      finishSession(state.active, now),
+      now
     );
     state.active = null;
     changed = true;
@@ -197,9 +305,9 @@ export function reconcileState(previousValue, currentGame, now = Date.now()) {
   return { state, changed };
 }
 
-async function loadState(env) {
+async function loadState(env, now = Date.now()) {
   const value = await env.GAME_HISTORY.get(STATE_KEY, "json");
-  return normaliseState(value);
+  return normaliseState(value, now);
 }
 
 async function saveState(env, state) {
@@ -233,7 +341,7 @@ export async function updateGameHistory(env, now = Date.now()) {
   if (!discordId) throw new Error("DISCORD_ID is missing");
 
   const [previousState, presence] = await Promise.all([
-    loadState(env),
+    loadState(env, now),
     loadLanyardPresence(discordId)
   ]);
 
@@ -242,8 +350,11 @@ export async function updateGameHistory(env, now = Date.now()) {
 
   if (changed) await saveState(env, state);
 
+  const { weeklySessions, ...publicState } = state;
+
   return {
-    ...state,
+    ...publicState,
+    weekly: summariseWeekly(state, now),
     checkedAt: now,
     sourceAvailable: true
   };
@@ -264,11 +375,15 @@ async function handleRead(env) {
     console.error("Game history update failed", error);
 
     try {
-      const state = await loadState(env);
+      const checkedAt = Date.now();
+      const state = await loadState(env, checkedAt);
+      const { weeklySessions, ...publicState } = state;
+
       return jsonResponse({
         success: true,
-        ...state,
-        checkedAt: Date.now(),
+        ...publicState,
+        weekly: summariseWeekly(state, checkedAt),
+        checkedAt,
         sourceAvailable: false
       });
     } catch (storageError) {

@@ -5,7 +5,8 @@ import {
   findGame,
   normaliseState,
   reconcileState,
-  shouldSaveToHistory
+  shouldSaveToHistory,
+  summariseWeekly
 } from "../src/index.js";
 
 const START = 1_800_000_000_000;
@@ -68,6 +69,7 @@ test("ending a game adds it to shared history", () => {
   assert.equal(result.state.history[0].name, "Scrap Mechanic");
   assert.equal(result.state.history[0].durationMs, 3_600_000);
   assert.equal(result.state.history[0].endedAt, endedAt);
+  assert.equal(result.state.weeklySessions[0].name, "Scrap Mechanic");
 });
 
 test("switching games ends the previous session", () => {
@@ -165,4 +167,90 @@ test("switching from a helper to a game keeps history clean", () => {
 
   assert.equal(result.state.active.name, "Scrap Mechanic");
   assert.equal(result.state.history.length, 0);
+  assert.equal(result.state.weeklySessions.length, 0);
+});
+
+test("version one history seeds the rolling weekly sessions", () => {
+  const state = normaliseState({
+    version: 1,
+    history: [
+      {
+        id: "game",
+        name: "Trailmakers",
+        startedAt: START - 30_000,
+        endedAt: START,
+        durationMs: 30_000
+      }
+    ]
+  }, START);
+
+  assert.equal(state.version, 2);
+  assert.equal(state.weeklySessions.length, 1);
+  assert.equal(state.weeklySessions[0].name, "Trailmakers");
+});
+
+test("weekly summary combines sessions and includes the active game", () => {
+  const hour = 60 * 60 * 1000;
+  const summary = summariseWeekly({
+    version: 2,
+    weeklySessions: [
+      {
+        id: "trailmakers-one",
+        name: "Trailmakers",
+        startedAt: START - 6 * hour,
+        endedAt: START - 5 * hour,
+        durationMs: hour
+      },
+      {
+        id: "trailmakers-two",
+        name: "Trailmakers",
+        startedAt: START - 4 * hour,
+        endedAt: START - 2 * hour,
+        durationMs: 2 * hour
+      },
+      {
+        id: "scrap",
+        name: "Scrap Mechanic",
+        startedAt: START - 2 * hour,
+        endedAt: START - hour,
+        durationMs: hour
+      }
+    ],
+    active: {
+      id: "trailmakers-active",
+      name: "Trailmakers",
+      startedAt: START - 30 * 60 * 1000
+    }
+  }, START);
+
+  assert.equal(summary.games[0].name, "Trailmakers");
+  assert.equal(summary.games[0].durationMs, 3.5 * hour);
+  assert.equal(summary.games[0].sessions, 3);
+  assert.equal(summary.games[1].name, "Scrap Mechanic");
+  assert.equal(summary.games[1].sessions, 1);
+});
+
+test("weekly summary removes sessions older than seven days", () => {
+  const day = 24 * 60 * 60 * 1000;
+  const summary = summariseWeekly({
+    version: 2,
+    weeklySessions: [
+      {
+        id: "old",
+        name: "Old game",
+        startedAt: START - 9 * day,
+        endedAt: START - 8 * day,
+        durationMs: day
+      },
+      {
+        id: "recent",
+        name: "Recent game",
+        startedAt: START - day,
+        endedAt: START,
+        durationMs: day
+      }
+    ]
+  }, START);
+
+  assert.deepEqual(summary.games.map((item) => item.name), ["Recent game"]);
 });

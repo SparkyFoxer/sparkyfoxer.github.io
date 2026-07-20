@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=music-controls1">
+  <link rel="stylesheet" href="style.css?v=weekly-weather1">
   <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 </head>
 
@@ -35,7 +35,8 @@
   
 
   <video id="bgVideo" class="bg-video" src="assets/background.mp4" autoplay muted loop playsinline></video>
-  
+
+  <div id="weatherAmbience" class="weather-ambience" aria-hidden="true"></div>
   
 
   <main class="profile-screen">
@@ -55,6 +56,13 @@
     <p class="small-label">Recently played</p>
     <ul id="aboutGameHistoryList" class="last-played-list game-history-list">
       <li>No games seen yet.</li>
+    </ul>
+  </div>
+
+  <div class="game-weekly">
+    <p class="small-label">Top games • last 7 days</p>
+    <ul id="aboutGameWeeklyList" class="last-played-list weekly-game-list">
+      <li>Building weekly stats...</li>
     </ul>
   </div>
 
@@ -382,9 +390,10 @@
   </div>
 
   <script src="about.js?v=music-controls1"></script>
-  <script src="game-history.js?v=sharedhistory1"></script>
+  <script src="game-history.js?v=weekly-weather1"></script>
 
-    <script defer src="weather.js?v=startup-2"></script>
+  <script src="weather-ambience.js?v=weekly-weather1"></script>
+  <script defer src="weather.js?v=weekly-weather1"></script>
   <script src="pc-monitor.js?v=1783667779"></script>
   <script src="pc-offline-visual.js?v=offline-sleep-2"></script>
 <script src="site-controller.js?v=music-controls1"></script>

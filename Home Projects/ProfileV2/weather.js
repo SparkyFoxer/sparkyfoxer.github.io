@@ -154,6 +154,10 @@
       Number(current.weather_code)
     );
 
+    window.SparkyWeatherAmbience?.setFromCode(
+      Number(current.weather_code)
+    );
+
     nodes.icon.textContent = icon;
 
     nodes.temperature.textContent =
