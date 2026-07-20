@@ -10,7 +10,7 @@
   "kv_namespaces": [
     {
       "binding": "GAME_HISTORY",
-      "id": "REPLACE_WITH_KV_NAMESPACE_ID"
+      "id": "5fb6b1e577ac4f5b821aae183bf4e7ac"
     }
   ],
   "triggers": {
