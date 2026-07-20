@@ -1,0 +1,14 @@
+{
+  "name": "sparky-game-history-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/index.js",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --test-scheduled",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

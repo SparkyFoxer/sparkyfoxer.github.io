@@ -6,7 +6,7 @@
 
   <title>About Sparky Foxer</title>
 
-  <link rel="stylesheet" href="style.css?v=lastgame1">
+  <link rel="stylesheet" href="style.css?v=sharedhistory1">
 </head>
 
 <body>
@@ -42,9 +42,22 @@
         <p class="small-label">Stuff I like</p>
 
         <div class="about-grid">
-          <div class="about-mini-card">
-            <h2>Last game played</h2>
-            <p id="aboutGamingText">Waiting for game activity...</p>
+          <div class="about-mini-card about-game-card">
+            <h2>Games</h2>
+
+            <div class="game-current">
+              <p class="small-label">Now playing</p>
+              <p id="aboutGameNowText" aria-live="polite">Checking game activity...</p>
+            </div>
+
+            <div class="game-history">
+              <p class="small-label">Recently played</p>
+              <ul id="aboutGameHistoryList" class="last-played-list game-history-list">
+                <li>No games recorded yet.</li>
+              </ul>
+            </div>
+
+            <p id="aboutGamingText" hidden aria-hidden="true"></p>
           </div>
 
           <div class="about-mini-card">
@@ -99,6 +112,7 @@
       </section>
     </section>
   </main>
-  <script src="about.js?v=lastgame1"></script>
+  <script src="about.js?v=sharedhistory1"></script>
+  <script src="game-history.js?v=sharedhistory1"></script>
 </body>
 </html>
