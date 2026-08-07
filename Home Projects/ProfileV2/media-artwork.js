@@ -109,11 +109,48 @@
     return frame;
   }
 
+  function ensureCopyColumn(element) {
+    let copy = element.querySelector(":scope > .media-row-copy");
+    if (copy) return copy;
+
+    copy = document.createElement("span");
+    copy.className = "media-row-copy";
+
+    const content = [...element.childNodes].filter((node) => !(
+      node.nodeType === Node.ELEMENT_NODE &&
+      node.classList?.contains("media-art-frame")
+    ));
+
+    content.forEach((node) => copy.appendChild(node));
+    element.replaceChildren(copy);
+    return copy;
+  }
+
   function decorateRow(element, url, alt, kind) {
     if (!element) return;
-    element.querySelector(":scope > .media-art-frame")?.remove();
-    element.classList.add("media-row-with-art");
-    element.prepend(artFrame(url, alt, kind));
+
+    ensureCopyColumn(element);
+
+    element.classList.add(
+      "media-row-with-art",
+      kind === "game" ? "media-row-game" : "media-row-song"
+    );
+    element.classList.remove(
+      kind === "game" ? "media-row-song" : "media-row-game"
+    );
+
+    const source = safeUrl(url);
+    const artworkKey = `${kind}:${source}`;
+    const currentArt =
+      element.querySelector(":scope > .media-art-frame");
+
+    if (currentArt?.dataset.artworkKey === artworkKey) return;
+
+    currentArt?.remove();
+
+    const frame = artFrame(source, alt, kind);
+    frame.dataset.artworkKey = artworkKey;
+    element.prepend(frame);
   }
 
   async function decorateSongs() {
