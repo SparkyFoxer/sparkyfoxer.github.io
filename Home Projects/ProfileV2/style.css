@@ -3417,77 +3417,91 @@ body.site-entered .site-audio-controls {
 /* SPARKY_MEDIA_ARTWORK_END */
 
 /* SPARKY_CENTER_PC_MONITOR_90S_START */
+.profile-pc-monitor-wrap {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-top: 16px !important;
+}
+
 .pc-monitor-card-center {
-  --pc-cpu-line: #ff71c8;
-  --pc-cpu-hotspot-line: #b68cff;
   --pc-gpu-line: #69d7ff;
   --pc-gpu-hotspot-line: #ff9f6e;
   --pc-gpu-memory-line: #7bf1a8;
-  --pc-chart-grid: rgba(255, 255, 255, 0.11);
+  --pc-chart-grid: rgba(255, 255, 255, 0.1);
   --pc-chart-muted: rgba(255, 246, 255, 0.62);
+
   display: block !important;
   width: 100% !important;
   min-width: 0 !important;
   height: auto !important;
-  margin: 20px 0 0 !important;
-  padding: 16px !important;
+  margin: 0 !important;
+  padding: 15px !important;
   border: 1px solid var(--line) !important;
   border-radius: 20px !important;
-  background: rgba(255, 255, 255, 0.075) !important;
-  box-shadow: none !important;
+  background: var(--card) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.pc-monitor-card-center .pc-monitor-heading {
+  margin-bottom: 11px !important;
 }
 
 .pc-monitor-card-center .pc-spec-list {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 7px 12px !important;
+  gap: 7px 10px !important;
   margin: 0 !important;
 }
 
 .pc-monitor-card-center .pc-spec-list p {
-  display: flex !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 8px !important;
   min-width: 0 !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 2px !important;
   margin: 0 !important;
-  padding: 8px 9px !important;
-  border: 1px solid rgba(255, 255, 255, 0.09) !important;
-  border-radius: 12px !important;
-  background: rgba(0, 0, 0, 0.12) !important;
+  padding: 7px 9px !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  border-radius: 11px !important;
+  background: rgba(0, 0, 0, 0.11) !important;
 }
 
 .pc-monitor-card-center .pc-spec-list p span {
   color: var(--muted) !important;
-  font-size: 0.7rem !important;
-  letter-spacing: 0.07em !important;
+  font-size: 0.67rem !important;
+  letter-spacing: 0.06em !important;
   text-transform: uppercase !important;
 }
 
 .pc-monitor-card-center .pc-spec-list p strong {
-  font-size: 0.81rem !important;
-  line-height: 1.3 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  font-size: 0.76rem !important;
+  line-height: 1.25 !important;
+  text-align: right !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .pc-monitor-card-center .pc-monitor-section {
-  margin-top: 14px !important;
-  padding-top: 13px !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  margin-top: 11px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
 }
 
 .pc-live-grid {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 10px !important;
+  gap: 8px !important;
 }
 
 .pc-monitor-card-center .pc-metric {
   min-width: 0 !important;
   margin: 0 !important;
-  padding: 10px !important;
-  border: 1px solid rgba(255, 255, 255, 0.09) !important;
-  border-radius: 13px !important;
-  background: rgba(0, 0, 0, 0.12) !important;
+  padding: 7px 9px !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  border-radius: 11px !important;
+  background: rgba(0, 0, 0, 0.11) !important;
 }
 
 .pc-monitor-card-center .pc-metric-heading {
@@ -3498,36 +3512,40 @@ body.site-entered .site-audio-controls {
 .pc-monitor-card-center .pc-metric-heading > span:last-child {
   display: inline-flex !important;
   align-items: baseline !important;
-  gap: 6px !important;
+  gap: 5px !important;
 }
 
 .pc-monitor-card-center .pc-metric-heading strong {
+  min-width: 0 !important;
   overflow: hidden !important;
-  font-size: 0.79rem !important;
+  font-size: 0.76rem !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
 
-.pc-metric-subline {
-  margin-top: 7px !important;
+.pc-monitor-card-center .pc-metric-heading small {
   color: var(--muted) !important;
-  font-size: 0.71rem !important;
+  font-size: 0.68rem !important;
 }
 
-.pc-metric-subline strong {
-  color: var(--text) !important;
+.pc-monitor-card-center .pc-usage-bar {
+  height: 5px !important;
+  margin-top: 6px !important;
+}
+
+.pc-monitor-card-center .pc-usage-bar > span {
+  min-height: 5px !important;
 }
 
 .pc-monitor-card-center .pc-gpu-details {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 5px 9px !important;
-  margin-top: 7px !important;
-  font-size: 0.69rem !important;
+  gap: 3px 8px !important;
+  margin-top: 5px !important;
+  font-size: 0.65rem !important;
 }
 
-.pc-history-heading,
-.pc-chart-title {
+.pc-history-heading {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -3538,44 +3556,34 @@ body.site-entered .site-audio-controls {
   margin-bottom: 0 !important;
 }
 
-.pc-history-heading > span,
-.pc-chart-title > span {
+.pc-history-heading > span {
   color: var(--muted) !important;
-  font-size: 0.68rem !important;
+  font-size: 0.66rem !important;
 }
 
-.pc-chart-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 10px !important;
-  margin-top: 9px !important;
-}
-
-.pc-chart-panel {
+.pc-chart-panel-wide {
+  width: 100% !important;
   min-width: 0 !important;
-  padding: 9px !important;
-  border: 1px solid rgba(255, 255, 255, 0.09) !important;
-  border-radius: 14px !important;
-  background: rgba(0, 0, 0, 0.14) !important;
+  margin-top: 7px !important;
+  padding: 8px 9px 7px !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  border-radius: 12px !important;
+  background: rgba(0, 0, 0, 0.12) !important;
   overflow: hidden !important;
-}
-
-.pc-chart-title strong {
-  font-size: 0.78rem !important;
 }
 
 .pc-temperature-chart {
   display: block !important;
   width: 100% !important;
-  height: 165px !important;
-  margin-top: 5px !important;
+  height: 118px !important;
+  margin: 0 !important;
 }
 
 .pc-chart-legend {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 6px 9px !important;
-  margin-top: 5px !important;
+  gap: 5px 10px !important;
+  margin-top: 4px !important;
 }
 
 .pc-chart-legend-item {
@@ -3583,7 +3591,7 @@ body.site-entered .site-audio-controls {
   align-items: center !important;
   gap: 4px !important;
   color: var(--muted) !important;
-  font-size: 0.66rem !important;
+  font-size: 0.65rem !important;
 }
 
 .pc-chart-legend-item::before {
@@ -3599,35 +3607,39 @@ body.site-entered .site-audio-controls {
   font-weight: 600 !important;
 }
 
-.pc-chart-cpu { color: var(--pc-cpu-line) !important; }
-.pc-chart-cpu-hotspot { color: var(--pc-cpu-hotspot-line) !important; }
-.pc-chart-gpu { color: var(--pc-gpu-line) !important; }
-.pc-chart-gpu-hotspot { color: var(--pc-gpu-hotspot-line) !important; }
-.pc-chart-gpu-memory { color: var(--pc-gpu-memory-line) !important; }
+.pc-chart-gpu {
+  color: var(--pc-gpu-line) !important;
+}
+
+.pc-chart-gpu-hotspot {
+  color: var(--pc-gpu-hotspot-line) !important;
+}
+
+.pc-chart-gpu-memory {
+  color: var(--pc-gpu-memory-line) !important;
+}
 
 .pc-chart-legend-item.is-unavailable {
   opacity: 0.45 !important;
 }
 
-.pc-storage-grid {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 8px !important;
-}
-
 .pc-monitor-card-center .pc-monitor-footer {
-  margin-top: 13px !important;
+  margin-top: 10px !important;
+  padding-top: 9px !important;
 }
 
 @media (max-width: 650px) {
   .pc-monitor-card-center .pc-spec-list,
-  .pc-live-grid,
-  .pc-chart-grid {
+  .pc-live-grid {
     grid-template-columns: 1fr !important;
   }
 
   .pc-temperature-chart {
-    height: 155px !important;
+    height: 108px !important;
+  }
+
+  .pc-monitor-card-center .pc-spec-list p strong {
+    white-space: normal !important;
   }
 }
 /* SPARKY_CENTER_PC_MONITOR_90S_END */

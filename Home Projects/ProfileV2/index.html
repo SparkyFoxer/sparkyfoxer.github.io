@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=center-monitor-90s1">
+  <link rel="stylesheet" href="style.css?v=compact-separate-monitor1">
   <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 </head>
 
@@ -108,131 +108,6 @@
           </div>
         </div>
 
-<section id="pcMonitorCard" class="pc-monitor-card pc-monitor-card-center" aria-label="Live PC monitor">
-  <div class="pc-monitor-heading">
-    <div>
-      <p class="small-label">System monitor</p>
-      <h2>My PC</h2>
-    </div>
-    <span id="pcOnlineState" class="pc-online-state">Connecting</span>
-  </div>
-
-  <div class="pc-spec-list">
-    <p><span>CPU</span><strong>Ryzen 7 5800X</strong></p>
-    <p><span>GPU</span><strong>Sapphire RX 6700 XT 12 GB</strong></p>
-    <p><span>Memory</span><strong>32 GB DDR4-3200</strong></p>
-    <p><span>Board</span><strong>ROG STRIX B550-A GAMING</strong></p>
-    <p><span>Cooling</span><strong>Thermalright FW360 AIO</strong></p>
-    <p><span>Case / PSU</span><strong>LANCOOL II Mesh • CX650</strong></p>
-  </div>
-
-  <div class="pc-monitor-section">
-    <p class="small-label">Live usage</p>
-    <div class="pc-live-grid">
-      <div class="pc-metric">
-        <div class="pc-metric-heading">
-          <span>CPU</span>
-          <span><strong id="pcCpuValue">--%</strong><small id="pcCpuTemp">--°C</small></span>
-        </div>
-        <div class="pc-usage-bar" role="progressbar" aria-label="CPU usage" aria-valuemin="0" aria-valuemax="100">
-          <span id="pcCpuBar"></span>
-        </div>
-        <div class="pc-metric-subline">Hotspot <strong id="pcCpuHotspot">--°C</strong></div>
-      </div>
-
-      <div class="pc-metric">
-        <div class="pc-metric-heading">
-          <span>GPU</span>
-          <span><strong id="pcGpuValue">--%</strong><small id="pcGpuTemp">--°C</small></span>
-        </div>
-        <div class="pc-usage-bar" role="progressbar" aria-label="GPU usage" aria-valuemin="0" aria-valuemax="100">
-          <span id="pcGpuBar"></span>
-        </div>
-        <div class="pc-gpu-details">
-          <span>Hotspot <strong id="pcGpuHotspot">--°C</strong></span>
-          <span>Memory <strong id="pcGpuMemoryTemp">--°C</strong></span>
-          <span>Power <strong id="pcGpuPower">-- W</strong></span>
-        </div>
-      </div>
-
-      <div class="pc-metric">
-        <div class="pc-metric-heading"><span>RAM</span><strong id="pcRamValue">--%</strong></div>
-        <div class="pc-usage-bar" role="progressbar" aria-label="RAM usage" aria-valuemin="0" aria-valuemax="100">
-          <span id="pcRamBar"></span>
-        </div>
-      </div>
-
-      <div class="pc-metric">
-        <div class="pc-metric-heading"><span>VRAM</span><strong id="pcVramValue">--%</strong></div>
-        <div class="pc-usage-bar" role="progressbar" aria-label="VRAM usage" aria-valuemin="0" aria-valuemax="100">
-          <span id="pcVramBar"></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pc-monitor-section pc-temperature-history">
-    <div class="pc-history-heading">
-      <p class="small-label">Temperature history</p>
-      <span>Last 90 seconds</span>
-    </div>
-
-    <div class="pc-chart-grid">
-      <div class="pc-chart-panel">
-        <div class="pc-chart-title"><strong>CPU temperatures</strong><span>20–100°C</span></div>
-        <canvas id="pcCpuTempChart" class="pc-temperature-chart" height="165" role="img"
-          aria-label="CPU and CPU hotspot temperatures over the last 90 seconds"></canvas>
-        <div class="pc-chart-legend">
-          <span class="pc-chart-legend-item pc-chart-cpu">CPU <strong id="pcCpuChartValue">--°C</strong></span>
-          <span class="pc-chart-legend-item pc-chart-cpu-hotspot">Hotspot <strong id="pcCpuHotspotChartValue">Not reported</strong></span>
-        </div>
-      </div>
-
-      <div class="pc-chart-panel">
-        <div class="pc-chart-title"><strong>GPU temperatures</strong><span>20–100°C</span></div>
-        <canvas id="pcGpuTempChart" class="pc-temperature-chart" height="165" role="img"
-          aria-label="GPU, GPU hotspot and GPU memory temperatures over the last 90 seconds"></canvas>
-        <div class="pc-chart-legend">
-          <span class="pc-chart-legend-item pc-chart-gpu">GPU <strong id="pcGpuChartValue">--°C</strong></span>
-          <span class="pc-chart-legend-item pc-chart-gpu-hotspot">Hotspot <strong id="pcGpuHotspotChartValue">--°C</strong></span>
-          <span class="pc-chart-legend-item pc-chart-gpu-memory">Memory <strong id="pcGpuMemoryChartValue">--°C</strong></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pc-monitor-section">
-    <p class="small-label">Storage</p>
-    <div class="pc-storage-grid">
-      <div class="pc-metric">
-        <div class="pc-metric-heading"><span>Fedora</span><strong id="pcStorageFedoraValue">--</strong></div>
-        <div class="pc-usage-bar" role="progressbar" aria-label="Fedora storage usage" aria-valuemin="0" aria-valuemax="100">
-          <span id="pcStorageFedoraBar"></span>
-        </div>
-      </div>
-
-      <div class="pc-metric">
-        <div class="pc-metric-heading"><span>Games</span><strong id="pcStorageGamesValue">--</strong></div>
-        <div class="pc-usage-bar" role="progressbar" aria-label="Games storage usage" aria-valuemin="0" aria-valuemax="100">
-          <span id="pcStorageGamesBar"></span>
-        </div>
-      </div>
-
-      <div class="pc-metric">
-        <div class="pc-metric-heading"><span>Storage</span><strong id="pcStorageStorageValue">--</strong></div>
-        <div class="pc-usage-bar" role="progressbar" aria-label="Storage drive usage" aria-valuemin="0" aria-valuemax="100">
-          <span id="pcStorageStorageBar"></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pc-monitor-footer">
-    <span>Uptime <strong id="pcUptime">--</strong></span>
-    <span id="pcUpdatedText">Waiting for data</span>
-  </div>
-</section>
-
         <div id="activityCard" class="activity-card">
           <p class="small-label">Current Activity</p>
 
@@ -313,6 +188,118 @@
 
         <p class="footer-text">Made by Sparky Fox</p>
       </article>
+
+<div class="profile-pc-monitor-wrap">
+<section id="pcMonitorCard" class="pc-monitor-card pc-monitor-card-center" aria-label="Live PC monitor">
+  <div class="pc-monitor-heading">
+    <div>
+      <p class="small-label">System monitor</p>
+      <h2>My PC</h2>
+    </div>
+    <span id="pcOnlineState" class="pc-online-state">Connecting</span>
+  </div>
+
+  <div class="pc-spec-list">
+    <p><span>CPU</span><strong>Ryzen 7 5800X</strong></p>
+    <p><span>GPU</span><strong>Sapphire RX 6700 XT 12 GB</strong></p>
+    <p><span>Memory</span><strong>32 GB DDR4-3200</strong></p>
+    <p><span>Board</span><strong>ROG STRIX B550-A GAMING</strong></p>
+    <p><span>Cooling</span><strong>Thermalright FW360 AIO</strong></p>
+    <p><span>Case / PSU</span><strong>LANCOOL II Mesh • CX650</strong></p>
+  </div>
+
+  <div class="pc-monitor-section">
+    <p class="small-label">Live usage</p>
+
+    <div class="pc-live-grid">
+      <div class="pc-metric">
+        <div class="pc-metric-heading">
+          <span>CPU</span>
+          <span>
+            <strong id="pcCpuValue">--%</strong>
+            <small id="pcCpuTemp">--°C</small>
+          </span>
+        </div>
+        <div class="pc-usage-bar" role="progressbar" aria-label="CPU usage" aria-valuemin="0" aria-valuemax="100">
+          <span id="pcCpuBar"></span>
+        </div>
+      </div>
+
+      <div class="pc-metric">
+        <div class="pc-metric-heading">
+          <span>GPU</span>
+          <span>
+            <strong id="pcGpuValue">--%</strong>
+            <small id="pcGpuTemp">--°C</small>
+          </span>
+        </div>
+        <div class="pc-usage-bar" role="progressbar" aria-label="GPU usage" aria-valuemin="0" aria-valuemax="100">
+          <span id="pcGpuBar"></span>
+        </div>
+        <div class="pc-gpu-details">
+          <span>Hotspot <strong id="pcGpuHotspot">--°C</strong></span>
+          <span>Memory <strong id="pcGpuMemoryTemp">--°C</strong></span>
+          <span>Power <strong id="pcGpuPower">-- W</strong></span>
+        </div>
+      </div>
+
+      <div class="pc-metric">
+        <div class="pc-metric-heading">
+          <span>RAM</span>
+          <strong id="pcRamValue">--%</strong>
+        </div>
+        <div class="pc-usage-bar" role="progressbar" aria-label="RAM usage" aria-valuemin="0" aria-valuemax="100">
+          <span id="pcRamBar"></span>
+        </div>
+      </div>
+
+      <div class="pc-metric">
+        <div class="pc-metric-heading">
+          <span>VRAM</span>
+          <strong id="pcVramValue">--%</strong>
+        </div>
+        <div class="pc-usage-bar" role="progressbar" aria-label="VRAM usage" aria-valuemin="0" aria-valuemax="100">
+          <span id="pcVramBar"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pc-monitor-section pc-temperature-history">
+    <div class="pc-history-heading">
+      <p class="small-label">GPU temperature history</p>
+      <span>Last 90 seconds</span>
+    </div>
+
+    <div class="pc-chart-panel pc-chart-panel-wide">
+      <canvas
+        id="pcGpuTempChart"
+        class="pc-temperature-chart"
+        height="118"
+        role="img"
+        aria-label="GPU, GPU hotspot and GPU memory temperatures over the last 90 seconds"
+      ></canvas>
+
+      <div class="pc-chart-legend">
+        <span class="pc-chart-legend-item pc-chart-gpu">
+          GPU <strong id="pcGpuChartValue">--°C</strong>
+        </span>
+        <span class="pc-chart-legend-item pc-chart-gpu-hotspot">
+          Hotspot <strong id="pcGpuHotspotChartValue">--°C</strong>
+        </span>
+        <span class="pc-chart-legend-item pc-chart-gpu-memory">
+          Memory <strong id="pcGpuMemoryChartValue">--°C</strong>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pc-monitor-footer">
+    <span>Uptime <strong id="pcUptime">--</strong></span>
+    <span id="pcUpdatedText">Waiting for data</span>
+  </div>
+</section>
+</div>
 </div>
 
     <aside class="profile-side-panel profile-music-panel"
@@ -420,7 +407,7 @@
 
   <script src="weather-ambience.js?v=weekly-weather1"></script>
   <script defer src="weather.js?v=weekly-weather1"></script>
-  <script src="pc-monitor.js?v=center-monitor-90s1"></script>
+  <script src="pc-monitor.js?v=compact-separate-monitor1"></script>
   <script src="pc-offline-visual.js?v=offline-sleep-2"></script>
 <script src="site-controller.js?v=music-controls1"></script>
 </body>
