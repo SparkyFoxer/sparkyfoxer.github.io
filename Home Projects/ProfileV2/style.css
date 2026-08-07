@@ -3417,25 +3417,200 @@ body.site-entered .site-audio-controls {
 /* SPARKY_MEDIA_ARTWORK_END */
 
 /* SPARKY_CENTER_PC_MONITOR_90S_START */
+.pc-overview-card,
+.pc-monitor-card-center,
+.spotify-profile-footer {
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+.pc-overview-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-top: 14px !important;
+  padding: 14px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 20px !important;
+  background: var(--card) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.pc-overview-heading,
+.pc-monitor-card-center .pc-monitor-heading,
+.pc-chart-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+.pc-overview-heading {
+  margin-bottom: 10px !important;
+}
+
+.pc-overview-heading h2,
+.pc-monitor-card-center .pc-monitor-heading h2 {
+  margin: 0 !important;
+}
+
+.pc-overview-specs {
+  display: grid !important;
+  gap: 6px !important;
+}
+
+.pc-overview-specs p {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 6px 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px !important;
+  background: rgba(0, 0, 0, 0.11) !important;
+}
+
+.pc-overview-specs span {
+  color: var(--muted) !important;
+  font-size: 0.64rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+.pc-overview-specs strong {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  font-size: 0.72rem !important;
+  text-align: right !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.pc-uptime-card {
+  display: grid !important;
+  grid-template-columns: 68px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 11px !important;
+  margin-top: 10px !important;
+  padding: 10px !important;
+  border: 1px solid rgba(255, 113, 200, 0.22) !important;
+  border-radius: 14px !important;
+  background:
+    radial-gradient(
+      circle at left,
+      rgba(255, 113, 200, 0.13),
+      transparent 55%
+    ),
+    rgba(0, 0, 0, 0.12) !important;
+}
+
+.pc-uptime-graphic {
+  display: grid !important;
+  width: 64px !important;
+  height: 64px !important;
+  place-items: center !important;
+}
+
+.pc-uptime-graphic svg {
+  display: block !important;
+  width: 64px !important;
+  height: 64px !important;
+  overflow: visible !important;
+}
+
+.pc-uptime-orbit,
+.pc-uptime-orbit-glow,
+.pc-uptime-face {
+  fill: none !important;
+}
+
+.pc-uptime-orbit {
+  stroke: rgba(255, 255, 255, 0.1) !important;
+  stroke-width: 3 !important;
+}
+
+.pc-uptime-orbit-glow {
+  stroke: var(--pink) !important;
+  stroke-width: 3 !important;
+  stroke-linecap: round !important;
+  stroke-dasharray: 108 50 !important;
+  filter: drop-shadow(0 0 5px rgba(255, 113, 200, 0.48)) !important;
+  transform-origin: 32px 32px !important;
+  animation: pc-uptime-spin 12s linear infinite !important;
+}
+
+.pc-uptime-face {
+  stroke: rgba(255, 246, 255, 0.4) !important;
+  stroke-width: 1.5 !important;
+}
+
+.pc-uptime-hand {
+  fill: none !important;
+  stroke: var(--text) !important;
+  stroke-width: 3 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.pc-uptime-pin {
+  fill: var(--pink) !important;
+  filter: drop-shadow(0 0 4px rgba(255, 113, 200, 0.58)) !important;
+}
+
+@keyframes pc-uptime-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pc-uptime-copy {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+.pc-uptime-copy .small-label {
+  margin-bottom: 3px !important;
+}
+
+.pc-uptime-copy > strong {
+  font-size: 1.28rem !important;
+  line-height: 1.05 !important;
+}
+
+.pc-uptime-copy > span {
+  margin-top: 5px !important;
+  color: var(--muted) !important;
+  font-size: 0.66rem !important;
+}
+
+.pc-overview-card.is-offline .pc-uptime-orbit-glow {
+  animation-play-state: paused !important;
+  opacity: 0.38 !important;
+}
+
 .profile-pc-monitor-wrap {
   width: 100% !important;
   min-width: 0 !important;
-  margin-top: 16px !important;
+  margin-top: 15px !important;
 }
 
 .pc-monitor-card-center {
-  --pc-gpu-line: #69d7ff;
-  --pc-gpu-hotspot-line: #ff9f6e;
-  --pc-gpu-memory-line: #7bf1a8;
-  --pc-chart-grid: rgba(255, 255, 255, 0.1);
-  --pc-chart-muted: rgba(255, 246, 255, 0.62);
+  --pc-cpu-line: var(--pink);
+  --pc-gpu-line: #b68cff;
+  --pc-gpu-hotspot-line: #ff71c8;
+  --pc-gpu-memory-line: #79c8ff;
+  --pc-chart-grid: rgba(255, 255, 255, 0.085);
+  --pc-chart-muted: rgba(255, 246, 255, 0.58);
 
   display: block !important;
   width: 100% !important;
   min-width: 0 !important;
   height: auto !important;
   margin: 0 !important;
-  padding: 15px !important;
+  padding: 14px !important;
   border: 1px solid var(--line) !important;
   border-radius: 20px !important;
   background: var(--card) !important;
@@ -3443,63 +3618,29 @@ body.site-entered .site-audio-controls {
 }
 
 .pc-monitor-card-center .pc-monitor-heading {
-  margin-bottom: 11px !important;
+  margin-bottom: 9px !important;
 }
 
-.pc-monitor-card-center .pc-spec-list {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 7px 10px !important;
-  margin: 0 !important;
-}
-
-.pc-monitor-card-center .pc-spec-list p {
-  display: grid !important;
-  grid-template-columns: auto minmax(0, 1fr) !important;
-  align-items: center !important;
-  gap: 8px !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  padding: 7px 9px !important;
-  border: 1px solid rgba(255, 255, 255, 0.085) !important;
-  border-radius: 11px !important;
-  background: rgba(0, 0, 0, 0.11) !important;
-}
-
-.pc-monitor-card-center .pc-spec-list p span {
-  color: var(--muted) !important;
-  font-size: 0.67rem !important;
-  letter-spacing: 0.06em !important;
-  text-transform: uppercase !important;
-}
-
-.pc-monitor-card-center .pc-spec-list p strong {
-  min-width: 0 !important;
-  overflow: hidden !important;
-  font-size: 0.76rem !important;
-  line-height: 1.25 !important;
-  text-align: right !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
-
-.pc-monitor-card-center .pc-monitor-section {
-  margin-top: 11px !important;
-  padding-top: 10px !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+.pc-history-range {
+  padding: 4px 8px !important;
+  border: 1px solid rgba(255, 113, 200, 0.22) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 113, 200, 0.08) !important;
+  color: var(--pink) !important;
+  font-size: 0.65rem !important;
 }
 
 .pc-live-grid {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 8px !important;
+  gap: 7px !important;
 }
 
 .pc-monitor-card-center .pc-metric {
   min-width: 0 !important;
   margin: 0 !important;
   padding: 7px 9px !important;
-  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 11px !important;
   background: rgba(0, 0, 0, 0.11) !important;
 }
@@ -3518,23 +3659,23 @@ body.site-entered .site-audio-controls {
 .pc-monitor-card-center .pc-metric-heading strong {
   min-width: 0 !important;
   overflow: hidden !important;
-  font-size: 0.76rem !important;
+  font-size: 0.75rem !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
 
 .pc-monitor-card-center .pc-metric-heading small {
   color: var(--muted) !important;
-  font-size: 0.68rem !important;
+  font-size: 0.67rem !important;
 }
 
 .pc-monitor-card-center .pc-usage-bar {
-  height: 5px !important;
-  margin-top: 6px !important;
+  height: 4px !important;
+  margin-top: 5px !important;
 }
 
 .pc-monitor-card-center .pc-usage-bar > span {
-  min-height: 5px !important;
+  min-height: 4px !important;
 }
 
 .pc-monitor-card-center .pc-gpu-details {
@@ -3542,61 +3683,65 @@ body.site-entered .site-audio-controls {
   flex-wrap: wrap !important;
   gap: 3px 8px !important;
   margin-top: 5px !important;
-  font-size: 0.65rem !important;
+  font-size: 0.63rem !important;
 }
 
-.pc-history-heading {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 10px !important;
+.pc-chart-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+  margin-top: 8px !important;
 }
 
-.pc-history-heading .small-label {
-  margin-bottom: 0 !important;
-}
-
-.pc-history-heading > span {
-  color: var(--muted) !important;
-  font-size: 0.66rem !important;
-}
-
-.pc-chart-panel-wide {
-  width: 100% !important;
+.pc-chart-panel {
   min-width: 0 !important;
-  margin-top: 7px !important;
-  padding: 8px 9px 7px !important;
-  border: 1px solid rgba(255, 255, 255, 0.085) !important;
-  border-radius: 12px !important;
-  background: rgba(0, 0, 0, 0.12) !important;
+  padding: 7px 8px 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 11px !important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 113, 200, 0.035),
+      transparent 50%
+    ),
+    rgba(0, 0, 0, 0.11) !important;
   overflow: hidden !important;
+}
+
+.pc-chart-heading strong {
+  font-size: 0.71rem !important;
+}
+
+.pc-chart-heading > span {
+  color: var(--muted) !important;
+  font-size: 0.63rem !important;
 }
 
 .pc-temperature-chart {
   display: block !important;
   width: 100% !important;
-  height: 118px !important;
-  margin: 0 !important;
+  height: 106px !important;
+  margin: 3px 0 0 !important;
 }
 
 .pc-chart-legend {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 5px 10px !important;
-  margin-top: 4px !important;
+  gap: 4px 8px !important;
+  margin-top: 2px !important;
 }
 
 .pc-chart-legend-item {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 4px !important;
+  gap: 3px !important;
   color: var(--muted) !important;
-  font-size: 0.65rem !important;
+  font-size: 0.6rem !important;
 }
 
 .pc-chart-legend-item::before {
   content: "" !important;
-  width: 10px !important;
+  width: 9px !important;
   height: 3px !important;
   border-radius: 99px !important;
   background: currentColor !important;
@@ -3605,6 +3750,10 @@ body.site-entered .site-audio-controls {
 .pc-chart-legend-item strong {
   color: var(--text) !important;
   font-weight: 600 !important;
+}
+
+.pc-chart-cpu {
+  color: var(--pc-cpu-line) !important;
 }
 
 .pc-chart-gpu {
@@ -3620,26 +3769,112 @@ body.site-entered .site-audio-controls {
 }
 
 .pc-chart-legend-item.is-unavailable {
-  opacity: 0.45 !important;
+  opacity: 0.42 !important;
 }
 
-.pc-monitor-card-center .pc-monitor-footer {
-  margin-top: 10px !important;
-  padding-top: 9px !important;
+.spotify-profile-footer {
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin-top: 12px !important;
+  padding: 9px 11px !important;
+  border: 1px solid rgba(29, 185, 84, 0.28) !important;
+  border-radius: 14px !important;
+  background:
+    radial-gradient(
+      circle at left,
+      rgba(29, 185, 84, 0.15),
+      transparent 58%
+    ),
+    rgba(0, 0, 0, 0.12) !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease !important;
+}
+
+.spotify-profile-footer:hover {
+  transform: translateY(-1px) !important;
+  border-color: rgba(29, 185, 84, 0.48) !important;
+  background:
+    radial-gradient(
+      circle at left,
+      rgba(29, 185, 84, 0.22),
+      transparent 62%
+    ),
+    rgba(255, 255, 255, 0.045) !important;
+}
+
+.spotify-profile-logo {
+  display: grid !important;
+  width: 40px !important;
+  height: 40px !important;
+  place-items: center !important;
+}
+
+.spotify-profile-logo svg {
+  display: block !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.spotify-profile-logo circle {
+  fill: var(--green) !important;
+}
+
+.spotify-profile-logo path {
+  fill: none !important;
+  stroke: #08130c !important;
+  stroke-width: 3 !important;
+  stroke-linecap: round !important;
+}
+
+.spotify-profile-copy {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+}
+
+.spotify-profile-copy strong {
+  overflow: hidden !important;
+  font-size: 0.76rem !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.spotify-profile-copy small {
+  margin-top: 2px !important;
+  color: var(--muted) !important;
+  font-size: 0.64rem !important;
+}
+
+.spotify-profile-arrow {
+  color: var(--green) !important;
+  font-size: 1.05rem !important;
 }
 
 @media (max-width: 650px) {
-  .pc-monitor-card-center .pc-spec-list,
+  .pc-chart-grid,
   .pc-live-grid {
     grid-template-columns: 1fr !important;
   }
 
   .pc-temperature-chart {
-    height: 108px !important;
+    height: 100px !important;
   }
 
-  .pc-monitor-card-center .pc-spec-list p strong {
+  .pc-overview-specs strong {
     white-space: normal !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-uptime-orbit-glow {
+    animation: none !important;
   }
 }
 /* SPARKY_CENTER_PC_MONITOR_90S_END */

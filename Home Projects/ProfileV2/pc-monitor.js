@@ -1,16 +1,18 @@
-/* Compact live Fedora PC monitor with a 90-second GPU history */
+/* Distributed live Fedora monitor with 90-second CPU/GPU charts */
 (() => {
   const ENDPOINT =
     "https://sparky-pc-monitor.sparkyfoxer.workers.dev/api/status";
   const REFRESH_MS = 5000;
   const WINDOW_MS = 90000;
-  const HISTORY_KEY = "sparky_gpu_history_90s_v1";
+  const HISTORY_KEY = "sparky_pc_chart_history_90s_v3";
 
-  const card = document.querySelector("#pcMonitorCard");
-  if (!card) return;
+  const monitorCard = document.querySelector("#pcMonitorCard");
+  const overviewCard = document.querySelector("#pcOverviewCard");
+
+  if (!monitorCard || !overviewCard) return;
 
   let latest = null;
-  let points = loadPoints();
+  let history = loadHistory();
 
   const byId = (id) => document.getElementById(id);
 
@@ -44,6 +46,7 @@
 
   function usedTotal(used, total) {
     const totalGiB = gibibytes(total);
+
     if (!totalGiB) return "-- / --";
 
     return (
@@ -73,6 +76,7 @@
     if (seconds < 60) return `${seconds}s ago`;
 
     const minutes = Math.floor(seconds / 60);
+
     if (minutes < 60) return `${minutes}m ago`;
 
     return `${Math.floor(minutes / 60)}h ago`;
@@ -88,6 +92,7 @@
     if (!element) return;
 
     const safe = Math.min(100, Math.max(0, number(value)));
+
     element.style.width = `${safe}%`;
     element.parentElement?.setAttribute(
       "aria-valuenow",
@@ -95,7 +100,7 @@
     );
   }
 
-  function loadPoints() {
+  function loadHistory() {
     try {
       const parsed = JSON.parse(
         sessionStorage.getItem(HISTORY_KEY) || "[]"
@@ -110,40 +115,50 @@
     }
   }
 
-  function storePoints() {
+  function saveHistory() {
     try {
-      sessionStorage.setItem(HISTORY_KEY, JSON.stringify(points));
+      sessionStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(history)
+      );
     } catch {
-      // Keep the history in memory when browser storage is unavailable.
+      // The charts can still use in-memory history.
     }
   }
 
-  function addPoint(metrics) {
+  function addHistoryPoint(metrics) {
     const now = Date.now();
 
-    points.push({
+    history.push({
       time: now,
+      cpu: finite(metrics?.cpu?.temp_c),
       gpu: finite(metrics?.gpu?.temp_c),
       gpuHotspot: finite(metrics?.gpu?.hotspot_c),
       gpuMemory: finite(metrics?.gpu?.memory_temp_c)
     });
 
     const cutoff = now - WINDOW_MS;
-    points = points.filter((point) => number(point.time) >= cutoff);
-    storePoints();
+
+    history = history.filter(
+      (point) => number(point.time) >= cutoff
+    );
+
+    saveHistory();
   }
 
   function cssValue(name, fallback) {
     return (
-      getComputedStyle(card).getPropertyValue(name).trim() ||
+      getComputedStyle(monitorCard)
+        .getPropertyValue(name)
+        .trim() ||
       fallback
     );
   }
 
   function prepareCanvas(canvas) {
     const rect = canvas.getBoundingClientRect();
-    const width = Math.max(280, Math.round(rect.width || 520));
-    const height = Math.max(100, Math.round(rect.height || 118));
+    const width = Math.max(220, Math.round(rect.width || 270));
+    const height = Math.max(96, Math.round(rect.height || 106));
     const ratio = Math.min(2, window.devicePixelRatio || 1);
 
     canvas.width = Math.round(width * ratio);
@@ -168,26 +183,26 @@
   ) {
     context.beginPath();
     context.strokeStyle = colour;
-    context.lineWidth = 2.1;
+    context.lineWidth = 2.15;
     context.lineJoin = "round";
     context.lineCap = "round";
 
-    let open = false;
+    let started = false;
 
     for (const point of data) {
       const value = finite(point[key]);
 
       if (value === null) {
-        open = false;
+        started = false;
         continue;
       }
 
       const x = mapX(point.time);
       const y = mapY(value);
 
-      if (!open) {
+      if (!started) {
         context.moveTo(x, y);
-        open = true;
+        started = true;
       } else {
         context.lineTo(x, y);
       }
@@ -196,23 +211,25 @@
     context.stroke();
   }
 
-  function drawGpuChart() {
-    const canvas = byId("pcGpuTempChart");
+  function drawChart(canvasId, series, legendItems) {
+    const canvas = byId(canvasId);
+
     if (!(canvas instanceof HTMLCanvasElement)) return;
 
     const prepared = prepareCanvas(canvas);
     if (!prepared) return;
 
     const { context, width, height } = prepared;
-    const left = 30;
-    const right = 8;
-    const top = 7;
-    const bottom = 21;
+    const left = 29;
+    const right = 7;
+    const top = 6;
+    const bottom = 20;
     const plotWidth = width - left - right;
     const plotHeight = height - top - bottom;
     const now = Date.now();
     const cutoff = now - WINDOW_MS;
-    const visible = points.filter(
+
+    const visible = history.filter(
       (point) => number(point.time) >= cutoff
     );
 
@@ -241,7 +258,7 @@
 
     const grid = cssValue(
       "--pc-chart-grid",
-      "rgba(255,255,255,.11)"
+      "rgba(255,255,255,.1)"
     );
     const muted = cssValue(
       "--pc-chart-muted",
@@ -263,13 +280,12 @@
 
       context.textAlign = "right";
       context.textBaseline = "middle";
-      context.fillText(`${value}°`, left - 5, y);
+      context.fillText(`${value}°`, left - 4, y);
     }
 
     for (const [seconds, label] of [
       [-90, "-90s"],
-      [-60, "-60s"],
-      [-30, "-30s"],
+      [-45, "-45s"],
       [0, "now"]
     ]) {
       const x = mapX(now + seconds * 1000);
@@ -289,47 +305,35 @@
       context.fillText(label, x, height - bottom + 5);
     }
 
-    drawSeries(
-      context,
-      visible,
-      "gpu",
-      mapX,
-      mapY,
-      cssValue("--pc-gpu-line", "#69d7ff")
-    );
-    drawSeries(
-      context,
-      visible,
-      "gpuHotspot",
-      mapX,
-      mapY,
-      cssValue("--pc-gpu-hotspot-line", "#ff9f6e")
-    );
-    drawSeries(
-      context,
-      visible,
-      "gpuMemory",
-      mapX,
-      mapY,
-      cssValue("--pc-gpu-memory-line", "#7bf1a8")
-    );
+    for (const item of series) {
+      drawSeries(
+        context,
+        visible,
+        item.key,
+        mapX,
+        mapY,
+        cssValue(item.variable, item.fallback)
+      );
+    }
 
     if (visible.length < 2) {
       context.fillStyle = muted;
-      context.font = '11px Inter, system-ui, sans-serif';
+      context.font = '10px Inter, system-ui, sans-serif';
       context.textAlign = "center";
       context.textBaseline = "middle";
+
       context.fillText(
-        "Collecting 90-second history…",
+        "Collecting history…",
         left + plotWidth / 2,
         top + plotHeight / 2
       );
     }
 
     const last = visible.at(-1) || {};
-    setLegend("pcGpuChartValue", last.gpu);
-    setLegend("pcGpuHotspotChartValue", last.gpuHotspot);
-    setLegend("pcGpuMemoryChartValue", last.gpuMemory);
+
+    for (const item of legendItems) {
+      setLegend(item.id, last[item.key]);
+    }
   }
 
   function setLegend(id, value) {
@@ -337,6 +341,7 @@
     if (!element) return;
 
     const parsed = finite(value);
+
     element.textContent =
       parsed === null
         ? "Not reported"
@@ -344,7 +349,64 @@
 
     element
       .closest(".pc-chart-legend-item")
-      ?.classList.toggle("is-unavailable", parsed === null);
+      ?.classList.toggle(
+        "is-unavailable",
+        parsed === null
+      );
+  }
+
+  function drawCharts() {
+    drawChart(
+      "pcCpuTempChart",
+      [
+        {
+          key: "cpu",
+          variable: "--pc-cpu-line",
+          fallback: "#ff71c8"
+        }
+      ],
+      [
+        {
+          key: "cpu",
+          id: "pcCpuChartValue"
+        }
+      ]
+    );
+
+    drawChart(
+      "pcGpuTempChart",
+      [
+        {
+          key: "gpu",
+          variable: "--pc-gpu-line",
+          fallback: "#b68cff"
+        },
+        {
+          key: "gpuHotspot",
+          variable: "--pc-gpu-hotspot-line",
+          fallback: "#ff71c8"
+        },
+        {
+          key: "gpuMemory",
+          variable: "--pc-gpu-memory-line",
+          fallback: "#79c8ff"
+        }
+      ],
+      [
+        {
+          key: "gpu",
+          id: "pcGpuChartValue"
+        },
+        {
+          key: "gpuHotspot",
+          id: "pcGpuHotspotChartValue"
+        },
+        {
+          key: "gpuMemory",
+          id: "pcGpuMemoryChartValue"
+        }
+      ]
+    );
   }
 
   function render(data) {
@@ -353,18 +415,32 @@
     const online = Boolean(data?.online);
     const metrics = data?.metrics;
 
-    card.classList.toggle("is-offline", !online);
+    monitorCard.classList.toggle("is-offline", !online);
+    overviewCard.classList.toggle("is-offline", !online);
+
     setText("pcOnlineState", online ? "Online" : "Offline");
     setText("pcUpdatedText", `Updated ${age(data?.age_ms)}`);
 
     if (!metrics) return;
 
-    setText("pcCpuValue", percent(metrics.cpu?.usage_percent));
-    setText("pcCpuTemp", temperature(metrics.cpu?.temp_c));
+    setText(
+      "pcCpuValue",
+      percent(metrics.cpu?.usage_percent)
+    );
+    setText(
+      "pcCpuTemp",
+      temperature(metrics.cpu?.temp_c)
+    );
     setBar("pcCpuBar", metrics.cpu?.usage_percent);
 
-    setText("pcGpuValue", percent(metrics.gpu?.usage_percent));
-    setText("pcGpuTemp", temperature(metrics.gpu?.temp_c));
+    setText(
+      "pcGpuValue",
+      percent(metrics.gpu?.usage_percent)
+    );
+    setText(
+      "pcGpuTemp",
+      temperature(metrics.gpu?.temp_c)
+    );
     setText(
       "pcGpuHotspot",
       temperature(metrics.gpu?.hotspot_c)
@@ -373,7 +449,10 @@
       "pcGpuMemoryTemp",
       temperature(metrics.gpu?.memory_temp_c)
     );
-    setText("pcGpuPower", watts(metrics.gpu?.power_w));
+    setText(
+      "pcGpuPower",
+      watts(metrics.gpu?.power_w)
+    );
     setBar("pcGpuBar", metrics.gpu?.usage_percent);
 
     const memory = metrics.memory || {};
@@ -381,12 +460,19 @@
     setText(
       "pcRamValue",
       `${percent(memory.usage_percent)} • ` +
-        usedTotal(memory.used_bytes, memory.total_bytes)
+        usedTotal(
+          memory.used_bytes,
+          memory.total_bytes
+        )
     );
     setBar("pcRamBar", memory.usage_percent);
 
-    const vramUsed = number(metrics.gpu?.vram_used_bytes);
-    const vramTotal = number(metrics.gpu?.vram_total_bytes);
+    const vramUsed = number(
+      metrics.gpu?.vram_used_bytes
+    );
+    const vramTotal = number(
+      metrics.gpu?.vram_total_bytes
+    );
     const vramPercent = vramTotal
       ? (vramUsed / vramTotal) * 100
       : 0;
@@ -403,8 +489,8 @@
       duration(metrics.uptime_seconds)
     );
 
-    addPoint(metrics);
-    drawGpuChart();
+    addHistoryPoint(metrics);
+    drawCharts();
   }
 
   async function refresh() {
@@ -414,53 +500,63 @@
       });
 
       if (!response.ok) {
-        throw new Error(`Monitor returned ${response.status}`);
+        throw new Error(
+          `Monitor returned ${response.status}`
+        );
       }
 
       render(await response.json());
     } catch (error) {
       console.warn("PC monitor failed:", error);
-      card.classList.add("is-offline");
+
+      monitorCard.classList.add("is-offline");
+      overviewCard.classList.add("is-offline");
+
       setText("pcOnlineState", "Unavailable");
       setText(
         "pcUpdatedText",
         "Could not reach monitor"
       );
-      drawGpuChart();
+
+      drawCharts();
     }
   }
 
   refresh();
   setInterval(refresh, REFRESH_MS);
-  setInterval(drawGpuChart, 1000);
+  setInterval(drawCharts, 1000);
 
   setInterval(() => {
     if (!latest) return;
 
     latest.age_ms = number(latest.age_ms) + 1000;
+
     setText(
       "pcUpdatedText",
       `Updated ${age(latest.age_ms)}`
     );
 
     if (latest.age_ms > 25000) {
-      card.classList.add("is-offline");
+      monitorCard.classList.add("is-offline");
+      overviewCard.classList.add("is-offline");
       setText("pcOnlineState", "Offline");
     }
   }, 1000);
 
   if (typeof ResizeObserver === "function") {
-    const chart = byId("pcGpuTempChart");
+    const observer = new ResizeObserver(drawCharts);
 
-    if (chart) {
-      const observer = new ResizeObserver(drawGpuChart);
-      observer.observe(chart);
-    }
+    [
+      byId("pcCpuTempChart"),
+      byId("pcGpuTempChart")
+    ]
+      .filter(Boolean)
+      .forEach((canvas) => observer.observe(canvas));
   }
 
-  window.addEventListener("resize", drawGpuChart, {
+  window.addEventListener("resize", drawCharts, {
     passive: true
   });
 
-  drawGpuChart();
+  drawCharts();
 })();
