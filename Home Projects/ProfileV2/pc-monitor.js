@@ -217,6 +217,78 @@
     return { context, width, height };
   }
 
+  function smoothSeries(data, key, mapX, mapY) {
+    const alpha = 0.42;
+    const segments = [];
+    let segment = [];
+    let smoothedValue = null;
+
+    function finishSegment() {
+      if (segment.length) segments.push(segment);
+      segment = [];
+      smoothedValue = null;
+    }
+
+    for (const point of data) {
+      const rawValue = finite(point[key]);
+
+      if (rawValue === null) {
+        finishSegment();
+        continue;
+      }
+
+      smoothedValue =
+        smoothedValue === null
+          ? rawValue
+          : smoothedValue +
+            alpha * (rawValue - smoothedValue);
+
+      segment.push({
+        x: mapX(point.time),
+        y: mapY(smoothedValue)
+      });
+    }
+
+    finishSegment();
+    return segments;
+  }
+
+  function traceRoundedSeries(context, points) {
+    if (!points.length) return;
+
+    context.moveTo(points[0].x, points[0].y);
+
+    if (points.length === 1) return;
+
+    if (points.length === 2) {
+      context.lineTo(points[1].x, points[1].y);
+      return;
+    }
+
+    for (let index = 1; index < points.length - 1; index += 1) {
+      const current = points[index];
+      const next = points[index + 1];
+      const midpointX = (current.x + next.x) / 2;
+      const midpointY = (current.y + next.y) / 2;
+
+      context.quadraticCurveTo(
+        current.x,
+        current.y,
+        midpointX,
+        midpointY
+      );
+    }
+
+    const last = points.at(-1);
+
+    context.quadraticCurveTo(
+      last.x,
+      last.y,
+      last.x,
+      last.y
+    );
+  }
+
   function drawSeries(
     context,
     data,
@@ -225,34 +297,23 @@
     mapY,
     colour
   ) {
-    context.beginPath();
+    const segments = smoothSeries(
+      data,
+      key,
+      mapX,
+      mapY
+    );
+
     context.strokeStyle = colour;
     context.lineWidth = 2.1;
     context.lineJoin = "round";
     context.lineCap = "round";
 
-    let started = false;
-
-    for (const point of data) {
-      const value = finite(point[key]);
-
-      if (value === null) {
-        started = false;
-        continue;
-      }
-
-      const x = mapX(point.time);
-      const y = mapY(value);
-
-      if (!started) {
-        context.moveTo(x, y);
-        started = true;
-      } else {
-        context.lineTo(x, y);
-      }
+    for (const segment of segments) {
+      context.beginPath();
+      traceRoundedSeries(context, segment);
+      context.stroke();
     }
-
-    context.stroke();
   }
 
   function setChartValue(id, value, suffix) {
