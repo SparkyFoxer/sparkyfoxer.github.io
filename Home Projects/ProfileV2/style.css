@@ -3254,12 +3254,23 @@ body.site-entered .site-audio-controls {
 
 /* SPARKY_COMPACT_MUSIC_HISTORY_START */
 /*
- * Keep the music panel aligned with the rest of the dashboard, but stop
- * CSS Grid from stretching each recently-seen track to fill its height.
+ * Keep recent Spotify entries compact and let the Music card use only
+ * the height its content actually needs.
  */
+.profile-music-panel .dashboard-music-card,
+.profile-music-panel .about-music-card {
+  flex: 0 0 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  align-self: start !important;
+}
+
 .profile-music-panel .last-played-list {
+  flex: 0 0 auto !important;
   align-content: start !important;
   grid-auto-rows: max-content !important;
+  max-height: 520px !important;
+  overflow-y: auto !important;
 }
 
 .profile-music-panel .last-played-list li {
