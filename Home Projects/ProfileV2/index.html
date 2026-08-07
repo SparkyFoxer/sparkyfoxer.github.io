@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=consistent-card-gaps1">
+  <link rel="stylesheet" href="style.css?v=switchable-performance-history1">
   <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 </head>
 
@@ -230,41 +230,15 @@
       <p class="small-label">System monitor</p>
       <h2>Live performance</h2>
     </div>
-    <span class="pc-history-range">90s history</span>
+
+    <div class="pc-history-controls" role="group" aria-label="Chart history range">
+      <button type="button" class="pc-history-range-button" data-history-seconds="300" aria-pressed="false">300s</button>
+      <button type="button" class="pc-history-range-button is-active" data-history-seconds="120" aria-pressed="true">120s</button>
+      <button type="button" class="pc-history-range-button" data-history-seconds="30" aria-pressed="false">30s</button>
+    </div>
   </div>
 
-  <div class="pc-live-grid">
-    <div class="pc-metric">
-      <div class="pc-metric-heading">
-        <span>CPU</span>
-        <span>
-          <strong id="pcCpuValue">--%</strong>
-          <small id="pcCpuTemp">--°C</small>
-        </span>
-      </div>
-      <div class="pc-usage-bar" role="progressbar" aria-label="CPU usage" aria-valuemin="0" aria-valuemax="100">
-        <span id="pcCpuBar"></span>
-      </div>
-    </div>
-
-    <div class="pc-metric">
-      <div class="pc-metric-heading">
-        <span>GPU</span>
-        <span>
-          <strong id="pcGpuValue">--%</strong>
-          <small id="pcGpuTemp">--°C</small>
-        </span>
-      </div>
-      <div class="pc-usage-bar" role="progressbar" aria-label="GPU usage" aria-valuemin="0" aria-valuemax="100">
-        <span id="pcGpuBar"></span>
-      </div>
-      <div class="pc-gpu-details">
-        <span>Hotspot <strong id="pcGpuHotspot">--°C</strong></span>
-        <span>Memory <strong id="pcGpuMemoryTemp">--°C</strong></span>
-        <span>Power <strong id="pcGpuPower">-- W</strong></span>
-      </div>
-    </div>
-
+  <div class="pc-memory-grid">
     <div class="pc-metric">
       <div class="pc-metric-heading">
         <span>RAM</span>
@@ -286,52 +260,74 @@
     </div>
   </div>
 
-  <div class="pc-chart-grid">
-    <div class="pc-chart-panel">
-      <div class="pc-chart-heading">
-        <strong>CPU temperature</strong>
-        <span id="pcCpuChartValue">--°C</span>
+  <div class="pc-history-section">
+    <p class="small-label">Usage history</p>
+
+    <div class="pc-history-chart-grid">
+      <div class="pc-chart-panel">
+        <div class="pc-chart-heading">
+          <strong>CPU usage</strong>
+          <span id="pcCpuValue">--%</span>
+        </div>
+
+        <canvas id="pcCpuUsageChart" class="pc-history-chart" height="96" role="img" aria-label="CPU usage history"></canvas>
+
+        <div class="pc-chart-legend">
+          <span class="pc-chart-legend-item pc-chart-cpu-usage">CPU load</span>
+        </div>
       </div>
 
-      <canvas
-        id="pcCpuTempChart"
-        class="pc-temperature-chart"
-        height="106"
-        role="img"
-        aria-label="CPU temperature over the last 90 seconds"
-      ></canvas>
+      <div class="pc-chart-panel">
+        <div class="pc-chart-heading">
+          <strong>GPU usage</strong>
+          <span id="pcGpuValue">--%</span>
+        </div>
 
-      <div class="pc-chart-legend">
-        <span class="pc-chart-legend-item pc-chart-cpu">
-          CPU package
-        </span>
+        <canvas id="pcGpuUsageChart" class="pc-history-chart" height="96" role="img" aria-label="GPU usage history"></canvas>
+
+        <div class="pc-chart-legend">
+          <span class="pc-chart-legend-item pc-chart-gpu-usage">GPU load</span>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="pc-chart-panel">
-      <div class="pc-chart-heading">
-        <strong>GPU temperatures</strong>
-        <span>20–110°C</span>
+  <div class="pc-history-section">
+    <p class="small-label">Temperature history</p>
+
+    <div class="pc-history-chart-grid">
+      <div class="pc-chart-panel">
+        <div class="pc-chart-heading">
+          <strong>CPU temperature</strong>
+          <span id="pcCpuChartValue">--°C</span>
+        </div>
+
+        <canvas id="pcCpuTempChart" class="pc-history-chart" height="96" role="img" aria-label="CPU temperature history"></canvas>
+
+        <div class="pc-chart-legend">
+          <span class="pc-chart-legend-item pc-chart-cpu-temp">CPU package</span>
+        </div>
       </div>
 
-      <canvas
-        id="pcGpuTempChart"
-        class="pc-temperature-chart"
-        height="106"
-        role="img"
-        aria-label="GPU edge, hotspot and memory temperatures over the last 90 seconds"
-      ></canvas>
+      <div class="pc-chart-panel">
+        <div class="pc-chart-heading">
+          <strong>GPU temperatures</strong>
+          <span>20–110°C</span>
+        </div>
 
-      <div class="pc-chart-legend">
-        <span class="pc-chart-legend-item pc-chart-gpu">
-          GPU <strong id="pcGpuChartValue">--°C</strong>
-        </span>
-        <span class="pc-chart-legend-item pc-chart-gpu-hotspot">
-          Hotspot <strong id="pcGpuHotspotChartValue">--°C</strong>
-        </span>
-        <span class="pc-chart-legend-item pc-chart-gpu-memory">
-          Memory <strong id="pcGpuMemoryChartValue">--°C</strong>
-        </span>
+        <canvas id="pcGpuTempChart" class="pc-history-chart" height="96" role="img" aria-label="GPU edge, hotspot and memory temperature history"></canvas>
+
+        <div class="pc-chart-legend">
+          <span class="pc-chart-legend-item pc-chart-gpu">
+            GPU <strong id="pcGpuChartValue">--°C</strong>
+          </span>
+          <span class="pc-chart-legend-item pc-chart-gpu-hotspot">
+            Hotspot <strong id="pcGpuHotspotChartValue">--°C</strong>
+          </span>
+          <span class="pc-chart-legend-item pc-chart-gpu-memory">
+            Memory <strong id="pcGpuMemoryChartValue">--°C</strong>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -468,7 +464,7 @@
 
   <script src="weather-ambience.js?v=weekly-weather1"></script>
   <script defer src="weather.js?v=weekly-weather1"></script>
-  <script src="pc-monitor.js?v=balanced-monitor-layout1"></script>
+  <script src="pc-monitor.js?v=switchable-performance-history1"></script>
   <script src="pc-offline-visual.js?v=offline-sleep-2"></script>
 <script src="site-controller.js?v=music-controls1"></script>
 </body>

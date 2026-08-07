@@ -3931,3 +3931,133 @@ body.site-entered .site-audio-controls {
   }
 }
 /* SPARKY_CONSISTENT_CARD_GAPS_END */
+
+/* SPARKY_SWITCHABLE_MONITOR_HISTORY_START */
+.pc-monitor-card-center {
+  --pc-cpu-usage-line: var(--pink);
+  --pc-gpu-usage-line: #b68cff;
+  --pc-cpu-temp-line: #ff9bd8;
+  --pc-gpu-line: #b68cff;
+  --pc-gpu-hotspot-line: var(--pink);
+  --pc-gpu-memory-line: #79c8ff;
+}
+
+.pc-monitor-card-center .pc-monitor-heading {
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+.pc-history-controls {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: 3px !important;
+  padding: 3px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 999px !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+}
+
+.pc-history-range-button {
+  min-width: 42px !important;
+  padding: 4px 7px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font: inherit !important;
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+.pc-history-range-button:hover {
+  color: var(--text) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.pc-history-range-button.is-active,
+.pc-history-range-button[aria-pressed="true"] {
+  color: var(--text) !important;
+  background: rgba(255, 113, 200, 0.16) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 113, 200, 0.28),
+    0 0 10px rgba(255, 113, 200, 0.1) !important;
+}
+
+.pc-history-range-button:focus-visible {
+  outline: 2px solid rgba(255, 113, 200, 0.7) !important;
+  outline-offset: 2px !important;
+}
+
+.pc-memory-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.pc-history-section {
+  margin-top: 9px !important;
+  padding-top: 9px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.085) !important;
+}
+
+.pc-history-section > .small-label {
+  margin-bottom: 7px !important;
+}
+
+.pc-history-chart-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.pc-history-chart {
+  display: block !important;
+  width: 100% !important;
+  height: 96px !important;
+  margin: 3px 0 0 !important;
+}
+
+.pc-chart-heading > span {
+  color: var(--text) !important;
+  font-weight: 700 !important;
+}
+
+.pc-chart-cpu-usage {
+  color: var(--pc-cpu-usage-line) !important;
+}
+
+.pc-chart-gpu-usage {
+  color: var(--pc-gpu-usage-line) !important;
+}
+
+.pc-chart-cpu-temp {
+  color: var(--pc-cpu-temp-line) !important;
+}
+
+.pc-live-grid,
+.pc-gpu-details {
+  display: none !important;
+}
+
+@media (max-width: 650px) {
+  .pc-monitor-card-center .pc-monitor-heading {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .pc-history-controls {
+    align-self: flex-start !important;
+  }
+
+  .pc-memory-grid,
+  .pc-history-chart-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pc-history-chart {
+    height: 94px !important;
+  }
+}
+/* SPARKY_SWITCHABLE_MONITOR_HISTORY_END */

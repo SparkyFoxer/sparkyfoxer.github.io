@@ -1,10 +1,13 @@
-/* Distributed live Fedora monitor with 90-second CPU/GPU charts */
+/* Live Fedora monitor with switchable 300s / 120s / 30s history */
 (() => {
   const ENDPOINT =
     "https://sparky-pc-monitor.sparkyfoxer.workers.dev/api/status";
   const REFRESH_MS = 5000;
-  const WINDOW_MS = 90000;
-  const HISTORY_KEY = "sparky_pc_chart_history_90s_v3";
+  const MAX_HISTORY_SECONDS = 300;
+  const MAX_HISTORY_MS = MAX_HISTORY_SECONDS * 1000;
+  const HISTORY_KEY = "sparky_pc_chart_history_300s_v4";
+  const RANGE_KEY = "sparky_pc_chart_range_v1";
+  const VALID_RANGES = new Set([300, 120, 30]);
 
   const monitorCard = document.querySelector("#pcMonitorCard");
   const overviewCard = document.querySelector("#pcOverviewCard");
@@ -12,6 +15,7 @@
   if (!monitorCard || !overviewCard) return;
 
   let latest = null;
+  let selectedSeconds = loadSelectedRange();
   let history = loadHistory();
 
   const byId = (id) => document.getElementById(id);
@@ -30,23 +34,12 @@
     return `${Math.round(number(value))}%`;
   }
 
-  function temperature(value) {
-    const parsed = finite(value);
-    return parsed === null ? "--°C" : `${Math.round(parsed)}°C`;
-  }
-
-  function watts(value) {
-    const parsed = finite(value);
-    return parsed === null ? "-- W" : `${Math.round(parsed)} W`;
-  }
-
   function gibibytes(bytes) {
     return number(bytes) / 1024 ** 3;
   }
 
   function usedTotal(used, total) {
     const totalGiB = gibibytes(total);
-
     if (!totalGiB) return "-- / --";
 
     return (
@@ -76,7 +69,6 @@
     if (seconds < 60) return `${seconds}s ago`;
 
     const minutes = Math.floor(seconds / 60);
-
     if (minutes < 60) return `${minutes}m ago`;
 
     return `${Math.floor(minutes / 60)}h ago`;
@@ -92,7 +84,6 @@
     if (!element) return;
 
     const safe = Math.min(100, Math.max(0, number(value)));
-
     element.style.width = `${safe}%`;
     element.parentElement?.setAttribute(
       "aria-valuenow",
@@ -100,12 +91,29 @@
     );
   }
 
+  function loadSelectedRange() {
+    try {
+      const value = Number(localStorage.getItem(RANGE_KEY));
+      return VALID_RANGES.has(value) ? value : 120;
+    } catch {
+      return 120;
+    }
+  }
+
+  function saveSelectedRange() {
+    try {
+      localStorage.setItem(RANGE_KEY, String(selectedSeconds));
+    } catch {
+      // Keep the selection for this page session only.
+    }
+  }
+
   function loadHistory() {
     try {
       const parsed = JSON.parse(
         sessionStorage.getItem(HISTORY_KEY) || "[]"
       );
-      const cutoff = Date.now() - WINDOW_MS;
+      const cutoff = Date.now() - MAX_HISTORY_MS;
 
       return Array.isArray(parsed)
         ? parsed.filter((point) => number(point?.time) >= cutoff)
@@ -117,12 +125,9 @@
 
   function saveHistory() {
     try {
-      sessionStorage.setItem(
-        HISTORY_KEY,
-        JSON.stringify(history)
-      );
+      sessionStorage.setItem(HISTORY_KEY, JSON.stringify(history));
     } catch {
-      // The charts can still use in-memory history.
+      // In-memory history still works.
     }
   }
 
@@ -131,19 +136,58 @@
 
     history.push({
       time: now,
-      cpu: finite(metrics?.cpu?.temp_c),
-      gpu: finite(metrics?.gpu?.temp_c),
+      cpuUsage: finite(metrics?.cpu?.usage_percent),
+      gpuUsage: finite(metrics?.gpu?.usage_percent),
+      cpuTemp: finite(metrics?.cpu?.temp_c),
+      gpuTemp: finite(metrics?.gpu?.temp_c),
       gpuHotspot: finite(metrics?.gpu?.hotspot_c),
       gpuMemory: finite(metrics?.gpu?.memory_temp_c)
     });
 
-    const cutoff = now - WINDOW_MS;
+    const cutoff = now - MAX_HISTORY_MS;
 
     history = history.filter(
       (point) => number(point.time) >= cutoff
     );
 
     saveHistory();
+  }
+
+  function installRangeButtons() {
+    monitorCard
+      .querySelectorAll(".pc-history-range-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextRange = Number(
+            button.dataset.historySeconds
+          );
+
+          if (!VALID_RANGES.has(nextRange)) return;
+
+          selectedSeconds = nextRange;
+          saveSelectedRange();
+          updateRangeButtons();
+          drawCharts();
+        });
+      });
+
+    updateRangeButtons();
+  }
+
+  function updateRangeButtons() {
+    monitorCard
+      .querySelectorAll(".pc-history-range-button")
+      .forEach((button) => {
+        const active =
+          Number(button.dataset.historySeconds) ===
+          selectedSeconds;
+
+        button.classList.toggle("is-active", active);
+        button.setAttribute(
+          "aria-pressed",
+          String(active)
+        );
+      });
   }
 
   function cssValue(name, fallback) {
@@ -158,7 +202,7 @@
   function prepareCanvas(canvas) {
     const rect = canvas.getBoundingClientRect();
     const width = Math.max(220, Math.round(rect.width || 270));
-    const height = Math.max(96, Math.round(rect.height || 106));
+    const height = Math.max(88, Math.round(rect.height || 96));
     const ratio = Math.min(2, window.devicePixelRatio || 1);
 
     canvas.width = Math.round(width * ratio);
@@ -183,7 +227,7 @@
   ) {
     context.beginPath();
     context.strokeStyle = colour;
-    context.lineWidth = 2.15;
+    context.lineWidth = 2.1;
     context.lineJoin = "round";
     context.lineCap = "round";
 
@@ -211,8 +255,27 @@
     context.stroke();
   }
 
-  function drawChart(canvasId, series, legendItems) {
-    const canvas = byId(canvasId);
+  function setChartValue(id, value, suffix) {
+    const element = byId(id);
+    if (!element) return;
+
+    const parsed = finite(value);
+
+    element.textContent =
+      parsed === null
+        ? "Not reported"
+        : `${Math.round(parsed)}${suffix}`;
+
+    element
+      .closest(".pc-chart-legend-item")
+      ?.classList.toggle(
+        "is-unavailable",
+        parsed === null
+      );
+  }
+
+  function drawChart(options) {
+    const canvas = byId(options.canvasId);
 
     if (!(canvas instanceof HTMLCanvasElement)) return;
 
@@ -220,27 +283,25 @@
     if (!prepared) return;
 
     const { context, width, height } = prepared;
-    const left = 29;
+    const left = 30;
     const right = 7;
     const top = 6;
     const bottom = 20;
     const plotWidth = width - left - right;
     const plotHeight = height - top - bottom;
     const now = Date.now();
-    const cutoff = now - WINDOW_MS;
+    const windowMs = selectedSeconds * 1000;
+    const cutoff = now - windowMs;
 
     const visible = history.filter(
       (point) => number(point.time) >= cutoff
     );
 
-    const minTemp = 20;
-    const maxTemp = 110;
-
     const mapX = (timestamp) =>
       left +
       Math.max(
         0,
-        Math.min(1, (timestamp - cutoff) / WINDOW_MS)
+        Math.min(1, (timestamp - cutoff) / windowMs)
       ) *
         plotWidth;
 
@@ -251,7 +312,8 @@
           0,
           Math.min(
             1,
-            (value - minTemp) / (maxTemp - minTemp)
+            (value - options.minValue) /
+              (options.maxValue - options.minValue)
           )
         )) *
         plotHeight;
@@ -270,7 +332,7 @@
     context.fillStyle = muted;
     context.lineWidth = 1;
 
-    for (const value of [20, 40, 60, 80, 100]) {
+    for (const value of options.ticks) {
       const y = mapY(value);
 
       context.beginPath();
@@ -280,12 +342,18 @@
 
       context.textAlign = "right";
       context.textBaseline = "middle";
-      context.fillText(`${value}°`, left - 4, y);
+      context.fillText(
+        `${value}${options.tickSuffix}`,
+        left - 4,
+        y
+      );
     }
 
+    const halfRange = Math.round(selectedSeconds / 2);
+
     for (const [seconds, label] of [
-      [-90, "-90s"],
-      [-45, "-45s"],
+      [-selectedSeconds, `-${selectedSeconds}s`],
+      [-halfRange, `-${halfRange}s`],
       [0, "now"]
     ]) {
       const x = mapX(now + seconds * 1000);
@@ -296,7 +364,7 @@
       context.stroke();
 
       context.textAlign =
-        seconds === -90
+        seconds === -selectedSeconds
           ? "left"
           : seconds === 0
             ? "right"
@@ -305,7 +373,7 @@
       context.fillText(label, x, height - bottom + 5);
     }
 
-    for (const item of series) {
+    for (const item of options.series) {
       drawSeries(
         context,
         visible,
@@ -323,7 +391,7 @@
       context.textBaseline = "middle";
 
       context.fillText(
-        "Collecting history…",
+        `Collecting ${selectedSeconds}s history…`,
         left + plotWidth / 2,
         top + plotHeight / 2
       );
@@ -331,53 +399,87 @@
 
     const last = visible.at(-1) || {};
 
-    for (const item of legendItems) {
-      setLegend(item.id, last[item.key]);
+    for (const item of options.valueItems) {
+      setChartValue(
+        item.id,
+        last[item.key],
+        item.suffix
+      );
     }
   }
 
-  function setLegend(id, value) {
-    const element = byId(id);
-    if (!element) return;
-
-    const parsed = finite(value);
-
-    element.textContent =
-      parsed === null
-        ? "Not reported"
-        : `${Math.round(parsed)}°C`;
-
-    element
-      .closest(".pc-chart-legend-item")
-      ?.classList.toggle(
-        "is-unavailable",
-        parsed === null
-      );
-  }
-
   function drawCharts() {
-    drawChart(
-      "pcCpuTempChart",
-      [
+    drawChart({
+      canvasId: "pcCpuUsageChart",
+      series: [
         {
-          key: "cpu",
-          variable: "--pc-cpu-line",
+          key: "cpuUsage",
+          variable: "--pc-cpu-usage-line",
           fallback: "#ff71c8"
         }
       ],
-      [
+      minValue: 0,
+      maxValue: 100,
+      ticks: [0, 25, 50, 75, 100],
+      tickSuffix: "%",
+      valueItems: [
         {
-          key: "cpu",
-          id: "pcCpuChartValue"
+          key: "cpuUsage",
+          id: "pcCpuValue",
+          suffix: "%"
         }
       ]
-    );
+    });
 
-    drawChart(
-      "pcGpuTempChart",
-      [
+    drawChart({
+      canvasId: "pcGpuUsageChart",
+      series: [
         {
-          key: "gpu",
+          key: "gpuUsage",
+          variable: "--pc-gpu-usage-line",
+          fallback: "#b68cff"
+        }
+      ],
+      minValue: 0,
+      maxValue: 100,
+      ticks: [0, 25, 50, 75, 100],
+      tickSuffix: "%",
+      valueItems: [
+        {
+          key: "gpuUsage",
+          id: "pcGpuValue",
+          suffix: "%"
+        }
+      ]
+    });
+
+    drawChart({
+      canvasId: "pcCpuTempChart",
+      series: [
+        {
+          key: "cpuTemp",
+          variable: "--pc-cpu-temp-line",
+          fallback: "#ff9bd8"
+        }
+      ],
+      minValue: 20,
+      maxValue: 110,
+      ticks: [20, 40, 60, 80, 100],
+      tickSuffix: "°",
+      valueItems: [
+        {
+          key: "cpuTemp",
+          id: "pcCpuChartValue",
+          suffix: "°C"
+        }
+      ]
+    });
+
+    drawChart({
+      canvasId: "pcGpuTempChart",
+      series: [
+        {
+          key: "gpuTemp",
           variable: "--pc-gpu-line",
           fallback: "#b68cff"
         },
@@ -392,21 +494,28 @@
           fallback: "#79c8ff"
         }
       ],
-      [
+      minValue: 20,
+      maxValue: 110,
+      ticks: [20, 40, 60, 80, 100],
+      tickSuffix: "°",
+      valueItems: [
         {
-          key: "gpu",
-          id: "pcGpuChartValue"
+          key: "gpuTemp",
+          id: "pcGpuChartValue",
+          suffix: "°C"
         },
         {
           key: "gpuHotspot",
-          id: "pcGpuHotspotChartValue"
+          id: "pcGpuHotspotChartValue",
+          suffix: "°C"
         },
         {
           key: "gpuMemory",
-          id: "pcGpuMemoryChartValue"
+          id: "pcGpuMemoryChartValue",
+          suffix: "°C"
         }
       ]
-    );
+    });
   }
 
   function render(data) {
@@ -422,38 +531,6 @@
     setText("pcUpdatedText", `Updated ${age(data?.age_ms)}`);
 
     if (!metrics) return;
-
-    setText(
-      "pcCpuValue",
-      percent(metrics.cpu?.usage_percent)
-    );
-    setText(
-      "pcCpuTemp",
-      temperature(metrics.cpu?.temp_c)
-    );
-    setBar("pcCpuBar", metrics.cpu?.usage_percent);
-
-    setText(
-      "pcGpuValue",
-      percent(metrics.gpu?.usage_percent)
-    );
-    setText(
-      "pcGpuTemp",
-      temperature(metrics.gpu?.temp_c)
-    );
-    setText(
-      "pcGpuHotspot",
-      temperature(metrics.gpu?.hotspot_c)
-    );
-    setText(
-      "pcGpuMemoryTemp",
-      temperature(metrics.gpu?.memory_temp_c)
-    );
-    setText(
-      "pcGpuPower",
-      watts(metrics.gpu?.power_w)
-    );
-    setBar("pcGpuBar", metrics.gpu?.usage_percent);
 
     const memory = metrics.memory || {};
 
@@ -522,7 +599,9 @@
     }
   }
 
+  installRangeButtons();
   refresh();
+
   setInterval(refresh, REFRESH_MS);
   setInterval(drawCharts, 1000);
 
@@ -547,6 +626,8 @@
     const observer = new ResizeObserver(drawCharts);
 
     [
+      byId("pcCpuUsageChart"),
+      byId("pcGpuUsageChart"),
       byId("pcCpuTempChart"),
       byId("pcGpuTempChart")
     ]
