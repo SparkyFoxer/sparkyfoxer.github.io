@@ -3251,3 +3251,20 @@ body.site-entered .site-audio-controls {
     transition: none;
   }
 }
+
+/* SPARKY_COMPACT_MUSIC_HISTORY_START */
+/*
+ * Keep the music panel aligned with the rest of the dashboard, but stop
+ * CSS Grid from stretching each recently-seen track to fill its height.
+ */
+.profile-music-panel .last-played-list {
+  align-content: start !important;
+  grid-auto-rows: max-content !important;
+}
+
+.profile-music-panel .last-played-list li {
+  min-height: 0 !important;
+  height: auto !important;
+  align-self: start !important;
+}
+/* SPARKY_COMPACT_MUSIC_HISTORY_END */
