@@ -235,3 +235,130 @@
   refreshExpandedWeather();
   setInterval(refreshExpandedWeather, REFRESH_MS);
 })();
+
+/* SPARKY_DESKTOP_VIEWPORT_FITTER_START */
+(() => {
+  const DESKTOP_MIN_WIDTH = 1081;
+  const HORIZONTAL_MARGIN = 32;
+  const VERTICAL_MARGIN = 24;
+
+  const screen = document.querySelector(".profile-screen");
+  const dashboard = document.querySelector(".profile-dashboard");
+
+  if (!screen || !dashboard) return;
+
+  let animationFrame = 0;
+
+  function desktopMode() {
+    return window.innerWidth >= DESKTOP_MIN_WIDTH;
+  }
+
+  function applyFit() {
+    if (!desktopMode()) {
+      dashboard.style.removeProperty("--dashboard-fit-scale");
+      dashboard.removeAttribute("data-dashboard-scale");
+      return;
+    }
+
+    /*
+     * Measure with no scale applied. CSS transforms do not change the
+     * dashboard's layout measurements, so this remains stable.
+     */
+    dashboard.style.setProperty("--dashboard-fit-scale", "1");
+
+    const naturalWidth = Math.max(
+      dashboard.offsetWidth,
+      dashboard.scrollWidth,
+      1
+    );
+
+    const naturalHeight = Math.max(
+      dashboard.offsetHeight,
+      dashboard.scrollHeight,
+      1
+    );
+
+    const availableWidth = Math.max(
+      1,
+      window.innerWidth - HORIZONTAL_MARGIN
+    );
+
+    const availableHeight = Math.max(
+      1,
+      window.innerHeight - VERTICAL_MARGIN
+    );
+
+    const scale = Math.min(
+      1,
+      availableWidth / naturalWidth,
+      availableHeight / naturalHeight
+    );
+
+    const roundedScale = Math.floor(scale * 1000) / 1000;
+
+    dashboard.style.setProperty(
+      "--dashboard-fit-scale",
+      String(roundedScale)
+    );
+
+    dashboard.dataset.dashboardScale =
+      roundedScale.toFixed(3);
+  }
+
+  function scheduleFit() {
+    cancelAnimationFrame(animationFrame);
+
+    animationFrame = requestAnimationFrame(() => {
+      /*
+       * A second frame lets game cards, artwork and chart canvases finish
+       * their current layout before measuring.
+       */
+      animationFrame = requestAnimationFrame(applyFit);
+    });
+  }
+
+  const dashboardObserver =
+    typeof ResizeObserver === "function"
+      ? new ResizeObserver(scheduleFit)
+      : null;
+
+  dashboardObserver?.observe(dashboard);
+
+  const contentObserver = new MutationObserver(scheduleFit);
+
+  contentObserver.observe(dashboard, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: [
+      "class",
+      "hidden",
+      "src"
+    ]
+  });
+
+  const entryObserver = new MutationObserver(scheduleFit);
+
+  entryObserver.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+
+  dashboard.addEventListener("load", scheduleFit, true);
+  window.addEventListener("resize", scheduleFit, {
+    passive: true
+  });
+
+  document.fonts?.ready.then(scheduleFit);
+
+  /*
+   * These delayed checks catch Discord, game, Spotify and weather data
+   * arriving shortly after the page opens.
+   */
+  [100, 500, 1200, 2500].forEach((delay) => {
+    window.setTimeout(scheduleFit, delay);
+  });
+
+  scheduleFit();
+})();
+/* SPARKY_DESKTOP_VIEWPORT_FITTER_END */
