@@ -1,0 +1,14 @@
+[Unit]
+Description=Sparky Steam game presence
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/sparky-game-presence.env
+ExecStart=/usr/bin/python3 %h/.local/share/sparky-game-presence/steam-game-presence.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

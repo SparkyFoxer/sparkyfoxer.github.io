@@ -38,6 +38,28 @@ test("findGame ignores Spotify and custom status", () => {
   assert.equal(result.startedAt, START);
 });
 
+
+test("findGame skips Steam runtime and selects the real game", () => {
+  const result = findGame([
+    { name: "Steam Runtime Launch Client", type: 0 },
+    {
+      application_id: "730",
+      name: "Counter-Strike 2",
+      timestamps: { start: START },
+      type: 0
+    }
+  ]);
+
+  assert.equal(result.name, "Counter-Strike 2");
+  assert.equal(result.applicationId, "730");
+});
+
+test("findGame returns null when Discord only reports the launcher", () => {
+  assert.equal(findGame([
+    { name: "Steam Runtime Launch Client", type: 0 }
+  ]), null);
+});
+
 test("a new game becomes the active session", () => {
   const { state, changed } = reconcileState({}, game("Trailmakers"), START);
 
@@ -114,7 +136,10 @@ test("Steam Linux helper processes are not saved to history", () => {
     "pv-bwrap",
     "pressure-vessel-wrap",
     "pressure-vessel-adverb",
-    "steam-runtime-launcher-service"
+    "steam-runtime-launcher-service",
+    "Steam Runtime Launch Client",
+    "steam runtime launch client",
+    "steam runtime launcher"
   ];
 
   for (const name of ignoredNames) {

@@ -7,6 +7,26 @@
   const LANYARD_URL =
     `https://api.lanyard.rest/v1/users/${DISCORD_ID}`;
 
+  const GAME_NOISE_NAMES = new Set([
+    "pv-bwrap",
+    "srt-bwrap",
+    "steam runtime launch client"
+  ]);
+
+  function isLauncherNoise(value) {
+    const name = String(value?.name || value || "")
+      .trim()
+      .toLowerCase();
+
+    return (
+      !name ||
+      GAME_NOISE_NAMES.has(name) ||
+      name.startsWith("pressure-vessel-") ||
+      name.startsWith("steam-runtime-launcher-") ||
+      name.startsWith("steam runtime launch")
+    );
+  }
+
   const nowText = document.querySelector("#aboutGameNowText");
   const historyList = document.querySelector("#aboutGameHistoryList");
   const weeklyList = document.querySelector("#aboutGameWeeklyList");
@@ -61,12 +81,10 @@
   }
 
   function findGame(activities) {
-    const activity = activities.find((item) => {
-      if (!item || item.type !== 0) return false;
-
-      const name = String(item.name || "").toLowerCase();
-      return name !== "spotify" && name !== "custom status";
-    });
+    const activity = activities.find((item) => (
+      item?.type === 0 &&
+      !isLauncherNoise(item)
+    ));
 
     if (!activity) return null;
 

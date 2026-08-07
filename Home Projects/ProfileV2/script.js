@@ -15,6 +15,26 @@
 📺 Twitch: SparkyTheFox_
 ⚽ RL - D2 | 🔫 CS2 - 8k`;
 
+  const ACTIVITY_NOISE_NAMES = new Set([
+    "pv-bwrap",
+    "srt-bwrap",
+    "steam runtime launch client"
+  ]);
+
+  function isLauncherNoise(value) {
+    const name = String(value?.name || value || "")
+      .trim()
+      .toLowerCase();
+
+    return (
+      !name ||
+      ACTIVITY_NOISE_NAMES.has(name) ||
+      name.startsWith("pressure-vessel-") ||
+      name.startsWith("steam-runtime-launcher-") ||
+      name.startsWith("steam runtime launch")
+    );
+  }
+
   const nodes = {};
 
   let discordStatus = "offline";
@@ -471,6 +491,13 @@
 
         // Discord custom status has its own bubble.
         if (activity.type === 4) return false;
+
+        if (
+          activity.type === 0 &&
+          isLauncherNoise(activity)
+        ) {
+          return false;
+        }
 
         // Spotify has its own card.
         if (
