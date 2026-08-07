@@ -3279,3 +3279,81 @@ body.site-entered .site-audio-controls {
   align-self: start !important;
 }
 /* SPARKY_COMPACT_MUSIC_HISTORY_END */
+
+/* SPARKY_MEDIA_ARTWORK_START */
+.media-row-with-art {
+  display: grid !important;
+  grid-template-columns: 58px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+#aboutGameNowText.media-row-with-art,
+#aboutMusicText.media-row-with-art {
+  margin-top: 8px !important;
+  padding: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+}
+
+.last-played-list > li.media-row-with-art {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 8px !important;
+}
+
+.media-art-frame {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+.game-art-frame {
+  width: 58px !important;
+  height: 42px !important;
+  min-width: 58px !important;
+  border-radius: 9px !important;
+}
+
+.media-art-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.media-art-fallback {
+  display: grid !important;
+  width: 100% !important;
+  height: 100% !important;
+  place-items: center !important;
+  color: rgba(255, 255, 255, 0.76) !important;
+  font-size: 1.2rem !important;
+}
+
+@media (max-width: 650px) {
+  .media-row-with-art {
+    grid-template-columns: 50px minmax(0, 1fr) !important;
+  }
+
+  .media-art-frame {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+  }
+
+  .game-art-frame {
+    width: 50px !important;
+    height: 37px !important;
+    min-width: 50px !important;
+  }
+}
+/* SPARKY_MEDIA_ARTWORK_END */
