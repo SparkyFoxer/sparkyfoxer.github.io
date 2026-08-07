@@ -4061,3 +4061,23 @@ body.site-entered .site-audio-controls {
   }
 }
 /* SPARKY_SWITCHABLE_MONITOR_HISTORY_END */
+
+/* SPARKY_REMOVE_UPTIME_GLOW_START */
+/* Keep the uptime clock visible, but remove every glow/shadow effect. */
+.pc-uptime-graphic,
+.pc-uptime-graphic svg,
+.pc-uptime-orbit,
+.pc-uptime-orbit-glow,
+.pc-uptime-face,
+.pc-uptime-hand,
+.pc-uptime-pin {
+  filter: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.pc-uptime-orbit-glow {
+  animation: none !important;
+  transform: none !important;
+}
+/* SPARKY_REMOVE_UPTIME_GLOW_END */
