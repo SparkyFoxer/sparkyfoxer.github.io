@@ -3878,3 +3878,56 @@ body.site-entered .site-audio-controls {
   }
 }
 /* SPARKY_CENTER_PC_MONITOR_90S_END */
+
+/* SPARKY_CONSISTENT_CARD_GAPS_START */
+:root {
+  --dashboard-card-gap: 18px;
+}
+
+/*
+ * The columns already use gap, so direct child cards must not add
+ * another outside margin on top of it.
+ */
+.profile-dashboard {
+  gap: var(--dashboard-card-gap) !important;
+}
+
+.profile-games-panel,
+.profile-center-column,
+.profile-music-panel {
+  gap: var(--dashboard-card-gap) !important;
+}
+
+.profile-games-panel > *,
+.profile-center-column > *,
+.profile-music-panel > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.pc-overview-card,
+.profile-pc-monitor-wrap {
+  margin-top: 0 !important;
+}
+
+/* Keep the decorative ring, but stop it from spinning. */
+.pc-uptime-orbit-glow {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* These are intentional gaps inside their parent cards. */
+.pc-uptime-card {
+  margin-top: 10px !important;
+}
+
+.spotify-profile-footer {
+  margin-top: 12px !important;
+}
+
+@media (max-width: 650px) {
+  :root {
+    --dashboard-card-gap: 14px;
+  }
+}
+/* SPARKY_CONSISTENT_CARD_GAPS_END */
