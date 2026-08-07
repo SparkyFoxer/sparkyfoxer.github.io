@@ -7,8 +7,6 @@
   const LAST_SEEN_URL =
     "https://spotify-genres.sparkyfoxer.workers.dev/last-seen";
 
-  const WEBSITE_ACTIVITY_URL = "https://sparkyfops.pages.dev/";
-
   const WEBSITE_BIO_LINES = [
     "🦊 Sparky Foxer",
     "🏳️‍🌈 Fruitiest floofer :3",
@@ -119,25 +117,13 @@
 
     nodes.bio.replaceChildren();
 
-    const activityLine = document.createElement("span");
-    activityLine.append("✨ Activity: ");
+    WEBSITE_BIO_LINES.forEach((line, index) => {
+      if (index > 0) {
+        nodes.bio.appendChild(document.createElement("br"));
+      }
 
-    const activityLink = document.createElement("a");
-    activityLink.href = WEBSITE_ACTIVITY_URL;
-    activityLink.target = "_blank";
-    activityLink.rel = "noreferrer";
-    activityLink.textContent = WEBSITE_ACTIVITY_URL;
-    activityLink.style.color = "inherit";
-    activityLink.style.textDecoration = "underline";
-    activityLink.style.textUnderlineOffset = "0.16em";
-
-    activityLine.appendChild(activityLink);
-    nodes.bio.appendChild(activityLine);
-
-    for (const line of WEBSITE_BIO_LINES) {
-      nodes.bio.appendChild(document.createElement("br"));
       nodes.bio.append(line);
-    }
+    });
   }
 
   function renderCustomStatus(data) {
