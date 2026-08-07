@@ -4116,3 +4116,260 @@ body.site-entered .site-audio-controls {
   filter: none !important;
 }
 /* SPARKY_REMOVE_PINK_CLOCK_RING_END */
+
+/* SPARKY_BALANCED_SIDE_COLUMNS_START */
+.weather-expanded-details {
+  display: flex !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  margin-top: 13px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+.weather-sun-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.weather-sun-grid > div {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  padding: 8px 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  border-radius: 11px !important;
+  background: rgba(0, 0, 0, 0.11) !important;
+  text-align: center !important;
+}
+
+.weather-sun-grid span {
+  color: var(--muted) !important;
+  font-size: 0.62rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+.weather-sun-grid strong {
+  overflow: hidden !important;
+  font-size: 0.73rem !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.weather-hourly-section {
+  display: flex !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  margin-top: 13px !important;
+}
+
+.weather-expanded-heading {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+
+.weather-expanded-heading .small-label {
+  margin: 0 !important;
+}
+
+.weather-expanded-heading > span {
+  color: var(--muted) !important;
+  font-size: 0.62rem !important;
+  text-align: right !important;
+}
+
+.weather-hourly-outlook {
+  display: grid !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-auto-rows: minmax(62px, 1fr) !important;
+  gap: 7px !important;
+  margin: 8px 0 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.weather-hourly-item {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  padding: 7px 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  border-radius: 11px !important;
+  background: rgba(0, 0, 0, 0.11) !important;
+  text-align: center !important;
+}
+
+.weather-hourly-time {
+  color: var(--muted) !important;
+  font-size: 0.59rem !important;
+}
+
+.weather-hourly-icon {
+  font-size: 1.03rem !important;
+  line-height: 1.05 !important;
+}
+
+.weather-hourly-item strong {
+  font-size: 0.76rem !important;
+}
+
+.weather-hourly-item small {
+  color: var(--muted) !important;
+  font-size: 0.58rem !important;
+}
+
+.weather-hourly-unavailable {
+  display: grid !important;
+  grid-column: 1 / -1 !important;
+  min-height: 68px !important;
+  place-items: center !important;
+  color: var(--muted) !important;
+  font-size: 0.7rem !important;
+}
+
+.pc-setup-extras {
+  display: flex !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  margin-top: 11px !important;
+  padding-top: 11px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+.pc-setup-extras > .small-label {
+  margin-bottom: 7px !important;
+}
+
+.pc-setup-extras-grid {
+  display: grid !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-auto-rows: minmax(52px, 1fr) !important;
+  gap: 7px !important;
+}
+
+.pc-setup-extras-grid > div {
+  display: grid !important;
+  min-width: 0 !important;
+  grid-template-columns: 28px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  border-radius: 11px !important;
+  background: rgba(0, 0, 0, 0.11) !important;
+}
+
+.pc-setup-extra-icon {
+  display: grid !important;
+  width: 28px !important;
+  height: 28px !important;
+  place-items: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 9px !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  color: rgba(255, 246, 255, 0.76) !important;
+  font-size: 0.8rem !important;
+}
+
+.pc-setup-extras-grid > div > span:last-child {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.pc-setup-extras-grid small {
+  color: var(--muted) !important;
+  font-size: 0.59rem !important;
+}
+
+.pc-setup-extras-grid strong {
+  overflow: hidden !important;
+  font-size: 0.68rem !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/*
+ * Desktop cards share one grid row. Stretch the side columns to that row,
+ * then allow Weather and My PC to consume the available spare height.
+ */
+@media (min-width: 1081px) {
+  .profile-dashboard {
+    align-items: stretch !important;
+  }
+
+  .profile-games-panel,
+  .profile-music-panel {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .profile-games-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--dashboard-card-gap, 18px) !important;
+  }
+
+  .dashboard-game-card,
+  .dashboard-music-card {
+    flex: 0 0 auto !important;
+  }
+
+  .pc-overview-card,
+  .local-weather-card {
+    display: flex !important;
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+  }
+
+  .profile-music-panel {
+    align-self: stretch !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .pc-overview-card,
+  .local-weather-card,
+  .weather-expanded-details,
+  .weather-hourly-section,
+  .pc-setup-extras {
+    flex: 0 0 auto !important;
+  }
+
+  .weather-hourly-outlook,
+  .pc-setup-extras-grid {
+    grid-auto-rows: auto !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .weather-sun-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .weather-hourly-outlook {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .pc-setup-extras-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+/* SPARKY_BALANCED_SIDE_COLUMNS_END */

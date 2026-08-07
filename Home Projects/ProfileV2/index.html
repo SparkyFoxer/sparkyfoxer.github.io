@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=no-pink-clock-ring1">
+  <link rel="stylesheet" href="style.css?v=balanced-side-columns1">
   <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 </head>
 
@@ -103,6 +103,46 @@
       <span id="pcUpdatedText">Waiting for data</span>
     </div>
   </div>
+
+<!-- SPARKY_SETUP_EXTRAS_START -->
+<div class="pc-setup-extras">
+  <p class="small-label">Setup extras</p>
+
+  <div class="pc-setup-extras-grid">
+    <div>
+      <span class="pc-setup-extra-icon" aria-hidden="true">▣</span>
+      <span>
+        <small>Display</small>
+        <strong>1440p • 300 Hz</strong>
+      </span>
+    </div>
+
+    <div>
+      <span class="pc-setup-extra-icon" aria-hidden="true">⌘</span>
+      <span>
+        <small>Operating system</small>
+        <strong>Fedora KDE</strong>
+      </span>
+    </div>
+
+    <div>
+      <span class="pc-setup-extra-icon" aria-hidden="true">♪</span>
+      <span>
+        <small>Audio</small>
+        <strong>Logitech Z623</strong>
+      </span>
+    </div>
+
+    <div>
+      <span class="pc-setup-extra-icon" aria-hidden="true">◉</span>
+      <span>
+        <small>Racing wheel</small>
+        <strong>Logitech G923</strong>
+      </span>
+    </div>
+  </div>
+</div>
+<!-- SPARKY_SETUP_EXTRAS_END -->
 </section>
 </aside>
 
@@ -371,6 +411,36 @@
     </span>
   </div>
 
+<!-- SPARKY_WEATHER_EXPANSION_START -->
+<div class="weather-expanded-details">
+  <div class="weather-sun-grid" aria-label="Sunrise and sunset details">
+    <div>
+      <span>Sunrise</span>
+      <strong id="weatherSunrise">--:--</strong>
+    </div>
+    <div>
+      <span>Sunset</span>
+      <strong id="weatherSunset">--:--</strong>
+    </div>
+    <div>
+      <span>Daylight</span>
+      <strong id="weatherDaylight">--</strong>
+    </div>
+  </div>
+
+  <div class="weather-hourly-section">
+    <div class="weather-expanded-heading">
+      <p class="small-label">Next 6 hours</p>
+      <span id="weatherRainSummary">Loading rain outlook…</span>
+    </div>
+
+    <ul id="weatherHourlyOutlook" class="weather-hourly-outlook">
+      <li class="weather-hourly-unavailable">Loading hourly outlook…</li>
+    </ul>
+  </div>
+</div>
+<!-- SPARKY_WEATHER_EXPANSION_END -->
+
   <div class="weather-forecast-heading">
     <p class="small-label">Next few days</p>
     <p id="weatherUpdated" class="weather-updated"></p>
@@ -467,5 +537,6 @@
   <script src="pc-monitor.js?v=smoothed-performance-history1"></script>
   <script src="pc-offline-visual.js?v=offline-sleep-2"></script>
 <script src="site-controller.js?v=music-controls1"></script>
+  <script src="dashboard-balance.js?v=balanced-side-columns1"></script>
 </body>
 </html>
