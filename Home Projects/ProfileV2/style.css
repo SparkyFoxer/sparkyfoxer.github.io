@@ -3282,23 +3282,22 @@ body.site-entered .site-audio-controls {
 
 /* SPARKY_MEDIA_ARTWORK_START */
 /*
- * Treat artwork and text as two deliberate columns. The title and metadata
- * stay together on the right instead of becoming separate grid cells.
+ * Force every song/game media row into exactly two horizontal children:
+ * artwork on the left and one grouped text column on the right.
  */
-.media-row-with-art {
-  display: grid !important;
+#aboutGameNowText.media-row-with-art,
+#aboutMusicText.media-row-with-art,
+#aboutGameHistoryList > li.media-row-with-art,
+#aboutLastPlayedList > li.media-row-with-art {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: center !important;
-  column-gap: 11px !important;
-  row-gap: 0 !important;
+  justify-content: flex-start !important;
+  gap: 11px !important;
+  width: 100% !important;
   min-width: 0 !important;
-}
-
-.media-row-song {
-  grid-template-columns: 54px minmax(0, 1fr) !important;
-}
-
-.media-row-game {
-  grid-template-columns: 72px minmax(0, 1fr) !important;
+  text-align: left !important;
 }
 
 #aboutGameNowText.media-row-with-art,
@@ -3310,7 +3309,8 @@ body.site-entered .site-audio-controls {
   background: rgba(255, 255, 255, 0.045) !important;
 }
 
-.last-played-list > li.media-row-with-art {
+#aboutGameHistoryList > li.media-row-with-art,
+#aboutLastPlayedList > li.media-row-with-art {
   min-height: 0 !important;
   height: auto !important;
   padding: 8px !important;
@@ -3318,7 +3318,9 @@ body.site-entered .site-audio-controls {
 
 .media-row-copy {
   display: flex !important;
+  flex: 1 1 auto !important;
   min-width: 0 !important;
+  width: auto !important;
   flex-direction: column !important;
   align-items: flex-start !important;
   justify-content: center !important;
@@ -3333,6 +3335,7 @@ body.site-entered .site-audio-controls {
   width: 100% !important;
   min-width: 0 !important;
   margin: 0 !important;
+  text-align: left !important;
 }
 
 .media-row-copy > .track-main {
@@ -3354,8 +3357,8 @@ body.site-entered .site-audio-controls {
 .media-art-frame {
   position: relative !important;
   display: grid !important;
+  flex: 0 0 52px !important;
   place-items: center !important;
-  justify-self: start !important;
   width: 52px !important;
   height: 52px !important;
   min-width: 52px !important;
@@ -3366,6 +3369,7 @@ body.site-entered .site-audio-controls {
 }
 
 .game-art-frame {
+  flex-basis: 70px !important;
   width: 70px !important;
   height: 40px !important;
   min-width: 70px !important;
@@ -3389,21 +3393,22 @@ body.site-entered .site-audio-controls {
 }
 
 @media (max-width: 650px) {
-  .media-row-song {
-    grid-template-columns: 48px minmax(0, 1fr) !important;
-  }
-
-  .media-row-game {
-    grid-template-columns: 60px minmax(0, 1fr) !important;
+  #aboutGameNowText.media-row-with-art,
+  #aboutMusicText.media-row-with-art,
+  #aboutGameHistoryList > li.media-row-with-art,
+  #aboutLastPlayedList > li.media-row-with-art {
+    gap: 9px !important;
   }
 
   .media-art-frame {
+    flex-basis: 46px !important;
     width: 46px !important;
     height: 46px !important;
     min-width: 46px !important;
   }
 
   .game-art-frame {
+    flex-basis: 58px !important;
     width: 58px !important;
     height: 34px !important;
     min-width: 58px !important;
