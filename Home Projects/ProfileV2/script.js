@@ -7,13 +7,16 @@
   const LAST_SEEN_URL =
     "https://spotify-genres.sparkyfoxer.workers.dev/last-seen";
 
-  const FALLBACK_BIO = `🦊 Sparky Foxer :3
-🌟 New Zealand | OCE
-🤙 21 - Chill vibes
-🎮 CS2/FH6/BTD/Satisfactory
-🎵 EDM, DNB, Rock, Pop
-📺 Twitch: SparkyTheFox_
-⚽ RL - D2 | 🔫 CS2 - 8k`;
+  const WEBSITE_ACTIVITY_URL = "https://sparkyfops.pages.dev/";
+
+  const WEBSITE_BIO_LINES = [
+    "🦊 Sparky Foxer",
+    "🏳️‍🌈 Fruitiest floofer :3",
+    "🇳🇿 NZ/OCE",
+    "💅 21 Chill Gay vibes",
+    "🎮 CS2 • FH6 • BTD6 • Satisfactory",
+    "🎵 EDM • DnB"
+  ];
 
   const ACTIVITY_NOISE_NAMES = new Set([
     "pv-bwrap",
@@ -22,15 +25,20 @@
   ]);
 
   function isLauncherNoise(value) {
-    const name = String(value?.name || value || "")
+    const rawName = String(value?.name || value || "")
       .trim()
       .toLowerCase();
 
+    const name = rawName
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
     return (
       !name ||
-      ACTIVITY_NOISE_NAMES.has(name) ||
-      name.startsWith("pressure-vessel-") ||
-      name.startsWith("steam-runtime-launcher-") ||
+      name === "pv bwrap" ||
+      name === "srt bwrap" ||
+      name.startsWith("pressure vessel ") ||
       name.startsWith("steam runtime launch")
     );
   }
@@ -106,14 +114,30 @@
     renderLastSeen();
   }
 
-  function setBio(data) {
+  function setBio() {
     if (!nodes.bio) return;
 
-    const liveBio =
-      String(data?.kv?.bio || "").trim() ||
-      FALLBACK_BIO;
+    nodes.bio.replaceChildren();
 
-    nodes.bio.textContent = liveBio;
+    const activityLine = document.createElement("span");
+    activityLine.append("✨ Activity: ");
+
+    const activityLink = document.createElement("a");
+    activityLink.href = WEBSITE_ACTIVITY_URL;
+    activityLink.target = "_blank";
+    activityLink.rel = "noreferrer";
+    activityLink.textContent = WEBSITE_ACTIVITY_URL;
+    activityLink.style.color = "inherit";
+    activityLink.style.textDecoration = "underline";
+    activityLink.style.textUnderlineOffset = "0.16em";
+
+    activityLine.appendChild(activityLink);
+    nodes.bio.appendChild(activityLine);
+
+    for (const line of WEBSITE_BIO_LINES) {
+      nodes.bio.appendChild(document.createElement("br"));
+      nodes.bio.append(line);
+    }
   }
 
   function renderCustomStatus(data) {

@@ -14,15 +14,20 @@
   ]);
 
   function isLauncherNoise(value) {
-    const name = String(value?.name || value || "")
+    const rawName = String(value?.name || value || "")
       .trim()
       .toLowerCase();
 
+    const name = rawName
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
     return (
       !name ||
-      GAME_NOISE_NAMES.has(name) ||
-      name.startsWith("pressure-vessel-") ||
-      name.startsWith("steam-runtime-launcher-") ||
+      name === "pv bwrap" ||
+      name === "srt bwrap" ||
+      name.startsWith("pressure vessel ") ||
       name.startsWith("steam runtime launch")
     );
   }

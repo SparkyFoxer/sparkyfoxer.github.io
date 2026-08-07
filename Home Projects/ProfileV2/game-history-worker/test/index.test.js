@@ -139,6 +139,8 @@ test("Steam Linux helper processes are not saved to history", () => {
     "steam-runtime-launcher-service",
     "Steam Runtime Launch Client",
     "steam runtime launch client",
+    "steam-runtime-launch-client",
+    "steam_runtime_launch_client",
     "steam runtime launcher"
   ];
 
@@ -171,6 +173,64 @@ test("existing helper entries are removed from shared history", () => {
   });
 
   assert.deepEqual(state.history.map((item) => item.name), ["cs2"]);
+});
+
+
+test("hyphenated launcher sessions are removed from history and weekly stats", () => {
+  const launcher = {
+    id: "steam-runtime-launch-client:1",
+    name: "steam-runtime-launch-client",
+    startedAt: START,
+    endedAt: START + 10_000,
+    durationMs: 10_000
+  };
+  const actualGame = {
+    id: "game:1",
+    name: "Forza Horizon 6",
+    startedAt: START,
+    endedAt: START + 20_000,
+    durationMs: 20_000
+  };
+
+  const state = normaliseState({
+    version: 2,
+    history: [launcher, actualGame],
+    weeklySessions: [launcher, actualGame]
+  }, START + 30_000);
+
+  assert.deepEqual(state.history.map((item) => item.name), ["Forza Horizon 6"]);
+  assert.deepEqual(
+    state.weeklySessions.map((item) => item.name),
+    ["Forza Horizon 6"]
+  );
+});
+
+
+test("an active game is not duplicated in history or weekly sessions", () => {
+  const active = {
+    id: "2483190:1",
+    applicationId: "2483190",
+    name: "Forza Horizon 6",
+    startedAt: START,
+    endedAt: null,
+    durationMs: 0
+  };
+  const finishedCopy = {
+    ...active,
+    endedAt: START + 20_000,
+    durationMs: 20_000
+  };
+
+  const state = normaliseState({
+    version: 2,
+    active,
+    history: [finishedCopy],
+    weeklySessions: [finishedCopy]
+  }, START + 30_000);
+
+  assert.equal(state.active.name, "Forza Horizon 6");
+  assert.equal(state.history.length, 0);
+  assert.equal(state.weeklySessions.length, 0);
 });
 
 test("ending a helper session does not add it to history", () => {

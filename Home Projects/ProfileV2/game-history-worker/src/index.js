@@ -58,13 +58,18 @@ function safeEqual(left, right) {
 }
 
 export function isLauncherNoise(value) {
-  const name = cleanText(value?.name || value).toLowerCase();
-
-  if (!name || HISTORY_NOISE_NAMES.has(name)) return true;
+  const rawName = cleanText(value?.name || value).toLowerCase();
+  const name = rawName
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
   return (
-    name.startsWith("pressure-vessel-") ||
-    name.startsWith("steam-runtime-launcher-") ||
+    !name ||
+    HISTORY_NOISE_NAMES.has(rawName) ||
+    name === "pv bwrap" ||
+    name === "srt bwrap" ||
+    name.startsWith("pressure vessel ") ||
     name.startsWith("steam runtime launch")
   );
 }
@@ -151,14 +156,38 @@ export function normaliseState(value, now = Date.now()) {
     .slice(0, MAX_WEEKLY_SESSIONS);
 
   const active = cleanSession(value.active);
+  const cleanActive = active && shouldSaveToHistory(active)
+    ? active
+    : null;
+  const activeId = cleanActive?.id || "";
 
   return {
     version: 2,
-    active: active && shouldSaveToHistory(active) ? active : null,
-    history,
-    weeklySessions,
+    active: cleanActive,
+    history: activeId
+      ? history.filter((session) => session.id !== activeId)
+      : history,
+    weeklySessions: activeId
+      ? weeklySessions.filter((session) => session.id !== activeId)
+      : weeklySessions,
     updatedAt: finiteTimestamp(value.updatedAt)
   };
+}
+
+function stateNeedsSave(value, state) {
+  if (!value || typeof value !== "object") return true;
+
+  const comparableValue = {
+    version: value.version,
+    active: value.active ?? null,
+    history: Array.isArray(value.history) ? value.history : [],
+    weeklySessions: Array.isArray(value.weeklySessions)
+      ? value.weeklySessions
+      : [],
+    updatedAt: value.updatedAt ?? null
+  };
+
+  return JSON.stringify(comparableValue) !== JSON.stringify(state);
 }
 
 export function findGame(activities) {
@@ -402,14 +431,17 @@ export async function updateGameHistory(env, now = Date.now()) {
   const discordId = cleanText(env.DISCORD_ID);
   if (!discordId) throw new Error("DISCORD_ID is missing");
 
-  const [previousState, localGame, presence] = await Promise.all([
-    loadState(env, now),
+  const [storedState, localGame, presence] = await Promise.all([
+    env.GAME_HISTORY.get(STATE_KEY, "json"),
     loadLocalGame(env, now),
     loadLanyardPresence(discordId).catch((error) => {
       console.warn("Discord game presence failed", error);
       return null;
     })
   ]);
+
+  const previousState = normaliseState(storedState, now);
+  const needsCleanup = stateNeedsSave(storedState, previousState);
 
   if (!localGame && !presence) {
     throw new Error("No current game source is available");
@@ -418,7 +450,7 @@ export async function updateGameHistory(env, now = Date.now()) {
   const game = localGame || findGame(presence?.activities);
   const { state, changed } = reconcileState(previousState, game, now);
 
-  if (changed) await saveState(env, state);
+  if (changed || needsCleanup) await saveState(env, state);
 
   const { weeklySessions, ...publicState } = state;
 
