@@ -4081,3 +4081,38 @@ body.site-entered .site-audio-controls {
   transform: none !important;
 }
 /* SPARKY_REMOVE_UPTIME_GLOW_END */
+
+/* SPARKY_REMOVE_PINK_CLOCK_RING_START */
+/*
+ * Remove the coloured partial orbit entirely. Keep only the neutral
+ * inner clock face, hands and pin.
+ */
+.pc-uptime-orbit-glow {
+  display: none !important;
+  visibility: hidden !important;
+  stroke: none !important;
+  filter: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+.pc-uptime-orbit {
+  stroke: rgba(255, 255, 255, 0.13) !important;
+  filter: none !important;
+}
+
+.pc-uptime-face {
+  stroke: rgba(255, 255, 255, 0.28) !important;
+  filter: none !important;
+}
+
+.pc-uptime-hand {
+  stroke: rgba(255, 255, 255, 0.9) !important;
+  filter: none !important;
+}
+
+.pc-uptime-pin {
+  fill: rgba(255, 255, 255, 0.82) !important;
+  filter: none !important;
+}
+/* SPARKY_REMOVE_PINK_CLOCK_RING_END */
