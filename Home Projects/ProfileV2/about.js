@@ -119,19 +119,54 @@
     renderMusicHistory(history);
   }
 
+  function createMusicHistorySkeleton() {
+    const item = document.createElement("li");
+    item.className = "music-history-skeleton";
+    item.setAttribute("aria-hidden", "true");
+
+    const artwork = document.createElement("span");
+    artwork.className = "music-skeleton-art";
+
+    const copy = document.createElement("span");
+    copy.className = "music-skeleton-copy";
+
+    const title = document.createElement("span");
+    title.className =
+      "music-skeleton-line music-skeleton-line-title";
+
+    const metadata = document.createElement("span");
+    metadata.className =
+      "music-skeleton-line music-skeleton-line-meta";
+
+    copy.append(title, metadata);
+    item.append(artwork, copy);
+
+    return item;
+  }
+
   function renderMusicHistory(history = getMusicHistory()) {
     if (!lastPlayedEl) return;
 
-    lastPlayedEl.innerHTML = "";
+    const items = Array.isArray(history)
+      ? history.slice(0, MAX_HISTORY)
+      : [];
 
-    if (!history.length) {
+    lastPlayedEl.replaceChildren();
+    lastPlayedEl.setAttribute(
+      "aria-label",
+      items.length
+        ? `Recently seen Spotify songs, ${items.length} recorded`
+        : "Recently seen Spotify songs. No songs seen yet."
+    );
+
+    if (!items.length) {
       const li = document.createElement("li");
+      li.className = "music-history-empty";
       li.textContent = "No songs seen yet.";
       lastPlayedEl.appendChild(li);
-      return;
     }
 
-    for (const item of history) {
+    for (const item of items) {
       const li = document.createElement("li");
 
       const main = document.createElement("span");
@@ -157,6 +192,16 @@
       }
 
       lastPlayedEl.appendChild(li);
+    }
+
+    for (
+      let index = items.length;
+      index < MAX_HISTORY;
+      index += 1
+    ) {
+      lastPlayedEl.appendChild(
+        createMusicHistorySkeleton()
+      );
     }
   }
 

@@ -4307,7 +4307,7 @@ body.site-entered .site-audio-controls {
 
 /*
  * Desktop cards share one grid row. Stretch the side columns to that row,
- * then allow Weather and My PC to consume the available spare height.
+ * then let Music and My PC consume the available spare height.
  */
 @media (min-width: 1081px) {
   .profile-dashboard {
@@ -4326,17 +4326,56 @@ body.site-entered .site-audio-controls {
     gap: var(--dashboard-card-gap, 18px) !important;
   }
 
-  .dashboard-game-card,
-  .dashboard-music-card {
+  .dashboard-game-card {
     flex: 0 0 auto !important;
   }
 
-  .pc-overview-card,
-  .local-weather-card {
+  .pc-overview-card {
     display: flex !important;
     min-height: 0 !important;
     flex: 1 1 auto !important;
     flex-direction: column !important;
+  }
+
+  .local-weather-card {
+    display: flex !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    flex-direction: column !important;
+  }
+
+  .profile-music-panel .dashboard-music-card,
+  .profile-music-panel .about-music-card {
+    display: flex !important;
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    align-self: stretch !important;
+  }
+
+  .profile-music-panel .music-history {
+    display: flex !important;
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+  }
+
+  .profile-music-panel #aboutLastPlayedList {
+    min-height: 0 !important;
+    flex: 1 1 auto !important;
+    grid-template-rows: repeat(6, minmax(70px, 1fr)) !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+  }
+
+  .profile-music-panel #aboutLastPlayedList > li:not(.music-history-empty) {
+    min-height: 70px !important;
+    height: 100% !important;
+    align-self: stretch !important;
+  }
+
+  .profile-music-panel .music-history-empty {
+    display: none !important;
   }
 
   .profile-music-panel {
@@ -4373,3 +4412,59 @@ body.site-entered .site-audio-controls {
   }
 }
 /* SPARKY_BALANCED_SIDE_COLUMNS_END */
+
+/* SPARKY_SPOTIFY_SKELETON_SLOTS_START */
+#aboutLastPlayedList > li.music-history-skeleton {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.105) !important;
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.018) !important;
+  opacity: 0.62 !important;
+}
+
+.music-skeleton-art {
+  display: block !important;
+  flex: 0 0 52px !important;
+  width: 52px !important;
+  height: 52px !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+.music-skeleton-copy {
+  display: flex !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.music-skeleton-line {
+  display: block !important;
+  height: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.105) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.018) !important;
+}
+
+.music-skeleton-line-title {
+  width: min(78%, 150px) !important;
+}
+
+.music-skeleton-line-meta {
+  width: min(52%, 96px) !important;
+}
+
+@media (max-width: 1080px) {
+  #aboutLastPlayedList > li.music-history-skeleton {
+    display: none !important;
+  }
+}
+/* SPARKY_SPOTIFY_SKELETON_SLOTS_END */
