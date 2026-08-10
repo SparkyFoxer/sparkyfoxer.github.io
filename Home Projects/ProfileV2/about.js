@@ -1,13 +1,15 @@
-/* Live About page data from Discord/Lanyard */
+/* Live About page data from the shared Cloudflare activity tracker. */
 (() => {
-  const DISCORD_ID = "692126247458832455";
-  const LANYARD_URL = `https://api.lanyard.rest/v1/users/${DISCORD_ID}`;
+  const MUSIC_HISTORY_URL =
+    "https://sparky-game-history.sparkyfoxer.workers.dev/music-history";
+  const MUSIC_IMPORT_URL =
+    "https://sparky-game-history.sparkyfoxer.workers.dev/music-history/import";
 
   // Keep disabled until the Spotify genre Worker credentials are fixed.
   const GENRE_ENDPOINT = "";
 
-  const MUSIC_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
-  const CURRENT_MUSIC_KEY = "sparky_about_current_spotify_v1";
+  const LEGACY_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
+  const LEGACY_CURRENT_KEY = "sparky_about_current_spotify_v1";
   const MAX_HISTORY = 6;
   const PREVIEW_OFFLINE =
     new URLSearchParams(window.location.search).get("preview") ===
@@ -17,21 +19,54 @@
   const genreEl = document.querySelector("#aboutGenreText");
   const lastPlayedEl = document.querySelector("#aboutLastPlayedList");
 
+  let lastHistory = [];
+
   function cleanText(value) {
     return String(value || "").trim();
   }
 
-  function safeRead(key, fallback = null) {
+  function readLegacyHistory() {
     try {
-      const value = JSON.parse(localStorage.getItem(key) || "null");
-      return value ?? fallback;
+      const value = JSON.parse(
+        localStorage.getItem(LEGACY_HISTORY_KEY) || "[]"
+      );
+      return Array.isArray(value) ? value.slice(0, MAX_HISTORY) : [];
     } catch {
-      return fallback;
+      return [];
     }
   }
 
-  function safeWrite(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+  async function migrateLegacyHistory() {
+    const history = readLegacyHistory();
+    const current = (() => {
+      try {
+        return JSON.parse(
+          localStorage.getItem(LEGACY_CURRENT_KEY) || "null"
+        );
+      } catch {
+        return null;
+      }
+    })();
+
+    if (!history.length && !current) return;
+
+    try {
+      const response = await fetch(MUSIC_IMPORT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ history, current }),
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error(`Music migration returned ${response.status}`);
+      }
+
+      localStorage.removeItem(LEGACY_HISTORY_KEY);
+      localStorage.removeItem(LEGACY_CURRENT_KEY);
+    } catch (error) {
+      console.warn("Spotify history migration failed:", error);
+    }
   }
 
   function formatTime(isoOrMs) {
@@ -45,81 +80,6 @@
       minute: "2-digit",
       hour12: true
     }).format(date);
-  }
-
-  function getMusicHistory() {
-    const parsed = safeRead(MUSIC_HISTORY_KEY, []);
-    return Array.isArray(parsed) ? parsed : [];
-  }
-
-  function saveMusicHistory(history) {
-    safeWrite(MUSIC_HISTORY_KEY, history.slice(0, MAX_HISTORY));
-  }
-
-  function trackKey(track) {
-    if (!track) return "";
-
-    return cleanText(track.trackId) ||
-      [track.song, track.artist, track.album]
-        .map(cleanText)
-        .join("|")
-        .toLowerCase();
-  }
-
-  function addTrackToHistory(track, history = getMusicHistory()) {
-    const key = trackKey(track);
-    if (!key) return history;
-
-    const filtered = history.filter((item) => trackKey(item) !== key);
-
-    return [
-      {
-        ...track,
-        seenAt: new Date().toISOString()
-      },
-      ...filtered
-    ].slice(0, MAX_HISTORY);
-  }
-
-  function setCurrentTrack(track) {
-    const currentKey = trackKey(track);
-    if (!currentKey) return;
-
-    const previous = safeRead(CURRENT_MUSIC_KEY, null);
-    const previousKey = trackKey(previous);
-    let history = getMusicHistory()
-      .filter((item) => trackKey(item) !== currentKey);
-
-    if (previousKey && previousKey !== currentKey) {
-      history = addTrackToHistory(previous, history);
-    }
-
-    safeWrite(CURRENT_MUSIC_KEY, {
-      ...track,
-      firstSeenAt:
-        previousKey === currentKey
-          ? previous.firstSeenAt
-          : new Date().toISOString(),
-      lastSeenAt: new Date().toISOString()
-    });
-
-    saveMusicHistory(history);
-    renderMusicHistory(history);
-  }
-
-  function finishCurrentTrack() {
-    const current = safeRead(CURRENT_MUSIC_KEY, null);
-
-    if (!trackKey(current)) {
-      renderMusicHistory();
-      return;
-    }
-
-    const history = addTrackToHistory(current);
-
-    localStorage.removeItem(CURRENT_MUSIC_KEY);
-    saveMusicHistory(history);
-    renderMusicHistory(history);
   }
 
   function createMusicHistorySkeleton() {
@@ -152,13 +112,14 @@
     return item;
   }
 
-  function renderMusicHistory(history = getMusicHistory()) {
+  function renderMusicHistory(history = lastHistory) {
     if (!lastPlayedEl) return;
 
     const items = Array.isArray(history)
       ? history.slice(0, MAX_HISTORY)
       : [];
 
+    lastHistory = items;
     lastPlayedEl.replaceChildren();
     lastPlayedEl.setAttribute(
       "aria-label",
@@ -179,26 +140,22 @@
 
       const main = document.createElement("span");
       main.className = "track-main";
-      main.textContent = `${item.song || "Unknown song"} — ${item.artist || "Unknown artist"}`;
+      main.textContent =
+        `${item.song || "Unknown song"} — ` +
+        `${item.artist || "Unknown artist"}`;
 
       const meta = document.createElement("span");
       meta.className = "track-meta";
 
       const parts = [];
-
       if (item.album) parts.push(item.album);
 
-      const seen = formatTime(item.seenAt);
+      const seen = formatTime(item.seenAt || item.lastSeenAt);
       if (seen) parts.push(`seen ${seen}`);
 
       meta.textContent = parts.join(" • ");
-
       li.appendChild(main);
-
-      if (meta.textContent) {
-        li.appendChild(meta);
-      }
-
+      if (meta.textContent) li.appendChild(meta);
       lastPlayedEl.appendChild(li);
     }
 
@@ -207,9 +164,7 @@
       index < MAX_HISTORY;
       index += 1
     ) {
-      lastPlayedEl.appendChild(
-        createMusicHistorySkeleton()
-      );
+      lastPlayedEl.appendChild(createMusicHistorySkeleton());
     }
   }
 
@@ -217,18 +172,16 @@
     if (!GENRE_ENDPOINT || !trackId) return [];
 
     const url = `${GENRE_ENDPOINT}?track_id=${encodeURIComponent(trackId)}`;
-
-    const res = await fetch(url, {
+    const response = await fetch(url, {
       method: "GET",
       cache: "no-store"
     });
 
-    if (!res.ok) {
-      throw new Error(`Genre endpoint failed: ${res.status}`);
+    if (!response.ok) {
+      throw new Error(`Genre endpoint failed: ${response.status}`);
     }
 
-    const data = await res.json();
-
+    const data = await response.json();
     const genres =
       data.genres ||
       data.genre ||
@@ -237,40 +190,26 @@
       [];
 
     if (typeof genres === "string") return [genres];
-
     return Array.isArray(genres) ? genres : [];
   }
 
-  async function renderMusic(data) {
+  async function renderCurrent(track) {
     if (!musicEl) return;
 
-    const spotify = data?.spotify;
-
-    if (!spotify) {
+    if (PREVIEW_OFFLINE || !track) {
       musicEl.textContent = "Nothing showing from Spotify right now.";
-
-      if (genreEl) {
-        genreEl.textContent = "";
-      }
-
-      finishCurrentTrack();
+      if (genreEl) genreEl.textContent = "";
       return;
     }
 
-    const song = cleanText(spotify.song);
-    const artist = cleanText(spotify.artist);
-    const album = cleanText(spotify.album);
-    const trackId = cleanText(spotify.track_id);
+    const song = cleanText(track.song);
+    const artist = cleanText(track.artist);
+    const album = cleanText(track.album);
+    const trackId = cleanText(track.trackId || track.track_id);
 
     musicEl.textContent =
-      `${song || "Unknown song"} — ${artist || "Unknown artist"}${album ? ` • ${album}` : ""}`;
-
-    setCurrentTrack({
-      trackId,
-      song,
-      artist,
-      album
-    });
+      `${song || "Unknown song"} — ${artist || "Unknown artist"}` +
+      `${album ? ` • ${album}` : ""}`;
 
     if (!genreEl) return;
 
@@ -280,57 +219,49 @@
     }
 
     try {
-      genreEl.textContent = "";
-
       const genres = await fetchGenres(trackId);
-
-      if (!genres.length) {
-        genreEl.textContent = "";
-        return;
-      }
-
-      genreEl.textContent = `Genres: ${genres.slice(0, 5).join(", ")}`;
-    } catch (err) {
-      console.warn("Genre lookup failed:", err);
+      genreEl.textContent = genres.length
+        ? `Genres: ${genres.slice(0, 5).join(", ")}`
+        : "";
+    } catch (error) {
+      console.warn("Genre lookup failed:", error);
       genreEl.textContent = "";
     }
   }
 
   async function updateAboutLiveData() {
-    if (PREVIEW_OFFLINE) {
-      if (musicEl) {
-        musicEl.textContent =
-          "Nothing showing from Spotify right now.";
-      }
-
-      if (genreEl) genreEl.textContent = "";
-      renderMusicHistory();
-      return;
-    }
-
     try {
-      const res = await fetch(LANYARD_URL, {
+      const response = await fetch(MUSIC_HISTORY_URL, {
         method: "GET",
         cache: "no-store"
       });
 
-      if (!res.ok) throw new Error(`Lanyard failed: ${res.status}`);
+      if (!response.ok) {
+        throw new Error(`Music tracker returned ${response.status}`);
+      }
 
-      const json = await res.json();
-      const data = json.data;
+      const payload = await response.json();
+      if (!payload.success) {
+        throw new Error("Music tracker request was unsuccessful");
+      }
 
-      await renderMusic(data);
-    } catch (err) {
-      console.warn("About live data failed:", err);
+      renderMusicHistory(payload.history);
+      await renderCurrent(payload.active || null);
+    } catch (error) {
+      console.warn("Shared Spotify history failed:", error);
 
-      if (musicEl) musicEl.textContent = "Live music unavailable.";
+      if (musicEl && !PREVIEW_OFFLINE) {
+        musicEl.textContent = "Live music unavailable.";
+      } else if (musicEl) {
+        musicEl.textContent = "Nothing showing from Spotify right now.";
+      }
+
       if (genreEl) genreEl.textContent = "";
-
-      renderMusicHistory();
+      renderMusicHistory(lastHistory.length ? lastHistory : readLegacyHistory());
     }
   }
 
-  renderMusicHistory();
-  updateAboutLiveData();
+  renderMusicHistory(readLegacyHistory());
+  migrateLegacyHistory().finally(updateAboutLiveData);
   setInterval(updateAboutLiveData, 30000);
 })();

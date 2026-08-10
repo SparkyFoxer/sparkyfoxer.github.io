@@ -1,17 +1,17 @@
-/* Add album and Steam artwork to the existing activity lists. */
+/* Add Cloudflare-backed album and Steam artwork to activity lists. */
 (() => {
-  const DISCORD_ID = "692126247458832455";
-  const LANYARD_URL = `https://api.lanyard.rest/v1/users/${DISCORD_ID}`;
-  const GAME_HISTORY_URL =
-    "https://sparky-game-history.sparkyfoxer.workers.dev/game-history";
-  const MUSIC_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
+  const WORKER_BASE =
+    "https://sparky-game-history.sparkyfoxer.workers.dev";
+  const GAME_HISTORY_URL = `${WORKER_BASE}/game-history`;
+  const MUSIC_HISTORY_URL = `${WORKER_BASE}/music-history`;
+  const ARTWORK_URL = `${WORKER_BASE}/artwork`;
   const PREVIEW_OFFLINE =
     new URLSearchParams(window.location.search).get("preview") ===
     "offline";
 
   const albumCache = new Map();
   let lastGames = null;
-  let lastSpotify = null;
+  let lastMusic = null;
   let scheduled = false;
 
   function text(value) {
@@ -27,6 +27,13 @@
     }
   }
 
+  function proxiedArtwork(value) {
+    const source = safeUrl(value);
+    return source
+      ? `${ARTWORK_URL}?url=${encodeURIComponent(source)}`
+      : "";
+  }
+
   function steamAppId(game) {
     const value = text(
       game?.applicationId ||
@@ -38,23 +45,19 @@
 
   function steamArt(game) {
     const appId = steamAppId(game);
-    return appId
+    const source = appId
       ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/header.jpg`
       : "";
-  }
-
-  function musicHistory() {
-    try {
-      const value = JSON.parse(localStorage.getItem(MUSIC_HISTORY_KEY) || "[]");
-      return Array.isArray(value) ? value : [];
-    } catch {
-      return [];
-    }
+    return proxiedArtwork(source);
   }
 
   async function spotifyArt(track) {
-    const direct = safeUrl(track?.artUrl || track?.albumArtUrl);
-    if (direct) return direct;
+    const direct = safeUrl(
+      track?.artUrl ||
+      track?.albumArtUrl ||
+      track?.album_art_url
+    );
+    if (direct) return proxiedArtwork(direct);
 
     const trackId = text(track?.trackId || track?.track_id);
     if (!trackId) return "";
@@ -63,14 +66,15 @@
 
     const request = (async () => {
       try {
-        const trackUrl = `https://open.spotify.com/track/${encodeURIComponent(trackId)}`;
+        const trackUrl =
+          `https://open.spotify.com/track/${encodeURIComponent(trackId)}`;
         const endpoint =
           "https://open.spotify.com/oembed?url=" +
           encodeURIComponent(trackUrl);
         const response = await fetch(endpoint, { cache: "force-cache" });
         if (!response.ok) return "";
         const data = await response.json();
-        return safeUrl(data.thumbnail_url);
+        return proxiedArtwork(data.thumbnail_url);
       } catch {
         return "";
       }
@@ -157,7 +161,9 @@
   }
 
   async function decorateSongs() {
-    const items = musicHistory();
+    const items = Array.isArray(lastMusic?.history)
+      ? lastMusic.history
+      : [];
     const rows = [
       ...document.querySelectorAll("#aboutLastPlayedList > li")
     ];
@@ -176,20 +182,16 @@
     });
 
     const current = document.querySelector("#aboutMusicText");
-    if (PREVIEW_OFFLINE || !current || !lastSpotify) return;
+    const active = PREVIEW_OFFLINE ? null : lastMusic?.active;
+    if (!current || !active) return;
 
-    const url = safeUrl(lastSpotify.album_art_url) ||
-      await spotifyArt({
-        trackId: lastSpotify.track_id,
-        album: lastSpotify.album,
-        song: lastSpotify.song
-      });
+    const url = await spotifyArt(active);
 
     if (current.isConnected) {
       decorateRow(
         current,
         url,
-        `${text(lastSpotify.album) || text(lastSpotify.song) || "Spotify"} cover`,
+        `${text(active.album) || text(active.song) || "Spotify"} cover`,
         "song"
       );
     }
@@ -238,12 +240,12 @@
   }
 
   async function refreshData() {
-    const [gamesResult, presenceResult] = await Promise.allSettled([
+    const [gamesResult, musicResult] = await Promise.allSettled([
       fetch(GAME_HISTORY_URL, { cache: "no-store" }).then((response) => {
         if (!response.ok) throw new Error(response.status);
         return response.json();
       }),
-      fetch(LANYARD_URL, { cache: "no-store" }).then((response) => {
+      fetch(MUSIC_HISTORY_URL, { cache: "no-store" }).then((response) => {
         if (!response.ok) throw new Error(response.status);
         return response.json();
       })
@@ -257,10 +259,10 @@
     }
 
     if (
-      presenceResult.status === "fulfilled" &&
-      presenceResult.value?.success
+      musicResult.status === "fulfilled" &&
+      musicResult.value?.success
     ) {
-      lastSpotify = presenceResult.value.data?.spotify || null;
+      lastMusic = musicResult.value;
     }
 
     scheduleDecoration();
