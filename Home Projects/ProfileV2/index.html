@@ -6,7 +6,7 @@
   <title>Sparky Fox</title>
   <meta name="description" content="Sparky Fox profile page">
   <link rel="icon" href="assets/avatar.png" type="image/png">
-  <link rel="stylesheet" href="style.css?v=spotify-skeleton-slots1">
+  <link rel="stylesheet" href="style.css?v=content-scale1">
   <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 </head>
 
@@ -104,45 +104,36 @@
     </div>
   </div>
 
-<!-- SPARKY_SETUP_EXTRAS_START -->
-<div class="pc-setup-extras">
-  <p class="small-label">Setup extras</p>
+  <section class="pc-peripherals" aria-labelledby="pcPeripheralsHeading">
+    <p id="pcPeripheralsHeading" class="small-label">Peripherals</p>
 
-  <div class="pc-setup-extras-grid">
-    <div>
-      <span class="pc-setup-extra-icon" aria-hidden="true">▣</span>
-      <span>
-        <small>Display</small>
-        <strong>1440p • 300 Hz</strong>
-      </span>
-    </div>
+    <div class="pc-peripheral-list">
+      <div class="pc-peripheral-group">
+        <span class="pc-peripheral-label">Monitors</span>
+        <span class="pc-peripheral-details">
+          <strong>27&Prime; 1440p &bull; 300 Hz</strong>
+          <small>24&Prime; 1080p &bull; 165 Hz</small>
+        </span>
+      </div>
 
-    <div>
-      <span class="pc-setup-extra-icon" aria-hidden="true">⌘</span>
-      <span>
-        <small>Operating system</small>
-        <strong>Fedora KDE</strong>
-      </span>
-    </div>
+      <div class="pc-peripheral-group">
+        <span class="pc-peripheral-label">Mouse / Keyboard</span>
+        <span class="pc-peripheral-details">
+          <strong>Logitech G502 X</strong>
+          <small>Keychron C3 Pro</small>
+        </span>
+      </div>
 
-    <div>
-      <span class="pc-setup-extra-icon" aria-hidden="true">♪</span>
-      <span>
-        <small>Audio</small>
-        <strong>Logitech Z623</strong>
-      </span>
+      <div class="pc-peripheral-group">
+        <span class="pc-peripheral-label">Audio</span>
+        <span class="pc-peripheral-details">
+          <strong>Logitech Z623</strong>
+          <small>HyperX Cloud Alpha</small>
+        </span>
+      </div>
     </div>
+  </section>
 
-    <div>
-      <span class="pc-setup-extra-icon" aria-hidden="true">🎧</span>
-      <span>
-        <small>Headphones</small>
-        <strong>HyperX Cloud Alpha</strong>
-      </span>
-    </div>
-  </div>
-</div>
-<!-- SPARKY_SETUP_EXTRAS_END -->
 </section>
 </aside>
 
@@ -435,7 +426,42 @@
     </div>
 
     <ul id="weatherHourlyOutlook" class="weather-hourly-outlook">
-      <li class="weather-hourly-unavailable">Loading hourly outlook…</li>
+      <li class="weather-hourly-skeleton" aria-hidden="true">
+        <span class="weather-skeleton-line weather-skeleton-time"></span>
+        <span class="weather-skeleton-icon"></span>
+        <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+        <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      </li>
+      <li class="weather-hourly-skeleton" aria-hidden="true">
+        <span class="weather-skeleton-line weather-skeleton-time"></span>
+        <span class="weather-skeleton-icon"></span>
+        <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+        <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      </li>
+      <li class="weather-hourly-skeleton" aria-hidden="true">
+        <span class="weather-skeleton-line weather-skeleton-time"></span>
+        <span class="weather-skeleton-icon"></span>
+        <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+        <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      </li>
+      <li class="weather-hourly-skeleton" aria-hidden="true">
+        <span class="weather-skeleton-line weather-skeleton-time"></span>
+        <span class="weather-skeleton-icon"></span>
+        <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+        <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      </li>
+      <li class="weather-hourly-skeleton" aria-hidden="true">
+        <span class="weather-skeleton-line weather-skeleton-time"></span>
+        <span class="weather-skeleton-icon"></span>
+        <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+        <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      </li>
+      <li class="weather-hourly-skeleton" aria-hidden="true">
+        <span class="weather-skeleton-line weather-skeleton-time"></span>
+        <span class="weather-skeleton-icon"></span>
+        <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+        <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      </li>
     </ul>
   </div>
 </div>
@@ -447,7 +473,24 @@
   </div>
 
   <ul id="weatherForecast" class="weather-forecast">
-    <li>Forecast loading...</li>
+    <li class="weather-forecast-skeleton" aria-hidden="true">
+      <span class="weather-skeleton-line weather-skeleton-day"></span>
+      <span class="weather-skeleton-icon"></span>
+      <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+    </li>
+    <li class="weather-forecast-skeleton" aria-hidden="true">
+      <span class="weather-skeleton-line weather-skeleton-day"></span>
+      <span class="weather-skeleton-icon"></span>
+      <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+    </li>
+    <li class="weather-forecast-skeleton" aria-hidden="true">
+      <span class="weather-skeleton-line weather-skeleton-day"></span>
+      <span class="weather-skeleton-icon"></span>
+      <span class="weather-skeleton-line weather-skeleton-rain"></span>
+      <span class="weather-skeleton-line weather-skeleton-temperature"></span>
+    </li>
   </ul>
 </section>
 
@@ -495,7 +538,7 @@
   </div>
 </main>
 
-  <script src="script.js?v=launcher-cleanup-exact-bio2"></script>
+  <script src="script.js?v=offline-preview1"></script>
 
   <audio
     id="siteMusic"
@@ -528,15 +571,15 @@
     >
   </div>
 
-  <script src="about.js?v=spotify-skeleton-slots1"></script>
-  <script src="game-history.js?v=launcher-cleanup-bio1"></script>
-  <script src="media-artwork.js?v=media-artwork-layout2"></script>
+  <script src="about.js?v=offline-preview1"></script>
+  <script src="game-history.js?v=offline-preview1"></script>
+  <script src="media-artwork.js?v=offline-preview1"></script>
 
   <script src="weather-ambience.js?v=weekly-weather1"></script>
-  <script defer src="weather.js?v=weekly-weather1"></script>
-  <script src="pc-monitor.js?v=smoothed-performance-history1"></script>
-  <script src="pc-offline-visual.js?v=offline-sleep-2"></script>
+  <script defer src="weather.js?v=layout-cleanup1"></script>
+  <script src="pc-monitor.js?v=offline-preview1"></script>
+  <script src="pc-offline-visual.js?v=offline-preview1"></script>
 <script src="site-controller.js?v=music-controls1"></script>
-  <script src="dashboard-balance.js?v=restore-two-commits1"></script>
+  <script src="dashboard-balance.js?v=layout-cleanup1"></script>
 </body>
 </html>

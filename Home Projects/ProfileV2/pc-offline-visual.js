@@ -36,7 +36,10 @@
   const lastSignal = overlay.querySelector(".pc-offline-last-signal");
 
   const preview =
-    new URLSearchParams(window.location.search).get("previewPcOffline") === "1";
+    new URLSearchParams(window.location.search).get("preview") ===
+      "offline" ||
+    new URLSearchParams(window.location.search).get("previewPcOffline") ===
+      "1";
 
   if (preview) {
     card.classList.add("pc-offline-preview");

@@ -8,6 +8,9 @@
   const HISTORY_KEY = "sparky_pc_chart_history_300s_v4";
   const RANGE_KEY = "sparky_pc_chart_range_v1";
   const VALID_RANGES = new Set([300, 120, 30]);
+  const PREVIEW_OFFLINE =
+    new URLSearchParams(window.location.search).get("preview") ===
+    "offline";
 
   const monitorCard = document.querySelector("#pcMonitorCard");
   const overviewCard = document.querySelector("#pcOverviewCard");
@@ -661,27 +664,40 @@
   }
 
   installRangeButtons();
-  refresh();
 
-  setInterval(refresh, REFRESH_MS);
-  setInterval(drawCharts, 1000);
-
-  setInterval(() => {
-    if (!latest) return;
-
-    latest.age_ms = number(latest.age_ms) + 1000;
-
-    setText(
-      "pcUpdatedText",
-      `Updated ${age(latest.age_ms)}`
+  if (PREVIEW_OFFLINE) {
+    monitorCard.classList.add(
+      "is-offline",
+      "pc-offline-preview"
     );
+    overviewCard.classList.add("is-offline");
 
-    if (latest.age_ms > 25000) {
-      monitorCard.classList.add("is-offline");
-      overviewCard.classList.add("is-offline");
-      setText("pcOnlineState", "Offline");
-    }
-  }, 1000);
+    setText("pcOnlineState", "Offline");
+    setText("pcUpdatedText", "PC is currently offline");
+    setText("pcUptime", "--");
+  } else {
+    refresh();
+    setInterval(refresh, REFRESH_MS);
+
+    setInterval(() => {
+      if (!latest) return;
+
+      latest.age_ms = number(latest.age_ms) + 1000;
+
+      setText(
+        "pcUpdatedText",
+        `Updated ${age(latest.age_ms)}`
+      );
+
+      if (latest.age_ms > 25000) {
+        monitorCard.classList.add("is-offline");
+        overviewCard.classList.add("is-offline");
+        setText("pcOnlineState", "Offline");
+      }
+    }, 1000);
+  }
+
+  setInterval(drawCharts, 1000);
 
   if (typeof ResizeObserver === "function") {
     const observer = new ResizeObserver(drawCharts);

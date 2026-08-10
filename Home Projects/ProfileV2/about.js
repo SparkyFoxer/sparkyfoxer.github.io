@@ -9,6 +9,9 @@
   const MUSIC_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
   const CURRENT_MUSIC_KEY = "sparky_about_current_spotify_v1";
   const MAX_HISTORY = 6;
+  const PREVIEW_OFFLINE =
+    new URLSearchParams(window.location.search).get("preview") ===
+    "offline";
 
   const musicEl = document.querySelector("#aboutMusicText");
   const genreEl = document.querySelector("#aboutGenreText");
@@ -121,21 +124,26 @@
 
   function createMusicHistorySkeleton() {
     const item = document.createElement("li");
-    item.className = "music-history-skeleton";
+    item.className =
+      "dynamic-list-skeleton music-history-skeleton";
     item.setAttribute("aria-hidden", "true");
 
     const artwork = document.createElement("span");
-    artwork.className = "music-skeleton-art";
+    artwork.className =
+      "dynamic-skeleton-art music-skeleton-art";
 
     const copy = document.createElement("span");
-    copy.className = "music-skeleton-copy";
+    copy.className =
+      "dynamic-skeleton-copy music-skeleton-copy";
 
     const title = document.createElement("span");
     title.className =
+      "dynamic-skeleton-line dynamic-skeleton-line-title " +
       "music-skeleton-line music-skeleton-line-title";
 
     const metadata = document.createElement("span");
     metadata.className =
+      "dynamic-skeleton-line dynamic-skeleton-line-meta " +
       "music-skeleton-line music-skeleton-line-meta";
 
     copy.append(title, metadata);
@@ -289,6 +297,17 @@
   }
 
   async function updateAboutLiveData() {
+    if (PREVIEW_OFFLINE) {
+      if (musicEl) {
+        musicEl.textContent =
+          "Nothing showing from Spotify right now.";
+      }
+
+      if (genreEl) genreEl.textContent = "";
+      renderMusicHistory();
+      return;
+    }
+
     try {
       const res = await fetch(LANYARD_URL, {
         method: "GET",

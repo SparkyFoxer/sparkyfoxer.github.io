@@ -4239,72 +4239,6 @@ body.site-entered .site-audio-controls {
   font-size: 0.7rem !important;
 }
 
-.pc-setup-extras {
-  display: flex !important;
-  min-height: 0 !important;
-  flex: 1 1 auto !important;
-  flex-direction: column !important;
-  margin-top: 11px !important;
-  padding-top: 11px !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
-}
-
-.pc-setup-extras > .small-label {
-  margin-bottom: 7px !important;
-}
-
-.pc-setup-extras-grid {
-  display: grid !important;
-  min-height: 0 !important;
-  flex: 1 1 auto !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  grid-auto-rows: minmax(52px, 1fr) !important;
-  gap: 7px !important;
-}
-
-.pc-setup-extras-grid > div {
-  display: grid !important;
-  min-width: 0 !important;
-  grid-template-columns: 28px minmax(0, 1fr) !important;
-  align-items: center !important;
-  gap: 7px !important;
-  padding: 8px !important;
-  border: 1px solid rgba(255, 255, 255, 0.085) !important;
-  border-radius: 11px !important;
-  background: rgba(0, 0, 0, 0.11) !important;
-}
-
-.pc-setup-extra-icon {
-  display: grid !important;
-  width: 28px !important;
-  height: 28px !important;
-  place-items: center !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 9px !important;
-  background: rgba(255, 255, 255, 0.045) !important;
-  color: rgba(255, 246, 255, 0.76) !important;
-  font-size: 0.8rem !important;
-}
-
-.pc-setup-extras-grid > div > span:last-child {
-  display: flex !important;
-  min-width: 0 !important;
-  flex-direction: column !important;
-  gap: 2px !important;
-}
-
-.pc-setup-extras-grid small {
-  color: var(--muted) !important;
-  font-size: 0.59rem !important;
-}
-
-.pc-setup-extras-grid strong {
-  overflow: hidden !important;
-  font-size: 0.68rem !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
-
 /*
  * Desktop cards share one grid row. Stretch the side columns to that row,
  * then let Music and My PC consume the available spare height.
@@ -4387,13 +4321,11 @@ body.site-entered .site-audio-controls {
   .pc-overview-card,
   .local-weather-card,
   .weather-expanded-details,
-  .weather-hourly-section,
-  .pc-setup-extras {
+  .weather-hourly-section {
     flex: 0 0 auto !important;
   }
 
-  .weather-hourly-outlook,
-  .pc-setup-extras-grid {
+  .weather-hourly-outlook {
     grid-auto-rows: auto !important;
   }
 }
@@ -4406,15 +4338,77 @@ body.site-entered .site-audio-controls {
   .weather-hourly-outlook {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
-
-  .pc-setup-extras-grid {
-    grid-template-columns: 1fr !important;
-  }
 }
 /* SPARKY_BALANCED_SIDE_COLUMNS_END */
 
-/* SPARKY_SPOTIFY_SKELETON_SLOTS_START */
-#aboutLastPlayedList > li.music-history-skeleton {
+/* SPARKY_LAYOUT_CLEANUP_START */
+:root {
+  --dashboard-card-padding: 16px;
+  --dashboard-card-radius: 24px;
+  --dashboard-row-radius: 14px;
+  --dashboard-row-height: 70px;
+  --dashboard-section-line: rgba(255, 255, 255, 0.09);
+  --dashboard-row-border: rgba(255, 255, 255, 0.085);
+  --dashboard-row-fill: rgba(255, 255, 255, 0.045);
+  --dashboard-skeleton-border: rgba(255, 255, 255, 0.11);
+  --dashboard-skeleton-fill: rgba(255, 255, 255, 0.018);
+}
+
+.profile-side-panel > .about-mini-card,
+.local-weather-card,
+.pc-overview-card,
+.pc-monitor-card-center {
+  padding: var(--dashboard-card-padding) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: var(--dashboard-card-radius) !important;
+  background: rgba(18, 14, 28, 0.72) !important;
+}
+
+.status-card,
+.activity-card,
+.stats-grid {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+}
+
+.stats-grid > div {
+  background: rgba(0, 0, 0, 0.12) !important;
+}
+
+.image-links .profile-link {
+  min-height: 48px !important;
+}
+
+.game-current,
+.music-current {
+  margin-bottom: 0 !important;
+}
+
+#aboutGameNowText,
+#aboutMusicText {
+  display: flex !important;
+  min-width: 0 !important;
+  min-height: var(--dashboard-row-height) !important;
+  align-items: center !important;
+  margin: 8px 0 0 !important;
+  padding: 8px !important;
+  border: 1px solid var(--dashboard-row-border) !important;
+  border-radius: var(--dashboard-row-radius) !important;
+  background: var(--dashboard-row-fill) !important;
+}
+
+.game-history,
+.game-weekly,
+.music-history {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid var(--dashboard-section-line) !important;
+}
+
+.dynamic-list-skeleton,
+#aboutGameHistoryList > li.dynamic-list-skeleton,
+#aboutLastPlayedList > li.dynamic-list-skeleton {
   display: flex !important;
   min-width: 0 !important;
   flex-direction: row !important;
@@ -4422,13 +4416,13 @@ body.site-entered .site-audio-controls {
   align-items: center !important;
   gap: 11px !important;
   padding: 8px !important;
-  border: 1px solid rgba(255, 255, 255, 0.105) !important;
-  border-radius: 14px !important;
-  background: rgba(255, 255, 255, 0.018) !important;
+  border: 1px solid var(--dashboard-skeleton-border) !important;
+  border-radius: var(--dashboard-row-radius) !important;
+  background: var(--dashboard-skeleton-fill) !important;
   opacity: 0.62 !important;
 }
 
-.music-skeleton-art {
+.dynamic-skeleton-art {
   display: block !important;
   flex: 0 0 52px !important;
   width: 52px !important;
@@ -4438,7 +4432,14 @@ body.site-entered .site-audio-controls {
   background: rgba(255, 255, 255, 0.025) !important;
 }
 
-.music-skeleton-copy {
+.game-skeleton-art {
+  flex-basis: 70px !important;
+  width: 70px !important;
+  height: 40px !important;
+  border-radius: 9px !important;
+}
+
+.dynamic-skeleton-copy {
   display: flex !important;
   min-width: 0 !important;
   flex: 1 1 auto !important;
@@ -4446,25 +4447,481 @@ body.site-entered .site-audio-controls {
   gap: 8px !important;
 }
 
-.music-skeleton-line {
+.dynamic-skeleton-line,
+.weather-skeleton-line {
   display: block !important;
   height: 8px !important;
-  border: 1px solid rgba(255, 255, 255, 0.105) !important;
+  border: 1px solid var(--dashboard-skeleton-border) !important;
   border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.018) !important;
+  background: var(--dashboard-skeleton-fill) !important;
 }
 
-.music-skeleton-line-title {
+.dynamic-skeleton-line-title {
   width: min(78%, 150px) !important;
 }
 
-.music-skeleton-line-meta {
+.dynamic-skeleton-line-meta {
   width: min(52%, 96px) !important;
 }
 
-@media (max-width: 1080px) {
-  #aboutLastPlayedList > li.music-history-skeleton {
+.dynamic-skeleton-line-short {
+  width: min(42%, 78px) !important;
+}
+
+#aboutGameWeeklyList > li.weekly-game-skeleton {
+  display: block !important;
+  min-height: 50px !important;
+  padding: 9px !important;
+}
+
+.weekly-game-skeleton .dynamic-skeleton-copy {
+  gap: 6px !important;
+}
+
+.weekly-skeleton-bar {
+  width: 100% !important;
+  height: 4px !important;
+}
+
+.weather-hourly-skeleton,
+.weather-forecast-skeleton {
+  min-width: 0 !important;
+  border: 1px solid var(--dashboard-skeleton-border) !important;
+  border-radius: 11px !important;
+  background: var(--dashboard-skeleton-fill) !important;
+  opacity: 0.62 !important;
+}
+
+.weather-hourly-skeleton {
+  display: flex !important;
+  min-height: 62px !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 7px 4px !important;
+}
+
+.weather-forecast-skeleton {
+  display: grid !important;
+  min-height: 34px !important;
+  grid-template-columns: minmax(65px, 1fr) auto auto auto !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 7px 8px !important;
+}
+
+.weather-skeleton-icon {
+  display: block !important;
+  width: 18px !important;
+  height: 18px !important;
+  border: 1px solid var(--dashboard-skeleton-border) !important;
+  border-radius: 6px !important;
+  background: var(--dashboard-skeleton-fill) !important;
+}
+
+.weather-skeleton-time,
+.weather-skeleton-rain {
+  width: 48% !important;
+}
+
+.weather-skeleton-temperature {
+  width: 56% !important;
+}
+
+.weather-skeleton-day {
+  width: 72% !important;
+}
+
+.weather-forecast-skeleton .weather-skeleton-rain {
+  width: 34px !important;
+}
+
+.weather-forecast-skeleton .weather-skeleton-temperature {
+  width: 46px !important;
+}
+
+.weather-hourly-unavailable {
+  grid-column: auto !important;
+  min-height: 62px !important;
+  padding: 7px 5px !important;
+  border: 1px solid var(--dashboard-row-border) !important;
+  border-radius: 11px !important;
+  background: var(--dashboard-row-fill) !important;
+  text-align: center !important;
+}
+
+.weather-forecast-unavailable {
+  display: grid !important;
+  min-height: 34px !important;
+  place-items: center !important;
+  padding: 7px 8px !important;
+  border: 1px solid var(--dashboard-row-border) !important;
+  border-radius: 11px !important;
+  background: var(--dashboard-row-fill) !important;
+  color: var(--muted) !important;
+  font-size: 0.7rem !important;
+  text-align: center !important;
+}
+
+.site-volume-slider {
+  width: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.site-audio-controls:hover .site-volume-slider,
+.site-audio-controls:focus-within .site-volume-slider {
+  width: 104px !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+@media (min-width: 651px) {
+  #aboutGameHistoryList,
+  #aboutLastPlayedList {
+    grid-auto-rows: minmax(var(--dashboard-row-height), auto) !important;
+  }
+
+  #aboutGameHistoryList {
+    grid-auto-rows: 62px !important;
+    max-height: 272px !important;
+    overflow-y: auto !important;
+  }
+
+  #aboutGameHistoryList > li,
+  #aboutLastPlayedList > li {
+    min-height: var(--dashboard-row-height) !important;
+  }
+
+  #aboutGameHistoryList > li {
+    min-height: 62px !important;
+    height: 62px !important;
+  }
+
+  .weekly-game-list > li {
+    min-height: 50px !important;
+  }
+
+  .game-history-empty,
+  .weekly-game-empty,
+  .music-history-empty {
     display: none !important;
   }
 }
-/* SPARKY_SPOTIFY_SKELETON_SLOTS_END */
+
+@media (min-width: 1081px) {
+  .pc-overview-card {
+    flex: 0 0 auto !important;
+  }
+
+  .profile-music-panel .dashboard-music-card,
+  .profile-music-panel .about-music-card,
+  .profile-music-panel .music-history,
+  .profile-music-panel #aboutLastPlayedList {
+    flex: 1 1 0 !important;
+  }
+
+  .profile-music-panel #aboutLastPlayedList > li:not(.music-history-empty) {
+    height: auto !important;
+  }
+}
+
+@media (max-width: 650px) {
+  :root {
+    --dashboard-card-padding: 14px;
+    --dashboard-card-radius: 22px;
+    --dashboard-row-height: 62px;
+  }
+
+  .profile-card {
+    border-radius: 22px !important;
+  }
+
+  #aboutGameHistoryList > li.dynamic-list-skeleton,
+  #aboutGameWeeklyList > li.dynamic-list-skeleton,
+  #aboutLastPlayedList > li.dynamic-list-skeleton {
+    display: none !important;
+  }
+
+  #aboutGameHistoryList,
+  #aboutLastPlayedList {
+    grid-auto-rows: auto !important;
+  }
+
+  #aboutGameHistoryList > li,
+  #aboutLastPlayedList > li {
+    min-height: 0 !important;
+  }
+
+  .site-audio-controls {
+    right: 8px !important;
+    bottom: 8px !important;
+    gap: 5px !important;
+    padding: 6px 7px !important;
+  }
+
+  .site-audio-label {
+    display: none !important;
+  }
+
+  .site-volume-slider {
+    width: 0 !important;
+  }
+
+  .site-audio-controls:hover .site-volume-slider,
+  .site-audio-controls:focus-within .site-volume-slider {
+    width: 66px !important;
+  }
+}
+/* SPARKY_LAYOUT_CLEANUP_END */
+
+/* SPARKY_CONTENT_LED_COLUMNS_START */
+.profile-side-panel .last-played-list,
+#aboutGameHistoryList,
+#aboutLastPlayedList {
+  max-height: none !important;
+  overflow-y: visible !important;
+  padding-right: 0 !important;
+  scrollbar-width: none !important;
+}
+
+.profile-music-panel #aboutLastPlayedList {
+  max-height: none !important;
+  grid-template-rows: none !important;
+  grid-auto-rows: minmax(var(--dashboard-row-height), auto) !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+.profile-music-panel #aboutLastPlayedList > li:not(.music-history-empty) {
+  min-height: var(--dashboard-row-height) !important;
+  height: auto !important;
+  align-self: stretch !important;
+}
+
+.profile-side-panel .last-played-list::-webkit-scrollbar,
+#aboutGameHistoryList::-webkit-scrollbar,
+#aboutLastPlayedList::-webkit-scrollbar {
+  display: none !important;
+}
+
+#aboutLastPlayedList {
+  flex: 0 0 auto !important;
+  grid-template-rows: none !important;
+  grid-auto-rows: minmax(var(--dashboard-row-height), auto) !important;
+  align-content: start !important;
+}
+
+#aboutLastPlayedList > li,
+#aboutLastPlayedList > li.media-row-with-art,
+#aboutLastPlayedList > li.dynamic-list-skeleton {
+  min-height: var(--dashboard-row-height) !important;
+  height: auto !important;
+  align-self: stretch !important;
+  overflow: visible !important;
+}
+
+#aboutMusicText.media-row-with-art {
+  min-height: var(--dashboard-row-height) !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+#aboutMusicText .media-row-copy,
+#aboutLastPlayedList .media-row-copy {
+  overflow: visible !important;
+}
+
+#aboutMusicText .track-main,
+#aboutMusicText .track-meta,
+#aboutLastPlayedList .track-main,
+#aboutLastPlayedList .track-meta {
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+@media (min-width: 1081px) {
+  .profile-dashboard {
+    align-items: stretch !important;
+  }
+
+  .profile-games-panel,
+  .profile-center-column,
+  .profile-music-panel {
+    display: flex !important;
+    height: auto !important;
+    min-height: min-content !important;
+    flex-direction: column !important;
+    align-self: stretch !important;
+  }
+
+  .profile-games-panel > .dashboard-game-card {
+    flex: 0 0 auto !important;
+    min-height: min-content !important;
+  }
+
+  .profile-games-panel > .pc-overview-card {
+    flex: 1 0 auto !important;
+    min-height: max-content !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .profile-center-column > .profile-card {
+    flex: 0 0 auto !important;
+  }
+
+  .profile-center-column > .profile-pc-monitor-wrap {
+    display: flex !important;
+    min-height: max-content !important;
+    flex: 1 0 auto !important;
+  }
+
+  .profile-pc-monitor-wrap > .pc-monitor-card-center {
+    display: flex !important;
+    min-height: max-content !important;
+    height: auto !important;
+    flex: 1 0 auto !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .pc-monitor-card-center .pc-history-section {
+    display: flex !important;
+    min-height: max-content !important;
+    flex: 1 0 auto !important;
+    flex-direction: column !important;
+  }
+
+  .pc-monitor-card-center .pc-history-chart-grid {
+    min-height: max-content !important;
+    flex: 1 1 auto !important;
+  }
+
+  .pc-monitor-card-center .pc-chart-panel {
+    display: flex !important;
+    min-height: max-content !important;
+    flex-direction: column !important;
+  }
+
+  .pc-monitor-card-center .pc-history-chart {
+    min-height: 96px !important;
+    height: auto !important;
+    flex: 1 1 96px !important;
+  }
+
+  .profile-music-panel > .local-weather-card {
+    flex: 0 0 auto !important;
+  }
+
+  .profile-music-panel > .dashboard-music-card,
+  .profile-music-panel > .about-music-card {
+    min-height: max-content !important;
+    height: auto !important;
+    flex: 1 0 auto !important;
+    align-self: stretch !important;
+  }
+
+  .profile-music-panel .music-history,
+  .profile-music-panel #aboutLastPlayedList {
+    min-height: max-content !important;
+    flex: 0 0 auto !important;
+  }
+
+  .weather-hourly-outlook {
+    grid-auto-rows: minmax(52px, auto) !important;
+    gap: 6px !important;
+  }
+
+  .weather-hourly-item,
+  .weather-hourly-skeleton,
+  .weather-hourly-unavailable {
+    min-height: 52px !important;
+    gap: 1px !important;
+    padding: 4px 3px !important;
+  }
+
+  .weather-hourly-icon {
+    font-size: 0.9rem !important;
+  }
+}
+/* SPARKY_CONTENT_LED_COLUMNS_END */
+
+/* SPARKY_PC_PERIPHERALS_START */
+.pc-peripherals {
+  margin-top: 11px !important;
+  padding-top: 11px !important;
+  border-top: 1px solid var(--dashboard-section-line) !important;
+}
+
+.pc-peripherals > .small-label {
+  margin-bottom: 7px !important;
+}
+
+.pc-peripheral-list {
+  display: grid !important;
+  gap: 6px !important;
+}
+
+.pc-peripheral-group {
+  display: grid !important;
+  min-width: 0 !important;
+  grid-template-columns: 90px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 39px !important;
+  padding: 6px 8px !important;
+  border: 1px solid var(--dashboard-row-border) !important;
+  border-radius: 10px !important;
+  background: rgba(0, 0, 0, 0.11) !important;
+}
+
+.pc-peripheral-label {
+  color: var(--muted) !important;
+  font-size: 0.59rem !important;
+  letter-spacing: 0.05em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.pc-peripheral-details {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 1px !important;
+  text-align: right !important;
+}
+
+.pc-peripheral-details strong,
+.pc-peripheral-details small {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.pc-peripheral-details strong {
+  font-size: 0.68rem !important;
+  line-height: 1.15 !important;
+}
+
+.pc-peripheral-details small {
+  color: var(--muted) !important;
+  font-size: 0.61rem !important;
+  line-height: 1.15 !important;
+}
+
+@media (max-width: 420px) {
+  .pc-peripheral-group {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+  }
+}
+/* SPARKY_PC_PERIPHERALS_END */
+
+.thought-bubble.hidden {
+  display: none !important;
+}

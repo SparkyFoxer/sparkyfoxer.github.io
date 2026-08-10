@@ -6,6 +6,11 @@
   const DISCORD_ID = "692126247458832455";
   const LANYARD_URL =
     `https://api.lanyard.rest/v1/users/${DISCORD_ID}`;
+  const MAX_HISTORY = 6;
+  const MAX_WEEKLY = 3;
+  const PREVIEW_OFFLINE =
+    new URLSearchParams(window.location.search).get("preview") ===
+    "offline";
 
   const GAME_NOISE_NAMES = new Set([
     "pv-bwrap",
@@ -41,6 +46,59 @@
   let activeGame = null;
   let gameHistory = [];
   let weeklyGames = [];
+
+  function createGameHistorySkeleton() {
+    const item = document.createElement("li");
+    item.className =
+      "dynamic-list-skeleton game-history-skeleton";
+    item.setAttribute("aria-hidden", "true");
+
+    const artwork = document.createElement("span");
+    artwork.className =
+      "dynamic-skeleton-art game-skeleton-art";
+
+    const copy = document.createElement("span");
+    copy.className = "dynamic-skeleton-copy";
+
+    const title = document.createElement("span");
+    title.className =
+      "dynamic-skeleton-line dynamic-skeleton-line-title";
+
+    const metadata = document.createElement("span");
+    metadata.className =
+      "dynamic-skeleton-line dynamic-skeleton-line-meta";
+
+    copy.append(title, metadata);
+    item.append(artwork, copy);
+
+    return item;
+  }
+
+  function createWeeklySkeleton() {
+    const item = document.createElement("li");
+    item.className =
+      "dynamic-list-skeleton weekly-game-skeleton";
+    item.setAttribute("aria-hidden", "true");
+
+    const copy = document.createElement("span");
+    copy.className = "dynamic-skeleton-copy";
+
+    const title = document.createElement("span");
+    title.className =
+      "dynamic-skeleton-line dynamic-skeleton-line-title";
+
+    const metadata = document.createElement("span");
+    metadata.className =
+      "dynamic-skeleton-line dynamic-skeleton-line-short";
+
+    const bar = document.createElement("span");
+    bar.className = "dynamic-skeleton-line weekly-skeleton-bar";
+
+    copy.append(title, metadata, bar);
+    item.appendChild(copy);
+
+    return item;
+  }
 
   function formatDuration(milliseconds) {
     const totalSeconds = Math.max(
@@ -120,16 +178,24 @@
   }
 
   function renderHistory() {
-    historyList.replaceChildren();
+    const items = gameHistory.slice(0, MAX_HISTORY);
 
-    if (!gameHistory.length) {
+    historyList.replaceChildren();
+    historyList.setAttribute(
+      "aria-label",
+      items.length
+        ? `Recently played games, ${items.length} recorded`
+        : "Recently played games. No games recorded yet."
+    );
+
+    if (!items.length) {
       const empty = document.createElement("li");
+      empty.className = "game-history-empty";
       empty.textContent = "No games recorded yet.";
       historyList.appendChild(empty);
-      return;
     }
 
-    for (const game of gameHistory) {
+    for (const game of items) {
       const item = document.createElement("li");
 
       const title = document.createElement("span");
@@ -151,26 +217,44 @@
       if (extra) item.title = extra;
       historyList.appendChild(item);
     }
+
+    for (
+      let index = items.length;
+      index < MAX_HISTORY;
+      index += 1
+    ) {
+      historyList.appendChild(
+        createGameHistorySkeleton()
+      );
+    }
   }
 
   function renderWeekly() {
     if (!weeklyList) return;
 
-    weeklyList.replaceChildren();
+    const items = weeklyGames.slice(0, MAX_WEEKLY);
 
-    if (!weeklyGames.length) {
+    weeklyList.replaceChildren();
+    weeklyList.setAttribute(
+      "aria-label",
+      items.length
+        ? `Top games from the last seven days, ${items.length} recorded`
+        : "Top games from the last seven days. No game time recorded yet."
+    );
+
+    if (!items.length) {
       const empty = document.createElement("li");
+      empty.className = "weekly-game-empty";
       empty.textContent = "No game time recorded this week yet.";
       weeklyList.appendChild(empty);
-      return;
     }
 
     const longestDuration = Math.max(
-      ...weeklyGames.map((game) => Number(game.durationMs || 0)),
+      ...items.map((game) => Number(game.durationMs || 0)),
       1
     );
 
-    weeklyGames.slice(0, 3).forEach((game, index) => {
+    items.forEach((game, index) => {
       const item = document.createElement("li");
       item.className = "weekly-game-item";
 
@@ -203,6 +287,14 @@
       item.append(heading, bar);
       weeklyList.appendChild(item);
     });
+
+    for (
+      let index = items.length;
+      index < MAX_WEEKLY;
+      index += 1
+    ) {
+      weeklyList.appendChild(createWeeklySkeleton());
+    }
   }
 
   async function loadDirectPresence() {
@@ -239,24 +331,30 @@
         throw new Error("Game tracker request was unsuccessful");
       }
 
-      activeGame = payload.active || null;
+      activeGame = PREVIEW_OFFLINE
+        ? null
+        : payload.active || null;
       gameHistory = Array.isArray(payload.history)
-        ? payload.history.slice(0, 6)
+        ? payload.history.slice(0, MAX_HISTORY)
         : [];
 
       weeklyGames = Array.isArray(payload.weekly?.games)
-        ? payload.weekly.games.slice(0, 3)
+        ? payload.weekly.games.slice(0, MAX_WEEKLY)
         : [];
     } catch (trackerError) {
       console.warn("Shared game history failed:", trackerError);
 
-      try {
-        await loadDirectPresence();
-      } catch (presenceError) {
-        console.warn("Game activity fallback failed:", presenceError);
+      if (PREVIEW_OFFLINE) {
+        activeGame = null;
+      } else {
+        try {
+          await loadDirectPresence();
+        } catch (presenceError) {
+          console.warn("Game activity fallback failed:", presenceError);
 
-        if (!activeGame) {
-          nowText.textContent = "Game activity unavailable.";
+          if (!activeGame) {
+            nowText.textContent = "Game activity unavailable.";
+          }
         }
       }
     }

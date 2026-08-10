@@ -3,6 +3,7 @@
   const LATITUDE = -43.5321;
   const LONGITUDE = 172.6362;
   const TIMEZONE = "Pacific/Auckland";
+  const FORECAST_SLOTS = 3;
 
   const WEATHER_URL =
     "https://api.open-meteo.com/v1/forecast" +
@@ -93,15 +94,49 @@
     }).format(date);
   }
 
+  function createForecastSkeleton() {
+    const item = document.createElement("li");
+    item.className = "weather-forecast-skeleton";
+    item.setAttribute("aria-hidden", "true");
+
+    const day = document.createElement("span");
+    day.className =
+      "weather-skeleton-line weather-skeleton-day";
+
+    const icon = document.createElement("span");
+    icon.className = "weather-skeleton-icon";
+
+    const rain = document.createElement("span");
+    rain.className =
+      "weather-skeleton-line weather-skeleton-rain";
+
+    const temperatures = document.createElement("span");
+    temperatures.className =
+      "weather-skeleton-line weather-skeleton-temperature";
+
+    item.append(day, icon, rain, temperatures);
+    return item;
+  }
+
+  function appendForecastSkeletons(count) {
+    for (let index = 0; index < count; index += 1) {
+      nodes.forecast.appendChild(createForecastSkeleton());
+    }
+  }
+
   function renderForecast(daily) {
     nodes.forecast.replaceChildren();
 
-    const dates = daily?.time || [];
+    const dates = Array.isArray(daily?.time)
+      ? daily.time.slice(0, FORECAST_SLOTS)
+      : [];
 
     if (!dates.length) {
       const item = document.createElement("li");
+      item.className = "weather-forecast-unavailable";
       item.textContent = "Forecast unavailable.";
       nodes.forecast.appendChild(item);
+      appendForecastSkeletons(FORECAST_SLOTS - 1);
       return;
     }
 
@@ -144,6 +179,10 @@
       item.append(day, weatherIcon, rain, temperatures);
       nodes.forecast.appendChild(item);
     });
+
+    appendForecastSkeletons(
+      Math.max(0, FORECAST_SLOTS - dates.length)
+    );
   }
 
   function renderWeather(data) {
@@ -197,8 +236,10 @@
     nodes.forecast.replaceChildren();
 
     const item = document.createElement("li");
+    item.className = "weather-forecast-unavailable";
     item.textContent = "Could not load the forecast.";
     nodes.forecast.appendChild(item);
+    appendForecastSkeletons(FORECAST_SLOTS - 1);
   }
 
   async function loadWeather() {

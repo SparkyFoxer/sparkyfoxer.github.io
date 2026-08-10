@@ -10,6 +10,7 @@
     "&forecast_days=2";
 
   const REFRESH_MS = 15 * 60 * 1000;
+  const HOURLY_SLOTS = 6;
 
   const byId = (id) => document.getElementById(id);
 
@@ -113,6 +114,36 @@
     }
   }
 
+  function createHourlySkeleton() {
+    const item = document.createElement("li");
+    item.className = "weather-hourly-skeleton";
+    item.setAttribute("aria-hidden", "true");
+
+    const time = document.createElement("span");
+    time.className =
+      "weather-skeleton-line weather-skeleton-time";
+
+    const icon = document.createElement("span");
+    icon.className = "weather-skeleton-icon";
+
+    const temperature = document.createElement("span");
+    temperature.className =
+      "weather-skeleton-line weather-skeleton-temperature";
+
+    const rain = document.createElement("span");
+    rain.className =
+      "weather-skeleton-line weather-skeleton-rain";
+
+    item.append(time, icon, temperature, rain);
+    return item;
+  }
+
+  function appendHourlySkeletons(list, count) {
+    for (let index = 0; index < count; index += 1) {
+      list.appendChild(createHourlySkeleton());
+    }
+  }
+
   function renderHourly(hourly, daily) {
     const list = byId("weatherHourlyOutlook");
     if (!list) return;
@@ -136,7 +167,7 @@
 
     for (
       let index = startIndex;
-      index < Math.min(times.length, startIndex + 6);
+      index < Math.min(times.length, startIndex + HOURLY_SLOTS);
       index += 1
     ) {
       entries.push({
@@ -174,6 +205,11 @@
       item.append(time, icon, temperature, rain);
       list.appendChild(item);
     }
+
+    appendHourlySkeletons(
+      list,
+      Math.max(0, HOURLY_SLOTS - entries.length)
+    );
 
     const hourlyMaximum = entries.reduce(
       (maximum, entry) =>
@@ -222,6 +258,7 @@
         item.className = "weather-hourly-unavailable";
         item.textContent = "Hourly outlook unavailable.";
         list.appendChild(item);
+        appendHourlySkeletons(list, HOURLY_SLOTS - 1);
       }
 
       const rainSummary = byId("weatherRainSummary");

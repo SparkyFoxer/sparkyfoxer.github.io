@@ -5,6 +5,9 @@
   const GAME_HISTORY_URL =
     "https://sparky-game-history.sparkyfoxer.workers.dev/game-history";
   const MUSIC_HISTORY_KEY = "sparky_about_last_played_spotify_v1";
+  const PREVIEW_OFFLINE =
+    new URLSearchParams(window.location.search).get("preview") ===
+    "offline";
 
   const albumCache = new Map();
   let lastGames = null;
@@ -173,7 +176,7 @@
     });
 
     const current = document.querySelector("#aboutMusicText");
-    if (!current || !lastSpotify) return;
+    if (PREVIEW_OFFLINE || !current || !lastSpotify) return;
 
     const url = safeUrl(lastSpotify.album_art_url) ||
       await spotifyArt({
@@ -196,7 +199,7 @@
     if (!lastGames) return;
 
     const current = document.querySelector("#aboutGameNowText");
-    if (current && lastGames.active) {
+    if (!PREVIEW_OFFLINE && current && lastGames.active) {
       decorateRow(
         current,
         steamArt(lastGames.active),

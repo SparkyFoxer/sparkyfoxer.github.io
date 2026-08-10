@@ -7,6 +7,10 @@
   const LAST_SEEN_URL =
     "https://spotify-genres.sparkyfoxer.workers.dev/last-seen";
 
+  const previewMode =
+    new URLSearchParams(window.location.search).get("preview");
+  const PREVIEW_OFFLINE = previewMode === "offline";
+
   const WEBSITE_BIO_LINES = [
     "🦊 Sparky Foxer",
     "🏳️‍🌈 Fruitiest floofer :3",
@@ -245,6 +249,22 @@
 
   async function loadLastSeen() {
     if (!nodes.lastSeen) return;
+
+    if (PREVIEW_OFFLINE) {
+      if (!lastSeenData?.preview_offline) {
+        lastSeenData = {
+          preview_offline: true,
+          is_online: false,
+          status: "offline",
+          last_seen_at: new Date(
+            Date.now() - 12 * 60 * 1000
+          ).toISOString()
+        };
+      }
+
+      renderLastSeen();
+      return;
+    }
 
     try {
       const response = await fetch(LAST_SEEN_URL, {
@@ -562,6 +582,19 @@
   }
 
   async function loadDiscordPresence() {
+    if (PREVIEW_OFFLINE) {
+      setStatus("offline");
+      setBio(null);
+      renderCustomStatus(null);
+      renderActivities({
+        discord_status: "offline",
+        activities: [],
+        listening_to_spotify: false,
+        spotify: null
+      });
+      return;
+    }
+
     try {
       const response = await fetch(LANYARD_URL, {
         cache: "no-store"
