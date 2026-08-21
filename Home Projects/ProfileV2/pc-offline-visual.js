@@ -21,7 +21,7 @@
     </div>
     <h3 class="pc-offline-title">Foxer's PC is snoozing</h3>
     <p class="pc-offline-description">
-      Live stats return automatically when Fedora wakes up.
+      Live stats return automatically when day PC wakes up.
     </p>
     <span class="pc-offline-last-signal">
       Waiting for the monitor to reconnect…
