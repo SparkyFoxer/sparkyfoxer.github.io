@@ -21,7 +21,7 @@
     </div>
     <h3 class="pc-offline-title">Foxer's PC is snoozing</h3>
     <p class="pc-offline-description">
-      Live stats return automatically when day PC wakes up.
+      Foxer's PC is having a little nap. Live stats will be back when it wakes up.
     </p>
     <span class="pc-offline-last-signal">
       Waiting for the monitor to reconnect…
