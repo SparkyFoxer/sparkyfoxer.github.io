@@ -1,0 +1,77 @@
+/* header {
+    background-color: #a8977e;
+    padding: 20px;
+} */
+
+/* h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #502700;
+    font-family: 'Arial';
+    font-size: 50px;
+} */
+
+/* .flex-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+} */
+
+
+
+
+
+   body {
+  background-image: url('123456789.png');
+border: 2px solid #333;
+  background-color: #f0f0f0;                                     /* Fallback background color */
+  background-size: cover;                                          /* Scale the image to cover the entire screen */
+  background-position: center;                                     /* Center the image */
+  background-repeat: no-repeat;                                    /* Prevent tiling */
+  background-attachment: fixed;                                    /* Keep background still when scrolling */
+  margin: 0;                                                       /* Remove default margin */
+  padding: 0;
+  
+}
+.box {
+  border: 2px solid #333;
+  padding: 20px;
+  margin: 10px;
+  width: 200px;
+  background-color: #f2f2f2;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.box2 {
+  border: 2px solid #920000;
+  padding: 20px;
+  margin: 10px;
+  width: 200px;
+  background-color: #ffe0ff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.flex-container {
+  display: flex;
+border: 2px solid #333;
+  justify-content: center;                                         /* Centers horizontally */
+  align-items: center;                                             /* Centers vertically */
+  height: 200px;                                                   /* Example height for the container */
+  border: 1px solid black;
+}
+.box div {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #333;
+  border-radius: 5px;
+background-color: #f0f0f0;
+}
+.centered-item {
+margin: 2px;
+padding: 2px;
+background-color: rgba(255, 255, 255, 0);
+border: 2px solid #333;
+}
+.justified-text {
+  text-align: justify;
+}
