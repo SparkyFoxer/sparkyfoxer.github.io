@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "sparkyfoxer.github.io_a2a967a6"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Open Malteo-Winery.html",

@@ -1,5 +1,6 @@
 {
     "python-envs.defaultEnvManager": "ms-python.python:system",
     "python-envs.defaultPackageManager": "ms-python.python:pip",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "java.debug.settings.onBuildFailureProceed": true
 }
